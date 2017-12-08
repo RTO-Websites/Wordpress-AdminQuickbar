@@ -1,0 +1,101 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.admin-quickbar {
+  position: fixed;
+  top: 66px;
+  right: 0;
+  width: 0;
+  bottom: 0;
+
+  background-color: #e6e9ec;
+
+  box-shadow: 0 0 5px 0 rgba(0,0,0,.2);
+
+  z-index: 99999;
+}
+
+.admin-quickbar-inner {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 15px;
+  overflow: auto;
+}
+
+.admin-quickbar.toggle {
+  width: 320px;
+  display: block;
+}
+.admin-quickbar.toggle .admin-quickbar-inner {
+  display: block;
+}
+
+.elementor-editor-active:not(.wp-admin) .admin-quickbar {
+  top: 0;
+}
+
+.dashicons-elementor {
+  margin-top: -6px;
+}
+
+.dashicons-elementor::before {
+  content: "\e800";
+  font-family: eicons;
+  font-size: 13px;
+}
+
+.admin-quickbar-post-type {
+  padding: 12px 15px;
+  text-transform: uppercase;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.admin-quickbar-post-options {
+  float: right;
+}
+
+.admin-quickbar-post {
+  padding: 12px 15px;
+  background-color: #fff;
+  margin-bottom: 3px;
+}
+
+.admin-quickbar-postlist-inner {
+  display: none;
+}
+
+.show-list .admin-quickbar-postlist-inner {
+  display: block;
+}
+
+.toggle-quickbar-button {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  width: 15px;
+  height: 50px;
+  line-height: 50px;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  background-color: #e6e9ec;
+  font-size: 15px;
+  box-shadow: -3px -1px 5px rgba(0,0,0,.1);
+  cursor: pointer;
+}
+
+.toggle-quickbar-button::before {
+  content: "\f341";
+  font-family: dashicons;
+}
+
+.admin-quickbar.toggle .toggle-quickbar-button::before {
+  content: "\f345";
+}

@@ -6,11 +6,11 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       https://www.hennewelt.de
+ * @link       https://www.rto.de
  * @since      1.0.0
  *
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/includes
+ * @package    AdminQuickbar
+ * @subpackage AdminQuickbar/includes
  */
 
 /**
@@ -20,8 +20,8 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/includes
+ * @package    AdminQuickbar
+ * @subpackage AdminQuickbar/includes
  * @author     Sascha Hennemann <s.hennemann@rto.de>
  */
 class AdminQuickbarI18N {

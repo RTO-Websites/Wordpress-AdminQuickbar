@@ -3,7 +3,7 @@
 /**
  * Fired during plugin activation
  *
- * @link       https://www.hennewelt.de
+ * @link       https://www.rto.de
  * @since      1.0.0
  *
  * @package    AdminPostListSidebar

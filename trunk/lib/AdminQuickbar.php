@@ -9,11 +9,11 @@ use Pub\AdminQuickbarPublic;
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       https://www.hennewelt.de
+ * @link       https://www.rto.de
  * @since      1.0.0
  *
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/includes
+ * @package    AdminQuickbar
+ * @subpackage AdminQuickbar/includes
  */
 
 /**
@@ -26,8 +26,8 @@ use Pub\AdminQuickbarPublic;
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/includes
+ * @package    AdminQuickbar
+ * @subpackage AdminQuickbar/includes
  * @author     Sascha Hennemann <s.hennemann@rto.de>
  */
 class AdminQuickbar {
@@ -86,10 +86,10 @@ class AdminQuickbar {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - AdminPostListSidebarLoader. Orchestrates the hooks of the plugin.
-	 * - AdminPostListSidebarI18n. Defines internationalization functionality.
-	 * - AdminPostListSidebarAdmin. Defines all hooks for the admin area.
-	 * - AdminPostListSidebarPublic. Defines all hooks for the public side of the site.
+	 * - AdminQuickbarLoader. Orchestrates the hooks of the plugin.
+	 * - AdminQuickbarI18n. Defines internationalization functionality.
+	 * - AdminQuickbarAdmin. Defines all hooks for the admin area.
+	 * - AdminQuickbarPublic. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -106,14 +106,13 @@ class AdminQuickbar {
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the AdminPostListSidebarI18n class in order to set the domain and to register the hook
+	 * Uses the AdminQuickbarI18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
 	 * @access   private
 	 */
 	private function setLocale() {
-
 		$pluginI18n = new AdminQuickbarI18N();
 		$pluginI18n->setDomain( $this->getAdminQuickbar() );
 

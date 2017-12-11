@@ -3,7 +3,7 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       https://www.hennewelt.de
+ * @link       https://www.rto.de
  * @since      1.0.0
  *
  * @package    AdminPostListSidebar
@@ -73,7 +73,7 @@ class AdminQuickbarPublic {
 		 * class.
 		 */
 
-		//wp_enqueue_style( $this->pluginName, plugin_dir_url( __FILE__ ) . 'css/admin-post-list-sidebar-public.css', array(), $this->version, 'all' );
+		//wp_enqueue_style( $this->pluginName, plugin_dir_url( __FILE__ ) . 'css/admin-quickbar-public.css', array(), $this->version, 'all' );
 
 	}
 
@@ -96,7 +96,7 @@ class AdminQuickbarPublic {
 		 * class.
 		 */
 
-		//wp_enqueue_script( $this->pluginName, plugin_dir_url( __FILE__ ) . 'js/admin-post-list-sidebar-public.js', array( 'jquery' ), $this->version, false );
+		//wp_enqueue_script( $this->pluginName, plugin_dir_url( __FILE__ ) . 'js/admin-quickbar-public.js', array( 'jquery' ), $this->version, false );
 
 	}
 

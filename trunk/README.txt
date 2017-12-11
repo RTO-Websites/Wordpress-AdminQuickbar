@@ -1,6 +1,6 @@
 === AdminQuickbar ===
 Contributors: crazypsycho
-Donate link: https://www.hennewelt.de
+Donate link: https://www.rto.de
 Tags: post, post list, sidabe elementor
 Requires at least: 3.0.1
 Tested up to: 4.9

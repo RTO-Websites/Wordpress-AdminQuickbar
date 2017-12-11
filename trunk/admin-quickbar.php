@@ -12,7 +12,7 @@ use Lib\AdminQuickbarDeactivator;
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://www.hennewelt.de
+ * @link              https://www.rto.de
  * @since             1.0.0
  * @package           AdminQuickbar
  *
@@ -22,7 +22,7 @@ use Lib\AdminQuickbarDeactivator;
  * Description:       Adds a quickbar in admin with fast access to all posts/pages
  * Version:           1.0.0
  * Author:            Sascha Hennemann
- * Author URI:        https://www.hennewelt.de
+ * Author URI:        https://www.rto.de
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       admin-quickbar

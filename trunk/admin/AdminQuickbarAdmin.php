@@ -3,7 +3,7 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       https://www.hennewelt.de
+ * @link       https://www.rto.de
  * @since      1.0.0
  *
  * @package    AdminPostListSidebar

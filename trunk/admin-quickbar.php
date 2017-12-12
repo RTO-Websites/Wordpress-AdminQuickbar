@@ -18,10 +18,10 @@ use Lib\AdminQuickbarDeactivator;
  *
  * @wordpress-plugin
  * Plugin Name:       AdminQuickbar
- * Plugin URI:        https://www.rto.de
+ * Plugin URI:        https://github.com/RTO-Websites/Wordpress-AdminQuickbar
  * Description:       Adds a quickbar in admin with fast access to all posts/pages
  * Version:           1.0.0
- * Author:            Sascha Hennemann
+ * Author:            RTO GmbH
  * Author URI:        https://www.rto.de
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt

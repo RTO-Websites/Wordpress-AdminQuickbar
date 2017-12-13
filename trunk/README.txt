@@ -1,7 +1,7 @@
 === AdminQuickbar ===
 Contributors: rtowebsites
 Donate link: https://www.rto.de
-Tags: post, post list, sidabe elementor
+Tags: post, post list, sidebar, elementor, rto, rto.de
 Requires at least: 3.0.1
 Tested up to: 4.9
 Requires PHP: 5.6

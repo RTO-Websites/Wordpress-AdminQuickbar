@@ -1,5 +1,5 @@
 === AdminQuickbar ===
-Contributors: crazypsycho
+Contributors: rtowebsites
 Donate link: https://www.rto.de
 Tags: post, post list, sidabe elementor
 Requires at least: 3.0.1

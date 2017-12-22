@@ -12,7 +12,7 @@
 
   background-color: #e6e9ec;
 
-  box-shadow: 0 0 5px 0 rgba(0,0,0,.2);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, .2);
 
   z-index: 99999;
 }
@@ -32,6 +32,7 @@
   width: 320px;
   display: block;
 }
+
 .admin-quickbar.toggle .admin-quickbar-inner {
   display: block;
 }
@@ -87,7 +88,7 @@
   transform: translateY(-50%);
   background-color: #e6e9ec;
   font-size: 15px;
-  box-shadow: -3px -1px 5px rgba(0,0,0,.1);
+  box-shadow: -3px -1px 5px rgba(0, 0, 0, .1);
   cursor: pointer;
 }
 
@@ -98,4 +99,25 @@
 
 .admin-quickbar.toggle .toggle-quickbar-button::before {
   content: "\f345";
+}
+
+.admin-quickbar .wp-post-image {
+  display: inline-block;
+  height: calc(1em + 20px);
+  margin-top: -10px;
+  margin-bottom: -10px;
+  margin-right: 7px;
+  transition: all 0.3s ease;
+  transform-origin: top left;
+  width: auto !important;
+}
+
+.admin-quickbar .wp-post-image:hover {
+  transform: scale(4.5);
+}
+
+.admin-quickbar-keepopen {
+  padding-left: 12px;
+  margin-bottom: 1em;
+  display: inline-block;
 }

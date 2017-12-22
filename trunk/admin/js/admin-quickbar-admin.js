@@ -56,8 +56,12 @@
     });
 
     // open quickbar
-    if (localStorage.adminQuickbarToggle == 'true') {
+    if (localStorage.adminQuickbarToggle == 'true' && localStorage.adminQuickbarKeepopen == 'true') {
       $('.admin-quickbar').addClass('toggle');
+    }
+
+    if (localStorage.adminQuickbarKeepopen == 'true') {
+      $('.admin-quickbar-keepopen input').prop('checked', true);
     }
   });
 
@@ -67,6 +71,13 @@
   $(document).on('click', '.toggle-quickbar-button', function (e) {
     $('.admin-quickbar').toggleClass('toggle');
     localStorage.adminQuickbarToggle = $('.admin-quickbar').hasClass('toggle');
+  });
+
+  /**
+   * Keep open
+   */
+  $(document).on('change', '.admin-quickbar-keepopen input', function (e) {
+    localStorage.adminQuickbarKeepopen = $('.admin-quickbar-keepopen input').is(':checked');
   });
 
 })(jQuery);

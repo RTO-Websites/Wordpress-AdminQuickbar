@@ -28,6 +28,10 @@ Just install and activate the plugin.
 
 == Changelog ==
 
+= 1.0.1 =
+* Add post-thumbnails
+* Add keep-open-option
+
 = 1.0 =
 * Release
 

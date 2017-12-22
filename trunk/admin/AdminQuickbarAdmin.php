@@ -40,6 +40,8 @@ class AdminQuickbarAdmin {
      */
     private $version;
 
+    public $textdomain;
+
     /**
      * Initialize the class and set its properties.
      *
@@ -51,6 +53,7 @@ class AdminQuickbarAdmin {
 
         $this->pluginName = $pluginName;
         $this->version = $version;
+        $this->textdomain = $pluginName;
         //add_action('admin_footer', array($this, 'addSidebar'), 1);
         add_action( 'admin_print_footer_scripts', array( $this, 'addSidebar' ) );
 

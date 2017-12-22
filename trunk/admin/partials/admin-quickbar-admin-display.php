@@ -51,10 +51,16 @@
 
                 // echo thumb
                 if ( has_post_thumbnail( $post ) ) {
-                    echo get_the_post_thumbnail( $post );
+                    // from post-thumbnail
+                    $attachmentId = get_post_thumbnail_id( $post->ID );
+                    $path = get_attached_file( $attachmentId );
+                    $url = wp_get_attachment_url( $attachmentId );
                 } else if ( $post->post_type == 'attachment' ) {
+                    // direct from attachment
                     $path = get_attached_file( $post->ID );
+                    $url = wp_get_attachment_url( $post->ID );
                 } else if ( class_exists( 'Inc\PostGallery' ) ) {
+                    // from post-gallery
                     $postGalleryImages = Inc\PostGallery::getImages( $post->ID );
                     if ( count( $postGalleryImages ) ) {
                         $firstThumb = array_shift( $postGalleryImages );
@@ -62,7 +68,7 @@
                     }
                 }
 
-                if ( !empty( $path ) ) {
+                if ( !empty( $path ) && class_exists( 'Inc\PostGallery' ) ) {
                     $path = explode( '/wp-content/', $path );
                     $path = '/wp-content/' . array_pop( $path );
 
@@ -77,9 +83,16 @@
                     echo '<img src="'
                         . $thumb['url']
                         . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image  post-image-from-postgallery" />';
+                } else if ( !empty( $url ) ) {
+                    echo '<img src="'
+                        . $url
+                        . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image" />';
                 }
+
+                // reset vars
                 $thumb = null;
                 $path = null;
+                $url = null;
 
                 // echo post-title
                 if ( !empty( $post->post_title ) ) {

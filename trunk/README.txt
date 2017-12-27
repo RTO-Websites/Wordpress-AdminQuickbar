@@ -28,6 +28,9 @@ Just install and activate the plugin.
 
 == Changelog ==
 
+= 1.0.2 =
+* Show only one language
+
 = 1.0.1 =
 * Add post-thumbnails
 * Add keep-open-option

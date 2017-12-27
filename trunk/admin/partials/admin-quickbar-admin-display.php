@@ -43,6 +43,7 @@
                 'post_type' => $postType->name,
                 'posts_per_page' => -1,
                 'post_status' => 'any',
+                'suppress_filters' => false,
             ) );
 
             // loop posts of current post-type

@@ -24,6 +24,16 @@
             . 'oembed_cache,ocean_modal_window,nxs_qp,elementor_library' );
         $postTypes = get_post_types( array(), 'object' );
 
+        echo '<br />';
+        // loop all post-types for add new buttons
+        foreach ( $postTypes as $postType ) {
+            if ( in_array( $postType->name, $filerPostTypes ) ) {
+                continue;
+            }
+
+            echo '<a class="button-secondary add-post-button" href="' . admin_url( 'post-new.php' ) . '?post_type=' . $postType->name . '">'
+                 . $postType->labels->singular_name . '</a> ';
+        }
 
         // loop all post-types
         foreach ( $postTypes as $postType ) {

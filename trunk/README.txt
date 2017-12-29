@@ -27,6 +27,9 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.0.3 =
+* Add buttons to add new posts
+* Improve style
 
 = 1.0.2 =
 * Show only one language

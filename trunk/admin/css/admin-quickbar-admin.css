@@ -52,10 +52,26 @@
 }
 
 .admin-quickbar-post-type {
-  padding: 12px 15px;
+  padding: 12px 15px 12px 0;
   text-transform: uppercase;
   font-size: 11px;
   cursor: pointer;
+}
+
+.admin-quickbar-post-type::before {
+  content: "\f140";
+  display: inline-block;
+  position: relative;
+  top: -1px;
+  margin-right: 2px;
+  font-family: Dashicons;
+  font-size: 15px;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.show-list .admin-quickbar-post-type::before {
+  content: "\f142";
 }
 
 .admin-quickbar-post-options {
@@ -120,4 +136,26 @@
   padding-left: 12px;
   margin-bottom: 1em;
   display: inline-block;
+}
+
+.add-post-button {
+  margin-bottom: 5px !important;
+}
+
+.add-post-button::before {
+  content: "\f132 ";
+  display: inline-block;
+  margin-right: 2px;
+  font-family: Dashicons;
+  vertical-align: middle;
+}
+
+.admin-quickbar-post-type::-moz-selection { /* Code for Firefox */
+  color: inherit;
+  background: inherit;
+}
+
+.admin-quickbar-post-type::selection {
+  color: inherit;
+  background: inherit;
 }

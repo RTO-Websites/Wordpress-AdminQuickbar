@@ -65,11 +65,13 @@
                     // from post-thumbnail
                     $attachmentId = get_post_thumbnail_id( $post->ID );
                     $path = get_attached_file( $attachmentId );
-                    $url = wp_get_attachment_url( $attachmentId );
+                    $url = wp_get_attachment_image_src( $attachmentId, 'thumbnail' );
+                    $url = !empty( $url ) ? $url[0] : '';
                 } else if ( $post->post_type == 'attachment' ) {
                     // direct from attachment
                     $path = get_attached_file( $post->ID );
-                    $url = wp_get_attachment_url( $post->ID );
+                    $url = wp_get_attachment_image_src( $post->ID, 'thumbnail' );
+                    $url = !empty( $url ) ? $url[0] : '';
                 } else if ( class_exists( 'Inc\PostGallery' ) ) {
                     // from post-gallery
                     $postGalleryImages = Inc\PostGallery::getImages( $post->ID );

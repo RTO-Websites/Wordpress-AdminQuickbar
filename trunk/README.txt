@@ -27,6 +27,12 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.0.5 =
+* Thumbnails are now optional
+
+= 1.0.4 =
+* Load smaller post-thumbs
+
 = 1.0.3 =
 * Add buttons to add new posts
 * Improve style

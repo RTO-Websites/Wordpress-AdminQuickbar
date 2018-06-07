@@ -132,6 +132,7 @@
   transform: scale(4.5);
 }
 
+.admin-quickbar-loadthumbs,
 .admin-quickbar-keepopen {
   padding-left: 12px;
   margin-bottom: 1em;
@@ -158,4 +159,8 @@
 .admin-quickbar-post-type::selection {
   color: inherit;
   background: inherit;
+}
+
+.admin-quickbar .wp-post-image[src=""] {
+  display: none;
 }

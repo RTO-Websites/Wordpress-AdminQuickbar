@@ -18,6 +18,10 @@
             <input type="checkbox" name="admin-quickbar-keepopen"/>
             <?php _e( 'Keep open', $this->textdomain ); ?>
         </label>
+        <label for="admin-quickbar-keepopen" class="admin-quickbar-loadthumbs">
+            <input type="checkbox" name="admin-quickbar-keepopen"/>
+            <?php _e( 'Load thumbs', $this->textdomain ); ?>
+        </label>
         <?php
         //add_theme_support( 'post-thumbnails' );
         $filerPostTypes = explode( ',', 'nav_menu_item,revision,custom_css,customize_changeset,'
@@ -93,11 +97,11 @@
                         'scale' => '0',
                     ) );
 
-                    echo '<img src="'
+                    echo '<img src="" data-src="'
                         . $thumb['url']
                         . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image  post-image-from-postgallery" />';
                 } else if ( !empty( $url ) ) {
-                    echo '<img src="'
+                    echo '<img src="" data-src="'
                         . $url
                         . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image" />';
                 }
@@ -139,3 +143,8 @@
 
     <div class="toggle-quickbar-button"></div>
 </div>
+<script>
+    jQuery(function() {
+        jQuery('.admin-quickbar')
+    });
+</script>

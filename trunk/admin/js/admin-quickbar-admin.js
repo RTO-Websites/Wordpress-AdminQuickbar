@@ -45,7 +45,7 @@
   /**
    * Open sidebar and postlists on dom-ready
    */
-  $(function($) {
+  $(function ($) {
     var postLists = getPostListStorage();
 
     // open postlists
@@ -63,6 +63,11 @@
     if (localStorage.adminQuickbarKeepopen == 'true') {
       $('.admin-quickbar-keepopen input').prop('checked', true);
     }
+
+    if (localStorage.adminQuickbarLoadthumbs == 'true') {
+      $('.admin-quickbar-loadthumbs input').prop('checked', true);
+      loadThumbs();
+    }
   });
 
   /**
@@ -78,6 +83,20 @@
    */
   $(document).on('change', '.admin-quickbar-keepopen input', function (e) {
     localStorage.adminQuickbarKeepopen = $('.admin-quickbar-keepopen input').is(':checked');
+  });
+
+  /**
+   * Load thumbs
+   */
+  $(document).on('change', '.admin-quickbar-loadthumbs input', function (e) {
+    localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
+
+    if (localStorage.adminQuickbarLoadthumbs == 'true') {
+      $('.admin-quickbar-loadthumbs input').prop('checked', true);
+      loadThumbs();
+    } else {
+      jQuery('.admin-quickbar .wp-post-image').prop('src', '');
+    }
   });
 
 })(jQuery);
@@ -102,4 +121,10 @@ function getPostListStorage() {
     localStorage.postList = '{}';
   }
   return JSON.parse(localStorage.postList);
+}
+
+function loadThumbs() {
+  jQuery('.admin-quickbar .wp-post-image').each(function (index, element) {
+    jQuery(element).prop('src', jQuery(element).data('src'));
+  });
 }

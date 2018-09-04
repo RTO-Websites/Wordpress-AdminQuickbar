@@ -36,7 +36,7 @@
             }
 
             echo '<a class="button-secondary add-post-button" href="' . admin_url( 'post-new.php' ) . '?post_type=' . $postType->name . '">'
-                 . $postType->labels->singular_name . '</a> ';
+                . $postType->labels->singular_name . '</a> ';
         }
 
         // loop all post-types
@@ -89,7 +89,12 @@
                     $path = explode( '/wp-content/', $path );
                     $path = '/wp-content/' . array_pop( $path );
 
-                    $thumbInstance = new Thumb\Thumb();
+                    if (class_exists('Inc\PostGallery\Thumb\Thumb')) {
+                        $thumbInstance = new Inc\PostGallery\Thumb\Thumb();
+                    } else {
+                        // legacy
+                        $thumbInstance = new Thumb\Thumb();
+                    }
                     $thumb = $thumbInstance->getThumb( array(
                         'path' => $path,
                         'width' => '150',
@@ -144,7 +149,7 @@
     <div class="toggle-quickbar-button"></div>
 </div>
 <script>
-    jQuery(function() {
-        jQuery('.admin-quickbar')
-    });
+  jQuery(function() {
+    jQuery('.admin-quickbar')
+  });
 </script>

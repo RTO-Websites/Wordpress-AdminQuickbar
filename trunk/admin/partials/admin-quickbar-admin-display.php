@@ -89,7 +89,7 @@
                     $path = explode( '/wp-content/', $path );
                     $path = '/wp-content/' . array_pop( $path );
 
-                    if (class_exists('Inc\PostGallery\Thumb\Thumb')) {
+                    if ( class_exists( 'Inc\PostGallery\Thumb\Thumb' ) ) {
                         $thumbInstance = new Inc\PostGallery\Thumb\Thumb();
                     } else {
                         // legacy
@@ -102,9 +102,11 @@
                         'scale' => '0',
                     ) );
 
-                    echo '<img src="" data-src="'
-                        . $thumb['url']
-                        . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image  post-image-from-postgallery" />';
+                    if ( !empty( $thumb['url'] ) ) {
+                        echo '<img src="" data-src="'
+                            . $thumb['url']
+                            . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image  post-image-from-postgallery" />';
+                    }
                 } else if ( !empty( $url ) ) {
                     echo '<img src="" data-src="'
                         . $url
@@ -149,7 +151,7 @@
     <div class="toggle-quickbar-button"></div>
 </div>
 <script>
-  jQuery(function() {
+  jQuery(function () {
     jQuery('.admin-quickbar')
   });
 </script>

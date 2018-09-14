@@ -24,14 +24,14 @@
         </label>
         <?php
         //add_theme_support( 'post-thumbnails' );
-        $filerPostTypes = explode( ',', 'nav_menu_item,revision,custom_css,customize_changeset,'
-            . 'oembed_cache,ocean_modal_window,nxs_qp,elementor_library' );
+        $filterPostTypes = explode( ',', 'nav_menu_item,revision,custom_css,customize_changeset,'
+            . 'oembed_cache,ocean_modal_window,nxs_qp' );
         $postTypes = get_post_types( array(), 'object' );
 
         echo '<br />';
         // loop all post-types for add new buttons
         foreach ( $postTypes as $postType ) {
-            if ( in_array( $postType->name, $filerPostTypes ) ) {
+            if ( in_array( $postType->name, $filterPostTypes ) ) {
                 continue;
             }
 
@@ -41,7 +41,7 @@
 
         // loop all post-types
         foreach ( $postTypes as $postType ) {
-            if ( in_array( $postType->name, $filerPostTypes ) ) {
+            if ( in_array( $postType->name, $filterPostTypes ) ) {
                 continue;
             }
             /*echo '<pre>';

@@ -20,7 +20,7 @@
         </label>
         <label for="admin-quickbar-keepopen" class="admin-quickbar-loadthumbs">
             <input type="checkbox" name="admin-quickbar-keepopen"/>
-            <?php _e( 'Load thumbs', $this->textdomain ); ?>
+            <?php _e( 'Show thumbs', $this->textdomain ); ?>
         </label>
         <?php
         //add_theme_support( 'post-thumbnails' );
@@ -58,6 +58,8 @@
                 'posts_per_page' => -1,
                 'post_status' => 'any',
                 'suppress_filters' => false,
+                'order_by' => 'menu_order',
+                'order' => 'ASC',
             ) );
 
             // loop posts of current post-type

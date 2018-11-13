@@ -164,3 +164,31 @@
 .admin-quickbar .wp-post-image[src=""] {
   display: none;
 }
+
+.admin-quickbar-jumpicons {
+  position: fixed;
+  bottom: 0;
+  right: 25px;
+  z-index: 999999;
+  background-color: #000;
+  padding: 2px 5px 0;
+}
+
+.admin-quickbar-jumpicons a {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  color: #fff;
+}
+
+.admin-quickbar-jumpicons a:hover {
+  color: #00a0d2;
+}
+
+.admin-quickbar-jumpicons a.dashicons-edit {
+  margin-top: 2px;
+}
+
+.admin-quickbar-jumpicons a.dashicons-elementor {
+  margin-top: -3px;
+}

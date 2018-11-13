@@ -27,6 +27,9 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.1.0 =
+* Add buttons to switch between elementor and wp-editor
+
 = 1.0.8 =
 * Posts are now order by menu_order ASC
 

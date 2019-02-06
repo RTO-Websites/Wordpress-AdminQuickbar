@@ -86,25 +86,20 @@
                         $path = get_attached_file( $post->ID );
                         $url = wp_get_attachment_image_src( $post->ID, 'thumbnail' );
                         $url = !empty( $url ) ? $url[0] : '';
-                    } else if ( class_exists( 'Inc\PostGallery' ) ) {
+                    } else if ( class_exists( 'Lib\PostGalleryImageList' ) ) {
                         // from post-gallery
-                        $postGalleryImages = Lib\PostGallery::getImages( $post->ID );
+                        $postGalleryImages = Lib\PostGalleryImageList::get( $post->ID );
                         if ( count( $postGalleryImages ) ) {
                             $firstThumb = array_shift( $postGalleryImages );
                             $path = $firstThumb['path'];
                         }
                     }
 
-                    if ( !empty( $path ) && class_exists( 'Inc\PostGallery' ) ) {
+                    if ( !empty( $path ) && class_exists( 'Lib\Thumb' ) ) {
                         $path = explode( '/wp-content/', $path );
                         $path = '/wp-content/' . array_pop( $path );
 
-                        if ( class_exists( 'Inc\PostGallery\Thumb\Thumb' ) ) {
-                            $thumbInstance = new Lib\PostGallery\Thumb\Thumb();
-                        } else {
-                            // legacy
-                            $thumbInstance = new Lib\Thumb();
-                        }
+                        $thumbInstance = new Lib\Thumb();
                         $thumb = $thumbInstance->getThumb( array(
                             'path' => $path,
                             'width' => '150',

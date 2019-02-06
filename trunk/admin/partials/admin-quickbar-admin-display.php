@@ -41,7 +41,7 @@
             ?>
 
             <a class="button-secondary add-post-button" href="#"
-                onclick="window.location.href='<?php echo admin_url( 'post-new.php' ); ?>?post_type=' + $('.admin-quickbar-new-select').val();return false;"></a>
+                    onclick="window.location.href='<?php echo admin_url( 'post-new.php' ); ?>?post_type=' + $('.admin-quickbar-new-select').val();return false;"></a>
 
             <?php
             // loop all post-types
@@ -86,7 +86,9 @@
                         $path = get_attached_file( $post->ID );
                         $url = wp_get_attachment_image_src( $post->ID, 'thumbnail' );
                         $url = !empty( $url ) ? $url[0] : '';
-                    } else if ( class_exists( 'Lib\PostGalleryImageList' ) ) {
+                    }
+
+                    if ( empty( $url) && class_exists( 'Lib\PostGalleryImageList' ) ) {
                         // from post-gallery
                         $postGalleryImages = Lib\PostGalleryImageList::get( $post->ID );
                         if ( count( $postGalleryImages ) ) {

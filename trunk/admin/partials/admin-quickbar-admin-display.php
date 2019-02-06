@@ -41,7 +41,7 @@
             ?>
 
             <a class="button-secondary add-post-button" href="#"
-                    onclick="window.location.href='<?php echo admin_url( 'post-new.php' ); ?>?post_type=' + $('.admin-quickbar-new-select').val();return false;"></a>
+                    onclick="window.location.href='<?php echo admin_url( 'post-new.php' ); ?>?post_type=' + jQuery('.admin-quickbar-new-select').val();return false;"></a>
 
             <?php
             // loop all post-types

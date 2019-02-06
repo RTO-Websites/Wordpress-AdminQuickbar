@@ -27,6 +27,10 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.2.0 =
+* Add preview-button
+* Fix some styles
+
 = 1.1.0 =
 * Add buttons to switch between elementor and wp-editor
 

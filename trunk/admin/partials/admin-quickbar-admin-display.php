@@ -29,25 +29,26 @@
             $postTypes = get_post_types( array(), 'object' );
 
             echo '<br />';
+            echo '<select class="admin-quickbar-new-select">';
             // loop all post-types for add new buttons
             foreach ( $postTypes as $postType ) {
                 if ( in_array( $postType->name, $filterPostTypes ) ) {
                     continue;
                 }
-
-                echo '<a class="button-secondary add-post-button" href="' . admin_url( 'post-new.php' ) . '?post_type=' . $postType->name . '">'
-                    . $postType->labels->singular_name . '</a> ';
+                echo '<option value="'.$postType->name.'">' . $postType->name . '</option>';
             }
+            echo '</select>';
+            ?>
 
+            <a class="button-secondary add-post-button" href="#"
+                onclick="window.location.href='<?php echo admin_url( 'post-new.php' ); ?>?post_type=' + $('.admin-quickbar-new-select').val();return false;"></a>
+
+            <?php
             // loop all post-types
             foreach ( $postTypes as $postType ) {
                 if ( in_array( $postType->name, $filterPostTypes ) ) {
                     continue;
                 }
-
-                echo '<div class="admin-quickbar-postlist" data-post-type="' . $postType->name . '">';
-                echo '<div class="admin-quickbar-post-type">' . $postType->label . '</div>';
-                echo '<div class="admin-quickbar-postlist-inner">';
 
                 // get posts of current post-type
                 $posts = get_posts( array(
@@ -58,6 +59,16 @@
                     'order_by' => 'menu_order',
                     'order' => 'ASC',
                 ) );
+
+                if ( empty( $posts ) ) {
+                    continue;
+                }
+
+                echo '<div class="admin-quickbar-postlist" data-post-type="' . $postType->name . '">';
+                echo '<div class="admin-quickbar-post-type">' . $postType->label
+                    . '<a class="dashicons dashicons-plus add-new" href="' .admin_url( 'post-new.php' ) . '?post_type=' . $postType->name . '"></a>'
+                    . '</div>';
+                echo '<div class="admin-quickbar-postlist-inner">';
 
                 // loop posts of current post-type
                 foreach ( $posts as $post ) {
@@ -77,7 +88,7 @@
                         $url = !empty( $url ) ? $url[0] : '';
                     } else if ( class_exists( 'Inc\PostGallery' ) ) {
                         // from post-gallery
-                        $postGalleryImages = Inc\PostGallery::getImages( $post->ID );
+                        $postGalleryImages = Lib\PostGallery::getImages( $post->ID );
                         if ( count( $postGalleryImages ) ) {
                             $firstThumb = array_shift( $postGalleryImages );
                             $path = $firstThumb['path'];
@@ -89,10 +100,10 @@
                         $path = '/wp-content/' . array_pop( $path );
 
                         if ( class_exists( 'Inc\PostGallery\Thumb\Thumb' ) ) {
-                            $thumbInstance = new Inc\PostGallery\Thumb\Thumb();
+                            $thumbInstance = new Lib\PostGallery\Thumb\Thumb();
                         } else {
                             // legacy
-                            $thumbInstance = new Thumb\Thumb();
+                            $thumbInstance = new Lib\Thumb();
                         }
                         $thumb = $thumbInstance->getThumb( array(
                             'path' => $path,
@@ -128,6 +139,7 @@
 
 
                     echo '<div class="admin-quickbar-post-options">';
+                    echo '<a class="dashicons dashicons-visibility" href="' . get_permalink( $post->ID) . '" title="Go to Page"></a>';
                     echo '<a class="dashicons dashicons-edit" href="' . admin_url() . 'post.php?post=' . $post->ID . '&action=edit" title="Go to WP-Editor"></a>';
 
                     // add button for elementor-edit
@@ -152,9 +164,12 @@
 
 <?php
 $currentPost = filter_input( INPUT_GET, 'post' );
-if ( !empty( $currentPost ) && defined( 'ELEMENTOR_VERSION' ) ) {
+if ( !empty( $currentPost ) ) {
     echo '<div class="admin-quickbar-jumpicons">';
-    echo '<a class="dashicons dashicons-edit" href="' . admin_url() . 'post.php?post=' . $currentPost . '&action=edit" title="Go to WP-Editor"></a>';
-    echo '<a class="dashicons dashicons-elementor" href="' . admin_url() . 'post.php?post=' . $currentPost . '&action=elementor" title="Go to Elementor"></a>';
+    echo '<a class="dashicons dashicons-visibility" href="' . get_permalink( $currentPost ) . '" title="Go to Page"></a>';
+    if ( defined( 'ELEMENTOR_VERSION' ) ) {
+        echo '<a class="dashicons dashicons-edit" href="' . admin_url() . 'post.php?post=' . $currentPost . '&action=edit" title="Go to WP-Editor"></a>';
+        echo '<a class="dashicons dashicons-elementor" href="' . admin_url() . 'post.php?post=' . $currentPost . '&action=elementor" title="Go to Elementor"></a>';
+    }
     echo '</div>';
 }

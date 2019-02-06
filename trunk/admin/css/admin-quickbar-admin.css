@@ -42,13 +42,15 @@
 }
 
 .dashicons-elementor {
-  margin-top: -6px;
+  top: 3px;
+  position: relative;
 }
 
 .dashicons-elementor::before {
   content: "\e800";
   font-family: eicons;
   font-size: 13px;
+  vertical-align: top;
 }
 
 .admin-quickbar-post-type {
@@ -74,14 +76,31 @@
   content: "\f142";
 }
 
+.admin-quickbar-post-type .add-new {
+  position: relative;
+  top: 6px;
+  font-size: 12px;
+  vertical-align: bottom;
+}
+
 .admin-quickbar-post-options {
   float: right;
+}
+
+.admin-quickbar-post-options .dashicons {
+  vertical-align: bottom;
 }
 
 .admin-quickbar-post {
   padding: 12px 15px;
   background-color: #fff;
   margin-bottom: 3px;
+}
+
+.admin-quickbar-post::after {
+  content: '';
+  display: block;
+  clear: both;
 }
 
 .admin-quickbar-postlist-inner {
@@ -176,19 +195,17 @@
 
 .admin-quickbar-jumpicons a {
   display: inline-block;
+  position: relative;
   width: 25px;
   height: 25px;
   color: #fff;
+  vertical-align: bottom;
 }
 
 .admin-quickbar-jumpicons a:hover {
   color: #00a0d2;
 }
 
-.admin-quickbar-jumpicons a.dashicons-edit {
-  margin-top: 2px;
-}
-
 .admin-quickbar-jumpicons a.dashicons-elementor {
-  margin-top: -3px;
+  top: 3px;
 }

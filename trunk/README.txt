@@ -27,6 +27,9 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.3.0 =
+* Posts and Pages are grouped by parent/category now
+
 = 1.2.0 =
 * Add preview-button
 * Fix some styles

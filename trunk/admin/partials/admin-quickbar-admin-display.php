@@ -35,7 +35,7 @@
                 if ( in_array( $postType->name, $filterPostTypes ) ) {
                     continue;
                 }
-                echo '<option value="'.$postType->name.'">' . $postType->name . '</option>';
+                echo '<option value="' . $postType->name . '">' . $postType->name . '</option>';
             }
             echo '</select>';
             ?>
@@ -44,109 +44,165 @@
                     onclick="window.location.href='<?php echo admin_url( 'post-new.php' ); ?>?post_type=' + jQuery('.admin-quickbar-new-select').val();return false;"></a>
 
             <?php
+            $categoryList = get_categories();
             // loop all post-types
             foreach ( $postTypes as $postType ) {
                 if ( in_array( $postType->name, $filterPostTypes ) ) {
                     continue;
                 }
 
+                $cats = [];
+                $GLOBALS['blub'] = true;
                 // get posts of current post-type
-                $posts = get_posts( array(
+                $args = [
                     'post_type' => $postType->name,
                     'posts_per_page' => -1,
-                    'post_status' => 'any',
                     'suppress_filters' => false,
-                    'order_by' => 'menu_order',
+                    'orderby' => $postType->hierarchical ? [ 'parent' => 'ASC', 'menu_order' => 'ASC' ] : 'menu_order',
                     'order' => 'ASC',
-                ) );
+                ];
+                if ( $postType->hierarchical ) {
+                    $posts = get_pages( $args );
+                    $cats = [
+                        'none' => $posts,
+                    ];
+                } else {
+                    $count = 0;
+                    $args = $args + [
+                            'post_status' => 'any',
+                            // workaround for elementor
+                            'meta_key' => 'blub54315321',
+                            'meta_compare' => 'NOT EXISTS',
+                        ];
 
-                if ( empty( $posts ) ) {
-                    continue;
+                    foreach ( $categoryList as $category ) {
+                        $args['category'] = $category->term_id;
+                        $cats[$category->name] = get_posts( $args );
+                        $count += count( $cats[$category->name] );
+                    }
+
+                    if ( !$count ) {
+                        unset( $args['category'] );
+                        $cats[__( 'Uncategorized' )] = get_posts( $args );
+                    }
                 }
 
+                $GLOBALS['blub'] = false;
+                if ( empty( $cats ) ) {
+                    continue;
+                }
                 echo '<div class="admin-quickbar-postlist" data-post-type="' . $postType->name . '">';
                 echo '<div class="admin-quickbar-post-type">' . $postType->label
-                    . '<a class="dashicons dashicons-plus add-new" href="' .admin_url( 'post-new.php' ) . '?post_type=' . $postType->name . '"></a>'
+                    . '<a class="dashicons dashicons-plus add-new" href="' . admin_url( 'post-new.php' ) . '?post_type=' . $postType->name . '"></a>'
                     . '</div>';
                 echo '<div class="admin-quickbar-postlist-inner">';
 
+                $margin = 0;
+                $lastParent = 0;
                 // loop posts of current post-type
-                foreach ( $posts as $post ) {
-                    echo '<div class="admin-quickbar-post">';
-
-                    // echo thumb
-                    if ( has_post_thumbnail( $post ) ) {
-                        // from post-thumbnail
-                        $attachmentId = get_post_thumbnail_id( $post->ID );
-                        $path = get_attached_file( $attachmentId );
-                        $url = wp_get_attachment_image_src( $attachmentId, 'thumbnail' );
-                        $url = !empty( $url ) ? $url[0] : '';
-                    } else if ( $post->post_type == 'attachment' ) {
-                        // direct from attachment
-                        $path = get_attached_file( $post->ID );
-                        $url = wp_get_attachment_image_src( $post->ID, 'thumbnail' );
-                        $url = !empty( $url ) ? $url[0] : '';
+                foreach ( $cats as $catName => $posts ) {
+                    if ( empty( $posts ) ) {
+                        continue;
                     }
-
-                    if ( empty( $url) && class_exists( 'Lib\PostGalleryImageList' ) ) {
-                        // from post-gallery
-                        $postGalleryImages = Lib\PostGalleryImageList::get( $post->ID );
-                        if ( count( $postGalleryImages ) ) {
-                            $firstThumb = array_shift( $postGalleryImages );
-                            $path = $firstThumb['path'];
+                    if ( !$postType->hierarchical ) {
+                        echo '<div class="admin-quickbar-category">' . $catName . '</div>';
+                    }
+                    foreach ( $posts as $post ) {
+                        $style = '';
+                        if ( empty( $post->post_parent ) ) {
+                            $margin = 0;
+                        } else if ( $post->post_parent === $lastParent ) {
+                            // do nothing
+                        } else {
+                            // has parent, not same as before
+                            $margin += 10;
+                            $lastParent = $post->post_parent;
                         }
-                    }
 
-                    if ( !empty( $path ) && class_exists( 'Lib\Thumb' ) ) {
-                        $path = explode( '/wp-content/', $path );
-                        $path = '/wp-content/' . array_pop( $path );
+                        if ( !empty( $margin ) && $postType->hierarchical ) {
+                            $style = ' style="margin-left:' . $margin . 'px;" ';
+                        }
 
-                        $thumbInstance = new Lib\Thumb();
-                        $thumb = $thumbInstance->getThumb( array(
-                            'path' => $path,
-                            'width' => '150',
-                            'height' => '150',
-                            'scale' => '0',
-                        ) );
+                        echo '<div class="admin-quickbar-post" ' . $style . '>';
 
-                        if ( !empty( $thumb['url'] ) ) {
+                        // echo thumb
+                        if ( has_post_thumbnail( $post ) ) {
+                            // from post-thumbnail
+                            $attachmentId = get_post_thumbnail_id( $post->ID );
+                            $path = get_attached_file( $attachmentId );
+                            $url = wp_get_attachment_image_src( $attachmentId, 'thumbnail' );
+                            $url = !empty( $url ) ? $url[0] : '';
+                        } else if ( $post->post_type == 'attachment' ) {
+                            // direct from attachment
+                            $path = get_attached_file( $post->ID );
+                            $url = wp_get_attachment_image_src( $post->ID, 'thumbnail' );
+                            $url = !empty( $url ) ? $url[0] : '';
+                        }
+
+                        if ( empty( $url ) && class_exists( 'Lib\PostGalleryImageList' ) ) {
+                            // from post-gallery
+                            $postGalleryImages = Lib\PostGalleryImageList::get( $post->ID );
+                            if ( count( $postGalleryImages ) ) {
+                                $firstThumb = array_shift( $postGalleryImages );
+                                $path = $firstThumb['path'];
+                            }
+                        }
+
+                        if ( !empty( $path ) && class_exists( 'Lib\Thumb' ) ) {
+                            $path = explode( '/wp-content/', $path );
+                            $path = '/wp-content/' . array_pop( $path );
+
+                            $thumbInstance = new Lib\Thumb();
+                            $thumb = $thumbInstance->getThumb( array(
+                                'path' => $path,
+                                'width' => '150',
+                                'height' => '150',
+                                'scale' => '0',
+                            ) );
+
+                            if ( !empty( $thumb['url'] ) ) {
+                                echo '<img src="" data-src="'
+                                    . $thumb['url']
+                                    . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image  post-image-from-postgallery" />';
+                            }
+                        } else if ( !empty( $url ) ) {
                             echo '<img src="" data-src="'
-                                . $thumb['url']
-                                . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image  post-image-from-postgallery" />';
+                                . $url
+                                . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image" />';
                         }
-                    } else if ( !empty( $url ) ) {
-                        echo '<img src="" data-src="'
-                            . $url
-                            . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image" />';
+
+                        // reset vars
+                        $thumb = null;
+                        $path = null;
+                        $url = null;
+
+                        // echo post-title
+                        if ( !empty( $post->post_title ) ) {
+                            echo $post->post_title;
+                        } else if ( !empty( $post->post_name ) ) {
+                            echo $post->post_name;
+                        } else {
+                            echo $post->ID;
+                        }
+
+                        $link = admin_url() . 'post.php?post=' . $post->ID;
+                        if ( $postType->name === 'wpcf7' ) {
+                            $link = admin_url() . 'admin.php?page=wpcf7&post=' . $post->ID;
+                        }
+
+                        echo '<div class="admin-quickbar-post-options">';
+                        echo '<a class="dashicons dashicons-edit" href="' . $link . '&action=edit" title="Go to WP-Editor"></a>';
+
+                        // add button for elementor-edit
+                        if ( defined( 'ELEMENTOR_VERSION' ) ) {
+                            echo '<a class="dashicons dashicons-elementor" href="' . $link . '&action=elementor" title="Go to Elementor"></a>';
+                        }
+                        echo '<a class="dashicons dashicons-visibility" href="' . get_permalink( $post->ID ) . '" title="Go to Page"></a>';
+
+                        echo '</div>'; // .admin-quickbar-post-options
+                        echo '</div>'; // .admin-quickbar-postlist-inner
+
                     }
-
-                    // reset vars
-                    $thumb = null;
-                    $path = null;
-                    $url = null;
-
-                    // echo post-title
-                    if ( !empty( $post->post_title ) ) {
-                        echo $post->post_title;
-                    } else if ( !empty( $post->post_name ) ) {
-                        echo $post->post_name;
-                    } else {
-                        echo $post->ID;
-                    }
-
-
-                    echo '<div class="admin-quickbar-post-options">';
-                    echo '<a class="dashicons dashicons-visibility" href="' . get_permalink( $post->ID) . '" title="Go to Page"></a>';
-                    echo '<a class="dashicons dashicons-edit" href="' . admin_url() . 'post.php?post=' . $post->ID . '&action=edit" title="Go to WP-Editor"></a>';
-
-                    // add button for elementor-edit
-                    if ( defined( 'ELEMENTOR_VERSION' ) ) {
-                        echo '<a class="dashicons dashicons-elementor" href="' . admin_url() . 'post.php?post=' . $post->ID . '&action=elementor" title="Go to Elementor"></a>';
-                    }
-
-                    echo '</div>'; // .admin-quickbar-post-options
-                    echo '</div>'; // .admin-quickbar-postlist-inner
-
                 }
 
                 echo '</div>';

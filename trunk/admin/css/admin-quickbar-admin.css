@@ -209,3 +209,15 @@
 .admin-quickbar-jumpicons a.dashicons-elementor {
   top: 3px;
 }
+
+.admin-quickbar-category {
+  position: relative;
+  margin-bottom: 0.75em;
+  margin-top: 0.75em;
+  margin-left: 12px;
+  font-weight: bold;
+}
+
+.admin-quickbar-category:first-child {
+  margin-top: 0;
+}

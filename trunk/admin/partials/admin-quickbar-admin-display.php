@@ -35,7 +35,7 @@
                 if ( in_array( $postType->name, $filterPostTypes ) ) {
                     continue;
                 }
-                echo '<option value="' . $postType->name . '">' . $postType->name . '</option>';
+                echo '<option value="' . $postType->name . '">' . $postType->label . '</option>';
             }
             echo '</select>';
             ?>
@@ -50,6 +50,7 @@
                 if ( in_array( $postType->name, $filterPostTypes ) ) {
                     continue;
                 }
+                $countPostType = 0;
 
                 $cats = [];
                 $GLOBALS['blub'] = true;
@@ -66,6 +67,7 @@
                     $cats = [
                         'none' => $posts,
                     ];
+                    $countPostType += count( $posts );
                 } else {
                     $count = 0;
                     $args = $args + [
@@ -80,15 +82,17 @@
                         $cats[$category->name] = get_posts( $args );
                         $count += count( $cats[$category->name] );
                     }
+                    $countPostType += $count;
 
                     if ( !$count ) {
                         unset( $args['category'] );
                         $cats[__( 'Uncategorized' )] = get_posts( $args );
+                        $countPostType += count( $cats[__( 'Uncategorized' )] );
                     }
                 }
 
                 $GLOBALS['blub'] = false;
-                if ( empty( $cats ) ) {
+                if ( empty( $cats ) || empty( $countPostType ) ) {
                     continue;
                 }
                 echo '<div class="admin-quickbar-postlist" data-post-type="' . $postType->name . '">';

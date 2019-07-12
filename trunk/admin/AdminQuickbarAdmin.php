@@ -22,6 +22,10 @@
  */
 class AdminQuickbarAdmin {
 
+    public $filterPostTypes = [];
+    public $postTypes = [];
+    public $categoryList = [];
+
     /**
      * The ID of this plugin.
      *
@@ -43,22 +47,27 @@ class AdminQuickbarAdmin {
     /**
      * Initialize the class and set its properties.
      *
+     * @param string $pluginName The name of this plugin.
+     * @param string $version The version of this plugin.
      * @since    1.0.0
-     * @param      string $pluginName The name of this plugin.
-     * @param      string $version The version of this plugin.
      */
     public function __construct( $pluginName, $version ) {
 
         $this->pluginName = $pluginName;
         $this->version = $version;
 
-        add_action( 'admin_print_footer_scripts', array( $this, 'addSidebar' ) );
+        $this->filterPostTypes = explode( ',', 'nav_menu_item,revision,custom_css,customize_changeset,'
+            . 'oembed_cache,ocean_modal_window,nxs_qp' );
 
-        add_action( 'admin_enqueue_scripts', array( $this, 'enqueueStyles' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'enqueueScripts' ) );
+        $this->categoryList = get_categories();
 
-        add_action( 'elementor/editor/before_enqueue_styles', array( $this, 'enqueueStyles' ) );
-        add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'enqueueScripts' ), 99999 );
+        add_action( 'admin_print_footer_scripts', [ $this, 'renderSidebar' ] );
+
+        add_action( 'admin_enqueue_scripts', [ $this, 'enqueueStyles' ] );
+        add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
+
+        add_action( 'elementor/editor/before_enqueue_styles', [ $this, 'enqueueStyles' ] );
+        add_action( 'elementor/editor/before_enqueue_scripts', [ $this, 'enqueueScripts' ], 99999 );
 
     }
 
@@ -68,10 +77,220 @@ class AdminQuickbarAdmin {
      * @param string $data
      * @return string
      */
-    public function addSidebar( $data ) {
+    public function renderSidebar( $data ) {
+        $this->postTypes = get_post_types( [], 'object' );
         include( 'partials/admin-quickbar-admin-display.php' );
 
         return $data;
+    }
+
+    /**
+     * Render post-thumb
+     *
+     * @param \WP_Post $post
+     * @throws \ImagickException
+     */
+    public function renderThumb( $post ) {
+        if ( has_post_thumbnail( $post ) ) {
+            // from post-thumbnail
+            $attachmentId = get_post_thumbnail_id( $post->ID );
+            $path = get_attached_file( $attachmentId );
+            $url = wp_get_attachment_image_src( $attachmentId, 'thumbnail' );
+            $url = !empty( $url ) ? $url[0] : '';
+        } else if ( $post->post_type == 'attachment' ) {
+            // direct from attachment
+            $path = get_attached_file( $post->ID );
+            $url = wp_get_attachment_image_src( $post->ID, 'thumbnail' );
+            $url = !empty( $url ) ? $url[0] : '';
+        }
+
+        if ( empty( $url ) && class_exists( 'Lib\PostGalleryImageList' ) ) {
+            // from post-gallery
+            $postGalleryImages = \Lib\PostGalleryImageList::get( $post->ID );
+            if ( count( $postGalleryImages ) ) {
+                $firstThumb = array_shift( $postGalleryImages );
+                $path = $firstThumb['path'];
+            }
+        }
+
+        if ( !empty( $path ) && class_exists( 'Lib\Thumb' ) ) {
+            $path = explode( '/wp-content/', $path );
+            $path = '/wp-content/' . array_pop( $path );
+
+            $thumbInstance = new \Lib\Thumb();
+            $thumb = $thumbInstance->getThumb( array(
+                'path' => $path,
+                'width' => '150',
+                'height' => '150',
+                'scale' => '0',
+            ) );
+
+            if ( !empty( $thumb['url'] ) ) {
+                echo '<img src="" data-src="'
+                    . $thumb['url']
+                    . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image  post-image-from-postgallery" />';
+            }
+        } else if ( !empty( $url ) ) {
+            echo '<img src="" data-src="'
+                . $url
+                . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image" />';
+        }
+    }
+
+    /**
+     * Renders post-title, or post-name/post-id if empty
+     *
+     * @param \WP_Post $post
+     */
+    public function renderPostTitle( $post ) {
+        if ( !empty( $post->post_title ) ) {
+            echo $post->post_title;
+        } else if ( !empty( $post->post_name ) ) {
+            echo $post->post_name;
+        } else {
+            echo $post->ID;
+        }
+    }
+
+    /**
+     * Renders select field and button to create new posts
+     */
+    public function renderAddNewPost() {
+        echo '<br />';
+        echo '<select class="admin-quickbar-new-select">';
+        // loop all post-types for add new buttons
+        foreach ( $this->postTypes as $postType ) {
+            if ( in_array( $postType->name, $this->filterPostTypes ) ) {
+                continue;
+            }
+            echo '<option value="' . $postType->name . '">' . $postType->label . '</option>';
+        }
+        echo '</select>';
+        ?>
+        <a class="button-secondary add-post-button" href="#"
+                onclick="window.location.href='<?php echo admin_url( 'post-new.php' ); ?>?post_type=' + jQuery('.admin-quickbar-new-select').val();return false;"></a>
+
+        <?php
+    }
+
+    /**
+     * @param \WP_Post $post
+     * @param \WP_Post_Type $postType
+     * @param int $lastParent
+     * @param int $margin
+     * @return string
+     */
+    public function getMarginStyle( $post, $postType, &$lastParent, &$margin = 0 ) {
+        $style = '';
+        if ( empty( $post->post_parent ) ) {
+            $margin = 0;
+        } else if ( $post->post_parent === $lastParent ) {
+            // do nothing
+        } else {
+            // has parent, not same as before
+            $margin += 10;
+            $lastParent = $post->post_parent;
+        }
+
+        if ( !empty( $margin ) && $postType->hierarchical ) {
+            $style = ' style="margin-left:' . $margin . 'px;" ';
+        }
+
+        return $style;
+    }
+
+    /**
+     * Get posts by post-type
+     *
+     * @param $postType
+     * @return array
+     */
+    public function getPostsByPostType( $postType ) {
+        $countPostType = 0;
+        $cats = [];
+
+        // get posts of current post-type
+        $args = [
+            'post_type' => $postType->name,
+            'posts_per_page' => -1,
+            'suppress_filters' => false,
+            'orderby' => $postType->hierarchical ? [ 'parent' => 'ASC', 'menu_order' => 'ASC' ] : 'menu_order',
+            'order' => 'ASC',
+        ];
+        if ( $postType->hierarchical ) {
+            $posts = get_pages( $args );
+            $cats = [
+                'none' => $posts,
+            ];
+            $countPostType += count( $posts );
+        } else {
+            $count = 0;
+            $args = $args + [
+                    'post_status' => 'any',
+                    // workaround for elementor
+                    'meta_key' => 'blub54315321',
+                    'meta_compare' => 'NOT EXISTS',
+                ];
+
+            foreach ( $this->categoryList as $category ) {
+                $args['category'] = $category->term_id;
+                $cats[$category->name] = get_posts( $args );
+                $count += count( $cats[$category->name] );
+            }
+            $countPostType += $count;
+
+            if ( !$count ) {
+                unset( $args['category'] );
+                $cats[__( 'Uncategorized' )] = get_posts( $args );
+                $countPostType += count( $cats[__( 'Uncategorized' )] );
+            }
+        }
+
+        return [
+            'count' => $countPostType,
+            'cats' => $cats,
+        ];
+    }
+
+    /**
+     * Returns post-edit-link, and info if elementor is available
+     *
+     * @param \WP_Post_Type $postType
+     * @param \WP_Post $post
+     * @return array
+     */
+    public function getPostTypeInfo( $postType, $post ) {
+        $noElementor = false;
+        $noView = false;
+        $link = admin_url() . 'post.php?post=' . $post->ID;
+
+        switch ( $postType->name ) {
+            case 'wpcf7':
+                $link = admin_url() . 'admin.php?page=wpcf7&post=' . $post->ID;
+                $noElementor = true;
+                break;
+
+
+            case 'attachment':
+                $noElementor = true;
+                break;
+
+            case 'elementor_font':
+            case 'elebee-global-css':
+            case 'postgalleryslider':
+            case 'acf-field-group':
+            case 'attachment':
+                $noElementor = true;
+                $noView = true;
+                break;
+
+        }
+
+        return [
+            'link' => $link,
+            'noElementor' => $noElementor,
+            'noView' => $noView,
+        ];
     }
 
     /**

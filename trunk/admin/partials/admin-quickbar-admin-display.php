@@ -53,7 +53,7 @@
                 $countPostType = 0;
 
                 $cats = [];
-                $GLOBALS['blub'] = true;
+
                 // get posts of current post-type
                 $args = [
                     'post_type' => $postType->name,
@@ -91,7 +91,6 @@
                     }
                 }
 
-                $GLOBALS['blub'] = false;
                 if ( empty( $cats ) || empty( $countPostType ) ) {
                     continue;
                 }
@@ -189,19 +188,43 @@
                             echo $post->ID;
                         }
 
+                        $noElementor = false;
+                        $noView = false;
                         $link = admin_url() . 'post.php?post=' . $post->ID;
-                        if ( $postType->name === 'wpcf7' ) {
-                            $link = admin_url() . 'admin.php?page=wpcf7&post=' . $post->ID;
+
+                        switch ( $postType->name ) {
+                            case 'wpcf7':
+                                $link = admin_url() . 'admin.php?page=wpcf7&post=' . $post->ID;
+                                $noElementor = true;
+                                break;
+
+
+                            case 'attachment':
+                                $noElementor = true;
+                                break;
+
+                            case 'elementor_font':
+                            case 'elebee-global-css':
+                            case 'postgalleryslider':
+                            case 'acf-field-group':
+                            case 'attachment':
+                                $noElementor = true;
+                                $noView = true;
+                                break;
+
                         }
 
                         echo '<div class="admin-quickbar-post-options">';
                         echo '<a class="dashicons dashicons-edit" href="' . $link . '&action=edit" title="Go to WP-Editor"></a>';
 
                         // add button for elementor-edit
-                        if ( defined( 'ELEMENTOR_VERSION' ) ) {
+                        if ( defined( 'ELEMENTOR_VERSION' ) && !$noElementor ) {
                             echo '<a class="dashicons dashicons-elementor" href="' . $link . '&action=elementor" title="Go to Elementor"></a>';
                         }
-                        echo '<a class="dashicons dashicons-visibility" href="' . get_permalink( $post->ID ) . '" title="Go to Page"></a>';
+
+                        if ( empty( $noView ) ) {
+                            echo '<a class="dashicons dashicons-visibility" href="' . get_permalink( $post->ID ) . '" title="Go to Page"></a>';
+                        }
 
                         echo '</div>'; // .admin-quickbar-post-options
                         echo '</div>'; // .admin-quickbar-postlist-inner

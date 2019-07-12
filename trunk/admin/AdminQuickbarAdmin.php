@@ -24,6 +24,7 @@ class AdminQuickbarAdmin {
 
     public $filterPostTypes = [];
     public $postTypes = [];
+    public $filteredPostTypes = [];
     public $categoryList = [];
 
     /**
@@ -58,6 +59,13 @@ class AdminQuickbarAdmin {
 
         $this->filterPostTypes = explode( ',', 'nav_menu_item,revision,custom_css,customize_changeset,'
             . 'oembed_cache,ocean_modal_window,nxs_qp' );
+
+        foreach ( $this->postTypes as $postType ) {
+            if ( in_array( $postType->name, $this->filterPostTypes ) ) {
+                continue;
+            }
+            $this->filteredPostTypes[] = $postType;
+        }
 
         $this->categoryList = get_categories();
 
@@ -156,21 +164,62 @@ class AdminQuickbarAdmin {
      * Renders select field and button to create new posts
      */
     public function renderAddNewPost() {
-        echo '<br />';
-        echo '<select class="admin-quickbar-new-select">';
-        // loop all post-types for add new buttons
+        include 'partials/add-new-posts.php';
+    }
+
+    /**
+     * Render post-type loop
+     */
+    public function renderLoopPostTypes() {
         foreach ( $this->postTypes as $postType ) {
             if ( in_array( $postType->name, $this->filterPostTypes ) ) {
                 continue;
             }
-            echo '<option value="' . $postType->name . '">' . $postType->label . '</option>';
-        }
-        echo '</select>';
-        ?>
-        <a class="button-secondary add-post-button" href="#"
-                onclick="window.location.href='<?php echo admin_url( 'post-new.php' ); ?>?post_type=' + jQuery('.admin-quickbar-new-select').val();return false;"></a>
 
-        <?php
+            $posts = $this->getPostsByPostType( $postType );
+            $countPostType = $posts['count'];
+            $cats = $posts['cats'];
+
+
+            if ( empty( $cats ) || empty( $countPostType ) ) {
+                continue;
+            }
+            include 'partials/loop-post-types.php';
+        }
+    }
+
+    /**
+     * Render category loop
+     *
+     * @param $postType
+     * @param $cats
+     */
+    public function renderLoopCategories( $postType, $cats ) {
+        foreach ( $cats as $catName => $posts ) {
+            if ( empty( $posts ) ) {
+                continue;
+            }
+            if ( !$postType->hierarchical ) {
+                echo '<div class="admin-quickbar-category">' . $catName . '</div>';
+            }
+
+            $this->renderLoopPosts( $postType, $posts );
+        }
+    }
+
+    /**
+     * Render posts loop
+     *
+     * @param $postType
+     * @param $cats
+     */
+    public function renderLoopPosts( $postType, $posts ) {
+        foreach ( $posts as $post ) {
+            $style = $this->getMarginStyle( $post, $postType, $lastParent, $margin );
+            $postTypeInfo = $this->getPostTypeInfo( $postType, $post );
+
+            include 'partials/loop-posts.php';
+        }
     }
 
     /**
@@ -312,7 +361,7 @@ class AdminQuickbarAdmin {
          * class.
          */
 
-        wp_enqueue_style( $this->pluginName, plugin_dir_url( __FILE__ ) . 'css/admin-quickbar-admin.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->pluginName, plugin_dir_url( __FILE__ ) . 'css/admin-quickbar-admin.css', [], $this->version, 'all' );
 
     }
 
@@ -335,7 +384,7 @@ class AdminQuickbarAdmin {
          * class.
          */
 
-        wp_enqueue_script( $this->pluginName, plugin_dir_url( __FILE__ ) . 'js/admin-quickbar-admin.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( $this->pluginName, plugin_dir_url( __FILE__ ) . 'js/admin-quickbar-admin.js', [ 'jquery' ], $this->version, false );
 
     }
 

@@ -72,7 +72,7 @@ class AdminQuickbar {
 	public function __construct() {
 
 		$this->pluginName = 'admin-quickbar';
-		$this->version = '1.0.0';
+		$this->version = '1.4.0';
 
 		$this->loadDependencies();
 		$this->setLocale();

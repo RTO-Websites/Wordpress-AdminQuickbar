@@ -192,7 +192,7 @@
                         $noView = false;
                         $link = admin_url() . 'post.php?post=' . $post->ID;
 
-                        switch ( $postType->name ) {
+                        switch ($postType->name) {
                             case 'wpcf7':
                                 $link = admin_url() . 'admin.php?page=wpcf7&post=' . $post->ID;
                                 $noElementor = true;
@@ -222,7 +222,7 @@
                             echo '<a class="dashicons dashicons-elementor" href="' . $link . '&action=elementor" title="Go to Elementor"></a>';
                         }
 
-                        if ( empty( $noView ) ) {
+                        if (empty($noView)) {
                             echo '<a class="dashicons dashicons-visibility" href="' . get_permalink( $post->ID ) . '" title="Go to Page"></a>';
                         }
 

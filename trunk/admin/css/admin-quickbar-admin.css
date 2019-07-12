@@ -47,7 +47,7 @@
 }
 
 .dashicons-elementor::before {
-  content: "\e800";
+  content: "\e812";
   font-family: eicons;
   font-size: 13px;
   vertical-align: top;
@@ -231,5 +231,5 @@
 }
 
 .admin-quickbar-new-select {
-  width: calc(100% - 20px);
+  width: calc(100% - 43px);
 }

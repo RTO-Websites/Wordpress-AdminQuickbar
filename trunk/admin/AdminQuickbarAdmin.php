@@ -18,7 +18,7 @@
  *
  * @package    AdminPostListSidebar
  * @subpackage AdminPostListSidebar/admin
- * @author     Sascha Hennemann <s.hennemann@rto.de>
+ * @author     RTO GmbH
  */
 class AdminQuickbarAdmin {
 
@@ -40,8 +40,6 @@ class AdminQuickbarAdmin {
      */
     private $version;
 
-    public $textdomain;
-
     /**
      * Initialize the class and set its properties.
      *
@@ -53,8 +51,7 @@ class AdminQuickbarAdmin {
 
         $this->pluginName = $pluginName;
         $this->version = $version;
-        $this->textdomain = $pluginName;
-        //add_action('admin_footer', array($this, 'addSidebar'), 1);
+
         add_action( 'admin_print_footer_scripts', array( $this, 'addSidebar' ) );
 
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueueStyles' ) );
@@ -65,6 +62,12 @@ class AdminQuickbarAdmin {
 
     }
 
+    /**
+     * Adds the sidebar to footer
+     *
+     * @param string $data
+     * @return string
+     */
     public function addSidebar( $data ) {
         include( 'partials/admin-quickbar-admin-display.php' );
 

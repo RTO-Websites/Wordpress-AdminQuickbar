@@ -16,11 +16,11 @@
         <div class="admin-quickbar-inner">
             <label for="admin-quickbar-keepopen" class="admin-quickbar-keepopen">
                 <input type="checkbox" name="admin-quickbar-keepopen"/>
-                <?php _e( 'Keep open', $this->textdomain ); ?>
+                <?php _e( 'Keep open', 'admin-quickbar' ); ?>
             </label>
             <label for="admin-quickbar-keepopen" class="admin-quickbar-loadthumbs">
                 <input type="checkbox" name="admin-quickbar-keepopen"/>
-                <?php _e( 'Show thumbs', $this->textdomain ); ?>
+                <?php _e( 'Show thumbs', 'admin-quickbar' ); ?>
             </label>
             <?php
             //add_theme_support( 'post-thumbnails' );

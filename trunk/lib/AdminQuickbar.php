@@ -1,7 +1,6 @@
 <?php namespace Lib;
 
 use Admin\AdminQuickbarAdmin;
-use Pub\AdminQuickbarPublic;
 
 /**
  * The file that defines the core plugin class
@@ -75,9 +74,8 @@ class AdminQuickbar {
 		$this->version = '1.4.0';
 
 		$this->loadDependencies();
-		$this->setLocale();
+		#$this->setLocale();
 		$this->defineAdminHooks();
-		$this->definePublicHooks();
 
 	}
 
@@ -133,22 +131,6 @@ class AdminQuickbar {
 
 		$this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
 		$this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueScripts' );
-
-	}
-
-	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function definePublicHooks() {
-
-		$pluginPublic = new AdminQuickbarPublic( $this->getAdminQuickbar(), $this->getVersion() );
-
-		$this->loader->addAction( 'wp_enqueue_scripts', $pluginPublic, 'enqueueStyles' );
-		$this->loader->addAction( 'wp_enqueue_scripts', $pluginPublic, 'enqueueScripts' );
 
 	}
 

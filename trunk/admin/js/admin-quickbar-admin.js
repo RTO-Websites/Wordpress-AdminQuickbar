@@ -13,14 +13,14 @@
    * ready:
    *
    * $(function() {
-	 *
-	 * });
+   *
+   * });
    *
    * Or when the window is loaded:
    *
    * $( window ).load(function() {
-	 *
-	 * });
+   *
+   * });
    *
    * ...and so on.
    *
@@ -33,7 +33,7 @@
    * Click on headlines
    */
   $(document).on('click', '.admin-quickbar-post-type', function (e) {
-    var target = $(e.target),
+    let target = $(e.target),
       parent = target.parent();
 
     parent.toggleClass('show-list');
@@ -46,7 +46,7 @@
    * Open sidebar and postlists on dom-ready
    */
   $(function ($) {
-    var postLists = getPostListStorage();
+    let postLists = getPostListStorage();
 
     // open postlists
     $('.admin-quickbar-postlist').each(function (index, element) {
@@ -58,6 +58,7 @@
     // open quickbar
     if (localStorage.adminQuickbarToggle == 'true' && localStorage.adminQuickbarKeepopen == 'true') {
       $('.admin-quickbar').addClass('toggle');
+      $('body').addClass('admin-quickbar-visible');
     }
 
     if (localStorage.adminQuickbarKeepopen == 'true') {
@@ -68,6 +69,11 @@
       $('.admin-quickbar-loadthumbs input').prop('checked', true);
       loadThumbs();
     }
+
+    if (localStorage.adminQuickbarOverlap == 'true') {
+      $('.admin-quickbar-overlap input').prop('checked', true);
+      $('body').addClass('admin-quickbar-is-overlap');
+    }
   });
 
   /**
@@ -75,6 +81,7 @@
    */
   $(document).on('click', '.toggle-quickbar-button', function (e) {
     $('.admin-quickbar').toggleClass('toggle');
+    $('body').toggleClass('admin-quickbar-visible');
     localStorage.adminQuickbarToggle = $('.admin-quickbar').hasClass('toggle');
   });
 
@@ -83,6 +90,19 @@
    */
   $(document).on('change', '.admin-quickbar-keepopen input', function (e) {
     localStorage.adminQuickbarKeepopen = $('.admin-quickbar-keepopen input').is(':checked');
+  });
+
+  /**
+   * Keep open
+   */
+  $(document).on('change', '.admin-quickbar-overlap input', function (e) {
+    localStorage.adminQuickbarOverlap = $('.admin-quickbar-overlap input').is(':checked');
+
+    if (localStorage.adminQuickbarOverlap == 'true') {
+      $('body').addClass('admin-quickbar-is-overlap');
+    } else {
+      $('body').removeClass('admin-quickbar-is-overlap');
+    }
   });
 
   /**
@@ -105,7 +125,7 @@
  * Set localStorage
  */
 function setPostListStorage() {
-  var plStorage = {};
+  let plStorage = {};
   jQuery('.admin-quickbar-postlist').each(function (index, element) {
     plStorage[jQuery(element).data('post-type')] = jQuery(element).hasClass('show-list');
   });
@@ -117,7 +137,7 @@ function setPostListStorage() {
  * Get localStorage
  */
 function getPostListStorage() {
-  if (!localStorage.postList || typeof(localStorage.postList) != 'string') {
+  if (!localStorage.postList || typeof (localStorage.postList) != 'string') {
     localStorage.postList = '{}';
   }
   return JSON.parse(localStorage.postList);

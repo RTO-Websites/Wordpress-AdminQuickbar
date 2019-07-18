@@ -5,7 +5,7 @@
 
 .admin-quickbar {
   position: fixed;
-  top: 66px;
+  top: 32px;
   right: 0;
   width: 0;
   bottom: 0;
@@ -28,9 +28,33 @@
   overflow: auto;
 }
 
+.admin-quickbar-inner > label {
+  white-space: nowrap;
+}
+
 .admin-quickbar.toggle {
   width: 320px;
   display: block;
+}
+
+body:not(.admin-quickbar-is-overlap).admin-quickbar-visible #wpcontent {
+  margin-right: 330px;
+}
+
+/** elementor **/
+body:not(.admin-quickbar-is-overlap).admin-quickbar-visible.elementor-navigator-docked #elementor-navigator {
+  right: 325px !important;
+}
+
+body:not(.admin-quickbar-is-overlap).admin-quickbar-visible #elementor-preview {
+  margin-right: 325px;
+}
+
+/** gutenberg **/
+body:not(.admin-quickbar-is-overlap).admin-quickbar-visible .edit-post-sidebar,
+body:not(.admin-quickbar-is-overlap).admin-quickbar-visible .edit-post-header,
+body:not(.admin-quickbar-is-overlap).admin-quickbar-visible .edit-post-layout__content {
+  right: 320px;
 }
 
 .admin-quickbar.toggle .admin-quickbar-inner {
@@ -154,11 +178,16 @@
   transform: scale(4.5);
 }
 
+.admin-quickbar-overlap,
 .admin-quickbar-loadthumbs,
 .admin-quickbar-keepopen {
-  padding-left: 12px;
+  padding-left: 6px;
   margin-bottom: 1em;
   display: inline-block;
+}
+
+.admin-quickbar-keepopen {
+  padding-left: 0;
 }
 
 .add-post-button {

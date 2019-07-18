@@ -18,9 +18,13 @@
                 <input type="checkbox" name="admin-quickbar-keepopen"/>
                 <?php _e( 'Keep open', 'admin-quickbar' ); ?>
             </label>
-            <label for="admin-quickbar-keepopen" class="admin-quickbar-loadthumbs">
-                <input type="checkbox" name="admin-quickbar-keepopen"/>
+            <label for="admin-quickbar-loadthumbs" class="admin-quickbar-loadthumbs">
+                <input type="checkbox" name="admin-quickbar-loadthumbs"/>
                 <?php _e( 'Show thumbs', 'admin-quickbar' ); ?>
+            </label>
+            <label for="admin-quickbar-overlap" class="admin-quickbar-overlap">
+                <input type="checkbox" name="admin-quickbar-overlap"/>
+                <?php _e( 'Overlap', 'admin-quickbar' ); ?>
             </label>
             <?php include( 'add-new-posts.php' ); ?>
             <?php $this->renderLoopPostTypes(); ?>

@@ -57,6 +57,8 @@ class AdminQuickbarAdmin {
         $this->pluginName = $pluginName;
         $this->version = $version;
 
+        $this->postTypes = get_post_types( [], 'object' );
+
         $this->filterPostTypes = explode( ',', 'nav_menu_item,revision,custom_css,customize_changeset,'
             . 'oembed_cache,ocean_modal_window,nxs_qp' );
 
@@ -86,7 +88,6 @@ class AdminQuickbarAdmin {
      * @return string
      */
     public function renderSidebar( $data ) {
-        $this->postTypes = get_post_types( [], 'object' );
         include( 'partials/admin-quickbar-admin-display.php' );
 
         return $data;

@@ -22,6 +22,7 @@
                 <input type="checkbox" name="admin-quickbar-keepopen"/>
                 <?php _e( 'Show thumbs', 'admin-quickbar' ); ?>
             </label>
+            <?php include( 'add-new-posts.php' ); ?>
             <?php $this->renderLoopPostTypes(); ?>
         </div>
         <div class="toggle-quickbar-button"></div>

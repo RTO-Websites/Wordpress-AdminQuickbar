@@ -36,7 +36,7 @@
 $currentPost = filter_input( INPUT_GET, 'post' );
 if ( !empty( $currentPost ) ): ?>
     <div class="admin-quickbar-jumpicons">
-        <a class="dashicons dashicons-visibility" href="' . get_permalink( $currentPost ) . '" title="Go to Page"></a>
+        <a class="dashicons dashicons-visibility" href="<?php echo get_permalink( $currentPost ); ?>" title="Go to Page"></a>
         <?php if ( defined( 'ELEMENTOR_VERSION' ) ): ?>
             <a class="dashicons dashicons-edit"
                     href="<?php echo admin_url() . 'post.php?post=' . $currentPost; ?>&action=edit"

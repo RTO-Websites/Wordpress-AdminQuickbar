@@ -2,8 +2,8 @@
   "require": {},
   "autoload": {
     "psr-4": {
-      "Admin\\": "admin/",
-      "Lib\\": "lib/"
+      "AdminQuickbar\\" : "./",
+      "AdminQuickbar\\Pub\\": "Public/"
     }
   }
 }

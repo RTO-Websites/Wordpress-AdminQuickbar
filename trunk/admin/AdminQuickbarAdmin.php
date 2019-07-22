@@ -1,4 +1,4 @@
-<?php namespace Admin;
+<?php namespace AdminQuickbar\Admin;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -6,8 +6,7 @@
  * @link       https://www.rto.de
  * @since      1.0.0
  *
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/admin
+ * @package    AdminQuickbar
  */
 
 /**
@@ -369,7 +368,7 @@ class AdminQuickbarAdmin {
          * class.
          */
 
-        wp_enqueue_style( $this->pluginName, plugin_dir_url( __FILE__ ) . 'css/admin-quickbar-admin.css', [], $this->version, 'all' );
+        wp_enqueue_style( $this->pluginName, AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], $this->version, 'all' );
 
     }
 
@@ -392,7 +391,7 @@ class AdminQuickbarAdmin {
          * class.
          */
 
-        wp_enqueue_script( $this->pluginName, plugin_dir_url( __FILE__ ) . 'js/admin-quickbar-admin.js', [ 'jquery' ], $this->version, false );
+        wp_enqueue_script( $this->pluginName, AdminQuickbar_URL . '/Admin/js/admin-quickbar-admin.js', [ 'jquery' ], $this->version, false );
 
     }
 

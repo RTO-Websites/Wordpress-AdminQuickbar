@@ -1,6 +1,6 @@
-<?php namespace Lib;
+<?php namespace AdminQuickbar\Lib;
 
-use Admin\AdminQuickbarAdmin;
+use AdminQuickbar\Admin\AdminQuickbarAdmin;
 
 /**
  * The file that defines the core plugin class
@@ -12,7 +12,6 @@ use Admin\AdminQuickbarAdmin;
  * @since      1.0.0
  *
  * @package    AdminQuickbar
- * @subpackage AdminQuickbar/includes
  */
 
 /**
@@ -37,7 +36,7 @@ class AdminQuickbar {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      AdminQuickbarLoader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -71,7 +70,7 @@ class AdminQuickbar {
 	public function __construct() {
 
 		$this->pluginName = 'admin-quickbar';
-		$this->version = '1.4.0';
+		$this->version = AdminQuickbar_VERSION;
 
 		$this->loadDependencies();
 		#$this->setLocale();
@@ -97,7 +96,7 @@ class AdminQuickbar {
 	 */
 	private function loadDependencies() {
 
-		$this->loader = new AdminQuickbarLoader();
+		$this->loader = new Loader();
 
 	}
 
@@ -111,7 +110,7 @@ class AdminQuickbar {
 	 * @access   private
 	 */
 	private function setLocale() {
-		$pluginI18n = new AdminQuickbarI18N();
+		$pluginI18n = new I18N();
 		$pluginI18n->setDomain( $this->getAdminQuickbar() );
 
 		$this->loader->addAction( 'plugins_loaded', $pluginI18n, 'loadPluginTextdomain' );
@@ -148,8 +147,8 @@ class AdminQuickbar {
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
-	 * @since     1.0.0
-	 * @return    AdminQuickbarLoader    Orchestrates the hooks of the plugin.
+	 * @return    Loader    Orchestrates the hooks of the plugin.
+	 *@since     1.0.0
 	 */
 	public function getLoader() {
 		return $this->loader;

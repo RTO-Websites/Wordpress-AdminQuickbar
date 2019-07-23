@@ -27,14 +27,12 @@
                 <?php _e( 'Overlap', 'admin-quickbar' ); ?>
             </label>
             <?php include( 'add-new-posts.php' ); ?>
-            <?php $this->renderLoopPostTypes(); ?>
+            <?php echo $postTypeLoop;  ?>
         </div>
         <div class="toggle-quickbar-button"></div>
     </div>
 
-<?php
-$currentPost = filter_input( INPUT_GET, 'post' );
-if ( !empty( $currentPost ) ): ?>
+<?php if ( !empty( $currentPost ) ): ?>
     <div class="admin-quickbar-jumpicons">
         <a class="dashicons dashicons-visibility" href="<?php echo get_permalink( $currentPost ); ?>" title="Go to Page"></a>
         <?php if ( defined( 'ELEMENTOR_VERSION' ) ): ?>

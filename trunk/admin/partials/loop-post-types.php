@@ -6,7 +6,7 @@
     <div class="admin-quickbar-postlist-inner">
         <?php
         // loop categories of current post-type
-        $this->renderLoopCategories( $postType, $cats );
+        echo $categoryLoop;
         ?>
     </div>
 </div>

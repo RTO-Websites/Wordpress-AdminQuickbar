@@ -1,6 +1,6 @@
 <br/>
 <select class="admin-quickbar-new-select">
-    <?php foreach ( $this->filteredPostTypes as $postType ): ?>
+    <?php foreach ( $filteredPostTypes as $postType ): ?>
         <option value="<?php echo $postType->name; ?>"><?php echo $postType->label; ?></option>
     <?php endforeach; ?>
 </select>

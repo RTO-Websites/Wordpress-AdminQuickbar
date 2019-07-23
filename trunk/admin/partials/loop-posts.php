@@ -1,10 +1,10 @@
 <div class="admin-quickbar-post" <?php echo $style; ?>>
     <?php
     // echo thumb
-    $this->renderThumb( $post );
+    echo $thumb;
 
     // echo post-title
-    $this->renderPostTitle( $post );
+    echo $postTitle;
     ?>
     <div class="admin-quickbar-post-options">
         <a class="dashicons dashicons-edit"

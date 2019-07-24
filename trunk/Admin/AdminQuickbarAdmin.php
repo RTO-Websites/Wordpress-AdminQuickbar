@@ -105,12 +105,12 @@ class AdminQuickbarAdmin {
             'filteredPostTypes' => $this->filteredPostTypes,
         ] );
 
-        $tpl = new Template( self::PartialDir . '/admin-quickbar-admin-display.php', [
+        $template = new Template( self::PartialDir . '/admin-quickbar-admin-display.php', [
             'postTypeLoop' => $postTypeLoop,
             'currentPost' => $currentPost,
             'addNewPosts' => $addNewPosts,
         ] );
-        $tpl->render();
+        $template->render();
 
         return $data;
     }
@@ -130,20 +130,20 @@ class AdminQuickbarAdmin {
 
             $posts = $this->getPostsByPostType( $postType );
             $countPostType = $posts['count'];
-            $cats = $posts['cats'];
+            $categories = $posts['categories'];
 
 
-            if ( empty( $cats ) || empty( $countPostType ) ) {
+            if ( empty( $categories ) || empty( $countPostType ) ) {
                 continue;
             }
 
-            $categoryLoop = $this->getLoopCategories( $postType, $cats );
+            $categoryLoop = $this->getLoopCategories( $postType, $categories );
 
-            $tpl = new Template( self::PartialDir . '/loop-post-types.php', [
+            $template = new Template( self::PartialDir . '/loop-post-types.php', [
                 'postType' => $postType,
                 'categoryLoop' => $categoryLoop,
             ] );
-            $output .= $tpl->getRendered();
+            $output .= $template->getRendered();
         }
 
         return $output;
@@ -153,22 +153,19 @@ class AdminQuickbarAdmin {
      * Get rendered category loop
      *
      * @param $postType
-     * @param $cats
-     * @return string
+     * @param $categories
+     * @return array
      * @throws \ImagickException
      */
-    public function getLoopCategories( $postType, $cats ) {
-        $output = '';
+    public function getLoopCategories( $postType, $categories ) {
+        $output = [];
 
-        foreach ( $cats as $catName => $posts ) {
+        foreach ( $categories as $categoryName => $posts ) {
             if ( empty( $posts ) ) {
                 continue;
             }
-            if ( !$postType->hierarchical ) {
-                $output .= '<div class="admin-quickbar-category">' . $catName . '</div>';
-            }
 
-            $output .= $this->getLoopPosts( $postType, $posts );
+            $output[$categoryName] = $this->getLoopPosts( $postType, $posts );
         }
 
         return $output;
@@ -188,14 +185,14 @@ class AdminQuickbarAdmin {
             $style = $this->getMarginStyle( $post, $postType, $lastParent, $margin );
             $postTypeInfo = $this->getPostTypeInfo( $postType, $post );
 
-            $tpl = new Template( self::PartialDir . '/loop-posts.php', [
+            $template = new Template( self::PartialDir . '/loop-posts.php', [
                 'post' => $post,
                 'postTypeInfo' => $postTypeInfo,
                 'style' => $style,
                 'thumb' => $this->getThumb( $post ),
                 'postTitle' => $this->getPostTitle( $post ),
             ] );
-            $output .= $tpl->getRendered();
+            $output .= $template->getRendered();
         }
 
         return $output;
@@ -209,7 +206,7 @@ class AdminQuickbarAdmin {
      * @throws \ImagickException
      */
     public function getThumb( $post ) {
-        $output = '';
+        $class = '';
         if ( has_post_thumbnail( $post ) ) {
             // from post-thumbnail
             $attachmentId = get_post_thumbnail_id( $post->ID );
@@ -245,17 +242,21 @@ class AdminQuickbarAdmin {
             ) );
 
             if ( !empty( $thumb['url'] ) ) {
-                $output = '<img src="" data-src="'
-                    . $thumb['url']
-                    . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image  post-image-from-postgallery" />';
+                $url = $thumb['url'];
+                $class .= '  post-image-from-postgallery';
             }
-        } else if ( !empty( $url ) ) {
-            $output = '<img src="" data-src="'
-                . $url
-                . '" alt="" class="attachment-post-thumbnail' . ' wp-post-image" />';
         }
 
-        return $output;
+        if ( empty( $url ) ) {
+            return '';
+        }
+
+        $template = new Template(self::PartialDir . '/thumbnail.php', [
+            'url' => $url,
+            'class' => $class,
+        ]);
+
+        return $template->getRendered();
     }
 
     /**
@@ -311,7 +312,7 @@ class AdminQuickbarAdmin {
      */
     public function getPostsByPostType( $postType ) {
         $countPostType = 0;
-        $cats = [];
+        $categories = [];
 
         // get posts of current post-type
         $args = [
@@ -323,7 +324,7 @@ class AdminQuickbarAdmin {
         ];
         if ( $postType->hierarchical ) {
             $posts = get_pages( $args );
-            $cats = [
+            $categories = [
                 'none' => $posts,
             ];
             $countPostType += count( $posts );
@@ -338,21 +339,21 @@ class AdminQuickbarAdmin {
 
             foreach ( $this->categoryList as $category ) {
                 $args['category'] = $category->term_id;
-                $cats[$category->name] = get_posts( $args );
-                $count += count( $cats[$category->name] );
+                $categories[$category->name] = get_posts( $args );
+                $count += count( $categories[$category->name] );
             }
             $countPostType += $count;
 
             if ( !$count ) {
                 unset( $args['category'] );
-                $cats[__( 'Uncategorized' )] = get_posts( $args );
-                $countPostType += count( $cats[__( 'Uncategorized' )] );
+                $categories[__( 'Uncategorized' )] = get_posts( $args );
+                $countPostType += count( $categories[__( 'Uncategorized' )] );
             }
         }
 
         return [
             'count' => $countPostType,
-            'cats' => $cats,
+            'categories' => $categories,
         ];
     }
 

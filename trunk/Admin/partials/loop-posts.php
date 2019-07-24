@@ -1,9 +1,6 @@
 <div class="admin-quickbar-post" <?php echo $style; ?>>
     <?php
-    // echo thumb
     echo $thumb;
-
-    // echo post-title
     echo $postTitle;
     ?>
     <div class="admin-quickbar-post-options">
@@ -23,6 +20,5 @@
                     href="<?php echo get_permalink( $post->ID ); ?>"
                     title="Go to Page"></a>
         <?php endif; ?>
-
     </div>
 </div>

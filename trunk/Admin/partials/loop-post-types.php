@@ -4,9 +4,13 @@
                 href="<?php echo admin_url( 'post-new.php' ) . '?post_type=' . $postType->name; ?>"></a>
     </div>
     <div class="admin-quickbar-postlist-inner">
-        <?php
-        // loop categories of current post-type
-        echo $categoryLoop;
-        ?>
+        <?php foreach ($categoryLoop as $categoryName => $renderedPosts) : ?>
+            <?php if ( !$postType->hierarchical ): ?>
+                <div class="admin-quickbar-category"><?php echo $categoryName; ?></div>
+            <?php endif; ?>
+            <?php
+            echo $renderedPosts;
+            ?>
+        <?php endforeach; ?>
     </div>
 </div>

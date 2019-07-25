@@ -38,7 +38,7 @@
 
     parent.toggleClass('show-list');
 
-    setPostListStorage();
+    refreshPostListStorage();
   });
 
 
@@ -124,7 +124,7 @@
 /**
  * Set localStorage
  */
-function setPostListStorage() {
+function refreshPostListStorage() {
   let postListStorage = {};
   jQuery('.admin-quickbar-postlist').each(function (index, element) {
     postListStorage[jQuery(element).data('post-type')] = jQuery(element).hasClass('show-list');

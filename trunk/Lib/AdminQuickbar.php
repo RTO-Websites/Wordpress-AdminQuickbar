@@ -1,7 +1,6 @@
-<?php namespace Lib;
+<?php namespace AdminQuickbar\Lib;
 
-use Admin\AdminQuickbarAdmin;
-use Pub\AdminQuickbarPublic;
+use AdminQuickbar\Admin\AdminQuickbarAdmin;
 
 /**
  * The file that defines the core plugin class
@@ -13,7 +12,6 @@ use Pub\AdminQuickbarPublic;
  * @since      1.0.0
  *
  * @package    AdminQuickbar
- * @subpackage AdminQuickbar/includes
  */
 
 /**
@@ -38,7 +36,7 @@ class AdminQuickbar {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      AdminQuickbarLoader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -72,12 +70,11 @@ class AdminQuickbar {
 	public function __construct() {
 
 		$this->pluginName = 'admin-quickbar';
-		$this->version = '1.0.0';
+		$this->version = AdminQuickbar_VERSION;
 
 		$this->loadDependencies();
-		$this->setLocale();
+		#$this->setLocale();
 		$this->defineAdminHooks();
-		$this->definePublicHooks();
 
 	}
 
@@ -99,7 +96,7 @@ class AdminQuickbar {
 	 */
 	private function loadDependencies() {
 
-		$this->loader = new AdminQuickbarLoader();
+		$this->loader = new Loader();
 
 	}
 
@@ -113,7 +110,7 @@ class AdminQuickbar {
 	 * @access   private
 	 */
 	private function setLocale() {
-		$pluginI18n = new AdminQuickbarI18N();
+		$pluginI18n = new I18N();
 		$pluginI18n->setDomain( $this->getAdminQuickbar() );
 
 		$this->loader->addAction( 'plugins_loaded', $pluginI18n, 'loadPluginTextdomain' );
@@ -137,22 +134,6 @@ class AdminQuickbar {
 	}
 
 	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function definePublicHooks() {
-
-		$pluginPublic = new AdminQuickbarPublic( $this->getAdminQuickbar(), $this->getVersion() );
-
-		$this->loader->addAction( 'wp_enqueue_scripts', $pluginPublic, 'enqueueStyles' );
-		$this->loader->addAction( 'wp_enqueue_scripts', $pluginPublic, 'enqueueScripts' );
-
-	}
-
-	/**
 	 * The name of the plugin used to uniquely identify it within the context of
 	 * WordPress and to define internationalization functionality.
 	 *
@@ -166,8 +147,8 @@ class AdminQuickbar {
 	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
-	 * @since     1.0.0
-	 * @return    AdminQuickbarLoader    Orchestrates the hooks of the plugin.
+	 * @return    Loader    Orchestrates the hooks of the plugin.
+	 *@since     1.0.0
 	 */
 	public function getLoader() {
 		return $this->loader;

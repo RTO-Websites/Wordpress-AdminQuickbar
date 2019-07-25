@@ -1,4 +1,4 @@
-<?php namespace Lib;
+<?php namespace AdminQuickbar\Lib;
 
 /**
  * Define the internationalization functionality
@@ -10,7 +10,6 @@
  * @since      1.0.0
  *
  * @package    AdminQuickbar
- * @subpackage AdminQuickbar/includes
  */
 
 /**
@@ -21,10 +20,8 @@
  *
  * @since      1.0.0
  * @package    AdminQuickbar
- * @subpackage AdminQuickbar/includes
- * @author     Sascha Hennemann <s.hennemann@rto.de>
  */
-class AdminQuickbarI18N {
+class I18N {
 
 	/**
 	 * The domain specified for this plugin.

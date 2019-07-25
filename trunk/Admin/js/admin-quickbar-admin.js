@@ -56,21 +56,21 @@
     });
 
     // open quickbar
-    if (localStorage.adminQuickbarToggle == 'true' && localStorage.adminQuickbarKeepopen == 'true') {
+    if (localStorage.adminQuickbarToggle === 'true' && localStorage.adminQuickbarKeepopen === 'true') {
       $('.admin-quickbar').addClass('toggle');
       $('body').addClass('admin-quickbar-visible');
     }
 
-    if (localStorage.adminQuickbarKeepopen == 'true') {
+    if (localStorage.adminQuickbarKeepopen === 'true') {
       $('.admin-quickbar-keepopen input').prop('checked', true);
     }
 
-    if (localStorage.adminQuickbarLoadthumbs == 'true') {
+    if (localStorage.adminQuickbarLoadthumbs === 'true') {
       $('.admin-quickbar-loadthumbs input').prop('checked', true);
       loadThumbs();
     }
 
-    if (localStorage.adminQuickbarOverlap == 'true') {
+    if (localStorage.adminQuickbarOverlap === 'true') {
       $('.admin-quickbar-overlap input').prop('checked', true);
       $('body').addClass('admin-quickbar-is-overlap');
     }
@@ -98,7 +98,7 @@
   $(document).on('change', '.admin-quickbar-overlap input', function (e) {
     localStorage.adminQuickbarOverlap = $('.admin-quickbar-overlap input').is(':checked');
 
-    if (localStorage.adminQuickbarOverlap == 'true') {
+    if (localStorage.adminQuickbarOverlap === 'true') {
       $('body').addClass('admin-quickbar-is-overlap');
     } else {
       $('body').removeClass('admin-quickbar-is-overlap');
@@ -111,7 +111,7 @@
   $(document).on('change', '.admin-quickbar-loadthumbs input', function (e) {
     localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
 
-    if (localStorage.adminQuickbarLoadthumbs == 'true') {
+    if (localStorage.adminQuickbarLoadthumbs === 'true') {
       $('.admin-quickbar-loadthumbs input').prop('checked', true);
       loadThumbs();
     } else {
@@ -130,7 +130,7 @@ function refreshPostListStorage() {
     postListStorage[jQuery(element).data('post-type')] = jQuery(element).hasClass('show-list');
   });
 
-  localStorage.postList = JSON.stringify(postlistStorage);
+  localStorage.postList = JSON.stringify(postListStorage);
 }
 
 /**

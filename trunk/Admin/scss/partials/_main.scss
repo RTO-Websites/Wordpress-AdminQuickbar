@@ -179,9 +179,13 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-overlap,
 .admin-quickbar-loadthumbs,
 .admin-quickbar-keepopen {
-  padding-left: 6px;
+  padding-left: 2px;
   margin-bottom: 1em;
   display: inline-block;
+
+  input {
+    margin-right: 2px;
+  }
 }
 
 .admin-quickbar-keepopen {

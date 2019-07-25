@@ -137,11 +137,11 @@ class AdminQuickbarAdmin {
                 continue;
             }
 
-            $categoryLoop = $this->getLoopCategories( $postType, $categories );
+            $postsByCategory = $this->getLoopCategories( $postType, $categories );
 
             $template = new Template( self::PartialDir . '/loop-post-types.php', [
                 'postType' => $postType,
-                'categoryLoop' => $categoryLoop,
+                'postsByCategory' => $postsByCategory,
             ] );
             $output .= $template->getRendered();
         }

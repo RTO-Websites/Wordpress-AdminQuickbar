@@ -4,7 +4,7 @@
                 href="<?php echo admin_url( 'post-new.php' ) . '?post_type=' . $postType->name; ?>"></a>
     </div>
     <div class="admin-quickbar-postlist-inner">
-        <?php foreach ($categoryLoop as $categoryName => $renderedPosts) : ?>
+        <?php foreach ($postsByCategory as $categoryName => $renderedPosts) : ?>
             <?php if ( !$postType->hierarchical ): ?>
                 <div class="admin-quickbar-category"><?php echo $categoryName; ?></div>
             <?php endif; ?>

@@ -125,9 +125,9 @@
  * Set localStorage
  */
 function setPostListStorage() {
-  let postlistStorage = {};
+  let postListStorage = {};
   jQuery('.admin-quickbar-postlist').each(function (index, element) {
-    postlistStorage[jQuery(element).data('post-type')] = jQuery(element).hasClass('show-list');
+    postListStorage[jQuery(element).data('post-type')] = jQuery(element).hasClass('show-list');
   });
 
   localStorage.postList = JSON.stringify(postlistStorage);

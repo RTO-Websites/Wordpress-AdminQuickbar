@@ -1,11 +1,7 @@
-/**
- * All of the CSS for your admin-specific functionality should be
- * included in this file.
- */
 
 .admin-quickbar {
   position: fixed;
-  top: 66px;
+  top: 32px;
   right: 0;
   width: 0;
   bottom: 0;
@@ -26,11 +22,37 @@
   bottom: 0;
   padding: 15px;
   overflow: auto;
+
+  > label {
+    white-space: nowrap;
+  }
 }
 
 .admin-quickbar.toggle {
   width: 320px;
   display: block;
+}
+
+body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
+  #wpcontent {
+    margin-right: 330px;
+  }
+
+  /** elementor **/
+  &.elementor-navigator-docked #elementor-navigator {
+    right: 325px !important;
+  }
+
+  #elementor-preview {
+    margin-right: 325px;
+  }
+
+  /** gutenberg **/
+  .edit-post-sidebar,
+  .edit-post-header,
+  .edit-post-layout__content {
+    right: 320px;
+  }
 }
 
 .admin-quickbar.toggle .admin-quickbar-inner {
@@ -47,7 +69,7 @@
 }
 
 .dashicons-elementor::before {
-  content: "\e800";
+  content: "\e812";
   font-family: eicons;
   font-size: 13px;
   vertical-align: top;
@@ -56,31 +78,34 @@
 .admin-quickbar-post-type {
   padding: 12px 15px 12px 0;
   text-transform: uppercase;
-  font-size: 11px;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.1rem;
   cursor: pointer;
-}
 
-.admin-quickbar-post-type::before {
-  content: "\f140";
-  display: inline-block;
-  position: relative;
-  top: -1px;
-  margin-right: 2px;
-  font-family: Dashicons;
-  font-size: 15px;
-  line-height: 0;
-  vertical-align: middle;
+  &::before {
+    content: "\f140";
+    display: inline-block;
+    position: relative;
+    top: -1px;
+    margin-right: 2px;
+    font-family: Dashicons;
+    font-size: 15px;
+    line-height: 0;
+    vertical-align: middle;
+  }
+
+  .add-new {
+    position: relative;
+    top: 6px;
+    font-size: 12px;
+    vertical-align: bottom;
+    padding-top: 3px;
+  }
 }
 
 .show-list .admin-quickbar-post-type::before {
   content: "\f142";
-}
-
-.admin-quickbar-post-type .add-new {
-  position: relative;
-  top: 6px;
-  font-size: 12px;
-  vertical-align: bottom;
 }
 
 .admin-quickbar-post-options {
@@ -151,11 +176,20 @@
   transform: scale(4.5);
 }
 
+.admin-quickbar-overlap,
 .admin-quickbar-loadthumbs,
 .admin-quickbar-keepopen {
-  padding-left: 12px;
+  padding-left: 2px;
   margin-bottom: 1em;
   display: inline-block;
+
+  input {
+    margin-right: 2px;
+  }
+}
+
+.admin-quickbar-keepopen {
+  padding-left: 0;
 }
 
 .add-post-button {
@@ -200,14 +234,14 @@
   height: 25px;
   color: #fff;
   vertical-align: bottom;
-}
 
-.admin-quickbar-jumpicons a:hover {
-  color: #00a0d2;
-}
+  &:hover {
+    color: #00a0d2;
+  }
 
-.admin-quickbar-jumpicons a.dashicons-elementor {
-  top: 3px;
+  &.dashicons-elementor {
+    top: 3px;
+  }
 }
 
 .admin-quickbar-category {
@@ -215,9 +249,18 @@
   margin-bottom: 0.75em;
   margin-top: 0.75em;
   margin-left: 12px;
-  font-weight: bold;
+
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  letter-spacing: 0.1rem;
+  color: #b9b9b9;
 }
 
 .admin-quickbar-category:first-child {
   margin-top: 0;
+}
+
+.admin-quickbar-new-select {
+  width: calc(100% - 43px);
 }

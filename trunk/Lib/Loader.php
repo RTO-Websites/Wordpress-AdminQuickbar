@@ -1,4 +1,4 @@
-<?php namespace Lib;
+<?php namespace AdminQuickbar\Lib;
 
 /**
  * Register all actions and filters for the plugin
@@ -7,7 +7,6 @@
  * @since      1.0.0
  *
  * @package    AdminQuickbar
- * @subpackage AdminQuickbar/includes
  */
 
 /**
@@ -18,10 +17,8 @@
  * run function to execute the list of actions and filters.
  *
  * @package    AdminQuickbar
- * @subpackage AdminQuickbar/includes
- * @author     Sascha Hennemann <s.hennemann@rto.de>
  */
-class AdminQuickbarLoader {
+class Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

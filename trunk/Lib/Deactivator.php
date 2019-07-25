@@ -1,4 +1,4 @@
-<?php namespace Lib;
+<?php namespace AdminQuickbar\Lib;
 
 /**
  * Fired during plugin deactivation
@@ -6,8 +6,7 @@
  * @link       https://www.rto.de
  * @since      1.0.0
  *
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/includes
+ * @package    AdminQuickbar
  */
 
 /**
@@ -20,7 +19,7 @@
  * @subpackage AdminPostListSidebar/includes
  * @author     Sascha Hennemann <s.hennemann@rto.de>
  */
-class AdminQuickbarDeactivator {
+class Deactivator {
 
 	/**
 	 * Short Description. (use period)

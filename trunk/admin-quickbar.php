@@ -1,8 +1,10 @@
 <?php
 
-use Lib\AdminQuickbar;
-use Lib\AdminQuickbarActivator;
-use Lib\AdminQuickbarDeactivator;
+namespace AdminQuickbar;
+
+use AdminQuickbar\Lib\AdminQuickbar;
+use AdminQuickbar\Lib\Activator;
+use AdminQuickbar\Lib\Deactivator;
 
 /**
  * The plugin bootstrap file
@@ -20,7 +22,7 @@ use Lib\AdminQuickbarDeactivator;
  * Plugin Name:       AdminQuickbar
  * Plugin URI:        https://github.com/RTO-Websites/Wordpress-AdminQuickbar
  * Description:       Adds a quickbar in admin with fast access to all posts/pages
- * Version:           1.3.0
+ * Version:           1.4.0
  * Author:            RTO GmbH
  * Author URI:        https://www.rto.de
  * License:           GPL-2.0+
@@ -34,22 +36,27 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+define( 'AdminQuickbar_VERSION', '1.4.0' );
+
+define( 'AdminQuickbar_DIR', str_replace( '\\', '/', __DIR__ ) );
+define( 'AdminQuickbar_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
+
 /**
  * The class responsible for auto loading classes.
  */
-require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+require_once AdminQuickbar_DIR . '/vendor/autoload.php';
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/AdminQuickbarActivator.php
  */
-register_activation_hook( __FILE__, array( AdminQuickbarActivator::class, 'activate' ) );
+register_activation_hook( __FILE__, [ Activator::class, 'activate' ] );
 
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/AdminQuickbarDeactivator.php
  */
-register_deactivation_hook( __FILE__, array( AdminQuickbarDeactivator::class, 'deactivate' ) );
+register_deactivation_hook( __FILE__, [ Deactivator::class, 'deactivate' ] );
 
 /**
  * Begins execution of the plugin.

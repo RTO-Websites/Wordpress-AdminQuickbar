@@ -26,7 +26,7 @@
                 <input type="checkbox" name="admin-quickbar-overlap"/>
                 <?php _e( 'Overlap', 'admin-quickbar' ); ?>
             </label>
-            <?php include( 'add-new-posts.php' ); ?>
+            <?php echo $addNewPosts; ?>
             <?php echo $postTypeLoop;  ?>
         </div>
         <div class="toggle-quickbar-button"></div>

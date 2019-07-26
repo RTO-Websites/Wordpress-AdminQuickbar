@@ -101,14 +101,14 @@ class AdminQuickbarAdmin {
         $postTypeLoop = $this->getLoopPostTypes();
         $currentPost = filter_input( INPUT_GET, 'post' );
 
-        $addNewPosts = new Template( self::PartialDir . '/add-new-post.php', [
+        $addNewPosts = new Template( self::PartialDir . '/add-new-posts.php', [
             'filteredPostTypes' => $this->filteredPostTypes,
         ] );
 
         $template = new Template( self::PartialDir . '/admin-quickbar-admin-display.php', [
             'postTypeLoop' => $postTypeLoop,
             'currentPost' => $currentPost,
-            'addNewPosts' => $addNewPosts,
+            'addNewPosts' => $addNewPosts->getRendered(),
         ] );
         $template->render();
 

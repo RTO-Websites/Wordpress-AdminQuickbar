@@ -225,15 +225,44 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-new-select {
   width: calc(100% - 43px); }
 
-.admin-quickbar-clear-cache {
+.admin-quickbar-jumpicons a.admin-quickbar-control-cache,
+.admin-quickbar-control-cache {
   display: inline-block;
   position: relative;
-  margin-left: -9px;
   top: 2px;
-  color: #01a252;
+  color: #7c1337;
   vertical-align: middle;
   font-size: 15px;
   cursor: pointer; }
+  .admin-quickbar-jumpicons a.admin-quickbar-control-cache.is-in-cache,
+  .admin-quickbar-control-cache.is-in-cache {
+    color: #01a252; }
+  .admin-quickbar-jumpicons a.admin-quickbar-control-cache::before,
+  .admin-quickbar-control-cache::before {
+    display: inline-block; }
+  .admin-quickbar-jumpicons a.admin-quickbar-control-cache.loading::before,
+  .admin-quickbar-control-cache.loading::before {
+    -webkit-animation: rotating 1.5s linear infinite;
+            animation: rotating 1.5s linear infinite; }
+
+.admin-quickbar-jumpicons a.admin-quickbar-control-cache {
+  color: #d4390a; }
 
 body.swift-setup .admin-quickbar {
   display: none !important; }
+
+@-webkit-keyframes rotating {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+@keyframes rotating {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }

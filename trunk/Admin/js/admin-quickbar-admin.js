@@ -120,22 +120,68 @@
   });
 
 
-  $(document).on('click', '.admin-quickbar-clear-cache', function(e) {
+  $(document).on('click', '.admin-quickbar-control-cache', function (e) {
     e.preventDefault();
-    let target = $(e.currentTarget),
-      url = target.data('url');
+    let target = $(e.currentTarget);
 
-    jQuery.post(ajaxurl, {
-      action: 'swift_performance_single_clear_cache',
-      '_wpnonce': target.closest('.admin-quickbar').data('swift-nonce'),
-      'url': url,
-    }, function(response) {
-      response = (typeof response === 'string' ? JSON.parse(response) : response);
-      target.remove();
-    });
+    if (target.hasClass('is-in-cache')) {
+      refreshSwiftCache(e);
+    } else {
+      addPageToSwiftCache(e);
+    }
   });
 
 })(jQuery);
+
+
+/**
+ * Removes a page from swift-cache
+ *
+ * @param e
+ */
+function refreshSwiftCache(e) {
+  e.preventDefault();
+  let target = jQuery(e.currentTarget),
+    url = target.data('url');
+
+  target.addClass('loading');
+
+  jQuery.post(ajaxurl, {
+    action: 'swift_performance_single_clear_cache',
+    '_wpnonce': target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
+    'url': url,
+  }, function (response) {
+    target.removeClass('is-in-cache');
+    addPageToSwiftCache(e);
+  });
+}
+
+/**
+ * Adds a page to swift-cache
+ *
+ * @param e
+ */
+function addPageToSwiftCache(e) {
+  e.preventDefault();
+  let target = jQuery(e.currentTarget),
+    url = target.data('url');
+
+  target.addClass('loading');
+
+  jQuery.post(ajaxurl, {
+    action: 'swift_performance_single_prebuild',
+    '_wpnonce': target.closest('.admin-quickbar').data('swift-nonce'),
+    'url': url,
+  }, function (response) {
+    response = (typeof response === 'string' ? JSON.parse(response) : response);
+
+    console.info('add-to-cache', response);
+    if (response.status !== false) {
+      target.addClass('is-in-cache');
+    }
+    target.removeClass('loading');
+  });
+}
 
 /**
  * Set localStorage

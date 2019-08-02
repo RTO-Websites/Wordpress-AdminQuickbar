@@ -269,17 +269,44 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   width: calc(100% - 43px);
 }
 
-.admin-quickbar-clear-cache {
+.admin-quickbar-jumpicons a.admin-quickbar-control-cache,
+.admin-quickbar-control-cache {
   display: inline-block;
   position: relative;
-  margin-left: -9px;
   top: 2px;
-  color: #01a252;
+  color: #7c1337;
   vertical-align: middle;
   font-size: 15px;
   cursor: pointer;
+
+  &.is-in-cache {
+    color: #01a252;
+  }
+
+  &::before {
+    display: inline-block;
+  }
+
+  &.loading::before {
+    animation: rotating 1.5s linear infinite;
+  }
+}
+
+.admin-quickbar-jumpicons a.admin-quickbar-control-cache {
+  color: #d4390a;
 }
 
 body.swift-setup .admin-quickbar {
   display: none !important;
+}
+
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }

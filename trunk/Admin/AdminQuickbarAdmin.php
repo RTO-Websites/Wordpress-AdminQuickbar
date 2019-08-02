@@ -112,6 +112,7 @@ class AdminQuickbarAdmin {
         $this->setPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
         $currentPost = filter_input( INPUT_GET, 'post' );
+        $permalink = get_permalink( $currentPost );
 
         $addNewPosts = new Template( self::PartialDir . '/add-new-posts.php', [
             'filteredPostTypes' => $this->filteredPostTypes,
@@ -121,7 +122,9 @@ class AdminQuickbarAdmin {
             'postTypeLoop' => $postTypeLoop,
             'currentPost' => $currentPost,
             'addNewPosts' => $addNewPosts->getRendered(),
-            'swiftNonce' => wp_create_nonce('swift-performance-ajax-nonce'),
+            'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
+            'hasSwift' => class_exists( 'Swift_Performance' ),
+            'inCache' => in_array( $permalink, $this->cacheList ),
         ] );
         $template->render();
 
@@ -207,6 +210,7 @@ class AdminQuickbarAdmin {
                 'postTitle' => $this->getPostTitle( $post ),
                 'inCache' => in_array( $permalink, $this->cacheList ),
                 'permalink' => $permalink,
+                'hasSwift' => class_exists( 'Swift_Performance' ),
             ] );
             $output .= $template->getRendered();
         }

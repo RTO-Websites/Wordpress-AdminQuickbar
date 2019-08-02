@@ -1,14 +1,15 @@
 <div class="admin-quickbar-post" <?php echo $style; ?>>
-    <?php if ( $inCache ): ?>
-        <a title="Cached (Click to clear)"
-                class="dashicons dashicons-yes-alt admin-quickbar-clear-cache"
-                data-url="<?php echo $permalink; ?>"></a>
-    <?php endif; ?>
     <?php
     echo $thumb;
     echo $postTitle;
     ?>
     <div class="admin-quickbar-post-options">
+        <?php if ( $hasSwift ): ?>
+            <a title="Refresh swift cache"
+                    class="dashicons dashicons-update-alt admin-quickbar-control-cache  <?php echo $inCache ? ' is-in-cache' : ''; ?>"
+                    data-url="<?php echo $permalink; ?>"></a>
+        <?php endif; ?>
+
         <a class="dashicons dashicons-edit"
                 href="<?php echo $postTypeInfo['link']; ?>&action=edit"
                 title="Go to WP-Editor"></a>

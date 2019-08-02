@@ -33,7 +33,12 @@
     </div>
 
 <?php if ( !empty( $currentPost ) ): ?>
-    <div class="admin-quickbar-jumpicons">
+    <div class="admin-quickbar-jumpicons" data-swift-nonce="<?php echo $swiftNonce; ?>">
+        <?php if ( $hasSwift ): ?>
+            <a title="Refresh swift cache"
+                    class="dashicons dashicons-update-alt admin-quickbar-control-cache  <?php echo $inCache ? ' is-in-cache' : ''; ?>"
+                    data-url="<?php echo $permalink; ?>"></a>
+        <?php endif; ?>
         <a class="dashicons dashicons-visibility" href="<?php echo get_permalink( $currentPost ); ?>" title="Go to Page"></a>
         <?php if ( defined( 'ELEMENTOR_VERSION' ) ): ?>
             <a class="dashicons dashicons-edit"

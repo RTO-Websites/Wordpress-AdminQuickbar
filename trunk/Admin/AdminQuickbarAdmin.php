@@ -121,6 +121,7 @@ class AdminQuickbarAdmin {
             'postTypeLoop' => $postTypeLoop,
             'currentPost' => $currentPost,
             'addNewPosts' => $addNewPosts->getRendered(),
+            'swiftNonce' => wp_create_nonce('swift-performance-ajax-nonce'),
         ] );
         $template->render();
 

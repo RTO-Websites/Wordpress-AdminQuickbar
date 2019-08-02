@@ -127,7 +127,7 @@
 
     jQuery.post(ajaxurl, {
       action: 'swift_performance_single_clear_cache',
-      '_wpnonce': swift_performance.nonce,
+      '_wpnonce': target.closest('.admin-quickbar').data('swift-nonce'),
       'url': url,
     }, function(response) {
       response = (typeof response === 'string' ? JSON.parse(response) : response);

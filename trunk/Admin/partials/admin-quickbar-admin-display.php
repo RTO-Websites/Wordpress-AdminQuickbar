@@ -12,7 +12,7 @@
  * @subpackage AdminPostListSidebar/admin/partials
  */
 ?>
-    <div class="admin-quickbar">
+    <div class="admin-quickbar" data-swift-nonce="<?php echo $swiftNonce; ?>">
         <div class="admin-quickbar-inner">
             <label for="admin-quickbar-keepopen" class="admin-quickbar-keepopen">
                 <input type="checkbox" name="admin-quickbar-keepopen"/>

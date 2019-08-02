@@ -279,3 +279,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   font-size: 15px;
   cursor: pointer;
 }
+
+body.swift-setup .admin-quickbar {
+  display: none !important;
+}

@@ -1,52 +1,83 @@
-(function ($) {
-  'use strict';
 
-  /**
-   * All of the code for your admin-specific JavaScript source
-   * should reside in this file.
-   *
-   * Note that this assume you're going to use jQuery, so it prepares
-   * the $ function reference to be used within the scope of this
-   * function.
-   *
-   * From here, you're able to define handlers for when the DOM is
-   * ready:
-   *
-   * $(function() {
-   *
-   * });
-   *
-   * Or when the window is loaded:
-   *
-   * $( window ).load(function() {
-   *
-   * });
-   *
-   * ...and so on.
-   *
-   * Remember that ideally, we should not attach any more than a single DOM-ready or window-load handler
-   * for any particular page. Though other scripts in WordPress core, other plugins, and other themes may
-   * be doing this, we should try to minimize doing that in our own work.
-   */
 
-  /**
-   * Click on headlines
-   */
-  $(document).on('click', '.admin-quickbar-post-type', function (e) {
-    let target = $(e.target),
-      parent = target.parent();
+let AdminQuickbar = function () {
+  let win = window,
+    doc = win.document,
+    self = this,
+    init,
+    domReady,
+    refreshPostListStorage,
+    addPageToSwiftCache;
 
-    parent.toggleClass('show-list');
+  if (typeof($) === 'undefined') {
+    var $ = jQuery;
+  }
 
-    refreshPostListStorage();
-  });
+  init = function () {
+    $(function ($) {
+      console.info('domrdy');
+      domReady();
+    });
 
+    $(document).on('click', '.toggle-quickbar-button', self.toggleSidebar);
+    $(document).on('click', '.admin-quickbar-post-type', self.togglePostTypes);
+
+
+    /**
+     * Keep open
+     */
+    $(document).on('change', '.admin-quickbar-keepopen input', function (e) {
+      localStorage.adminQuickbarKeepopen = $('.admin-quickbar-keepopen input').is(':checked');
+    });
+
+    /**
+     * Keep open
+     */
+    $(document).on('change', '.admin-quickbar-overlap input', function (e) {
+      localStorage.adminQuickbarOverlap = $('.admin-quickbar-overlap input').is(':checked');
+
+      if (localStorage.adminQuickbarOverlap === 'true') {
+        $('body').addClass('admin-quickbar-is-overlap');
+      } else {
+        $('body').removeClass('admin-quickbar-is-overlap');
+      }
+    });
+
+    /**
+     * Load thumbs
+     */
+    $(document).on('change', '.admin-quickbar-loadthumbs input', function (e) {
+      localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
+
+      if (localStorage.adminQuickbarLoadthumbs === 'true') {
+        $('.admin-quickbar-loadthumbs input').prop('checked', true);
+        self.loadThumbs();
+      } else {
+        jQuery('.admin-quickbar .wp-post-image').prop('src', '');
+      }
+    });
+
+    $(document).on('click', '.admin-quickbar-control-cache', function (e) {
+      e.preventDefault();
+      let target = $(e.currentTarget);
+
+      if (target.hasClass('is-in-cache')) {
+        self.refreshSwiftCache(e);
+      } else {
+        addPageToSwiftCache(e);
+      }
+    });
+
+
+  };
 
   /**
    * Open sidebar and postlists on dom-ready
    */
-  $(function ($) {
-    let postLists = getPostListStorage();
+  domReady = function () {
+    console.info('domrdy2');
+
+    let postLists = self.getPostListStorage();
 
     // open postlists
     $('.admin-quickbar-postlist').each(function (index, element) {
@@ -74,139 +105,110 @@
       $('.admin-quickbar-overlap input').prop('checked', true);
       $('body').addClass('admin-quickbar-is-overlap');
     }
-  });
+  };
 
   /**
-   * Open Sidebar
+   * Open/Close Sidebar
    */
-  $(document).on('click', '.toggle-quickbar-button', function (e) {
+  self.toggleSidebar = function (e) {
     $('.admin-quickbar').toggleClass('toggle');
     $('body').toggleClass('admin-quickbar-visible');
     localStorage.adminQuickbarToggle = $('.admin-quickbar').hasClass('toggle');
-  });
+  };
 
   /**
-   * Keep open
+   * Click on headlines
    */
-  $(document).on('change', '.admin-quickbar-keepopen input', function (e) {
-    localStorage.adminQuickbarKeepopen = $('.admin-quickbar-keepopen input').is(':checked');
-  });
+  self.togglePostTypes = function (e) {
+    let target = $(e.target),
+      parent = target.parent();
+
+    parent.toggleClass('show-list');
+
+    refreshPostListStorage();
+  };
 
   /**
-   * Keep open
+   * Removes a page from swift-cache
+   *
+   * @param e
    */
-  $(document).on('change', '.admin-quickbar-overlap input', function (e) {
-    localStorage.adminQuickbarOverlap = $('.admin-quickbar-overlap input').is(':checked');
-
-    if (localStorage.adminQuickbarOverlap === 'true') {
-      $('body').addClass('admin-quickbar-is-overlap');
-    } else {
-      $('body').removeClass('admin-quickbar-is-overlap');
-    }
-  });
-
-  /**
-   * Load thumbs
-   */
-  $(document).on('change', '.admin-quickbar-loadthumbs input', function (e) {
-    localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
-
-    if (localStorage.adminQuickbarLoadthumbs === 'true') {
-      $('.admin-quickbar-loadthumbs input').prop('checked', true);
-      loadThumbs();
-    } else {
-      jQuery('.admin-quickbar .wp-post-image').prop('src', '');
-    }
-  });
-
-
-  $(document).on('click', '.admin-quickbar-control-cache', function (e) {
+  self.refreshSwiftCache = function (e) {
     e.preventDefault();
-    let target = $(e.currentTarget);
+    let target = jQuery(e.currentTarget),
+      url = target.data('url');
 
-    if (target.hasClass('is-in-cache')) {
-      refreshSwiftCache(e);
-    } else {
+    target.addClass('loading');
+
+    jQuery.post(ajaxurl, {
+      action: 'swift_performance_single_clear_cache',
+      '_wpnonce': target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
+      'url': url,
+    }, function (response) {
+      target.removeClass('is-in-cache');
       addPageToSwiftCache(e);
+    });
+  };
+
+  /**
+   * Adds a page to swift-cache
+   *
+   * @param e
+   */
+  addPageToSwiftCache = function (e) {
+    e.preventDefault();
+    let target = jQuery(e.currentTarget),
+      url = target.data('url');
+
+    target.addClass('loading');
+
+    jQuery.post(ajaxurl, {
+      action: 'swift_performance_single_prebuild',
+      '_wpnonce': target.closest('.admin-quickbar').data('swift-nonce'),
+      'url': url,
+    }, function (response) {
+      response = (typeof response === 'string' ? JSON.parse(response) : response);
+
+      if (response.status !== false) {
+        target.addClass('is-in-cache');
+      }
+      target.removeClass('loading');
+    });
+  };
+
+  /**
+   * Set localStorage
+   */
+  refreshPostListStorage = function () {
+    let postListStorage = {};
+    jQuery('.admin-quickbar-postlist').each(function (index, element) {
+      postListStorage[jQuery(element).data('post-type')] = jQuery(element).hasClass('show-list');
+    });
+
+    localStorage.postList = JSON.stringify(postListStorage);
+  };
+
+  /**
+   * Get localStorage
+   */
+  self.getPostListStorage = function () {
+    if (!localStorage.postList || typeof (localStorage.postList) != 'string') {
+      localStorage.postList = '{}';
     }
-  });
+    return JSON.parse(localStorage.postList);
+  };
 
-})(jQuery);
+  /**
+   * Replace img src with data-src and loads images
+   */
+  self.loadThumbs = function () {
+    jQuery('.admin-quickbar .wp-post-image').each(function (index, element) {
+      jQuery(element).prop('src', jQuery(element).data('src'));
+    });
+  };
+
+  init();
+};
 
 
-/**
- * Removes a page from swift-cache
- *
- * @param e
- */
-function refreshSwiftCache(e) {
-  e.preventDefault();
-  let target = jQuery(e.currentTarget),
-    url = target.data('url');
-
-  target.addClass('loading');
-
-  jQuery.post(ajaxurl, {
-    action: 'swift_performance_single_clear_cache',
-    '_wpnonce': target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
-    'url': url,
-  }, function (response) {
-    target.removeClass('is-in-cache');
-    addPageToSwiftCache(e);
-  });
-}
-
-/**
- * Adds a page to swift-cache
- *
- * @param e
- */
-function addPageToSwiftCache(e) {
-  e.preventDefault();
-  let target = jQuery(e.currentTarget),
-    url = target.data('url');
-
-  target.addClass('loading');
-
-  jQuery.post(ajaxurl, {
-    action: 'swift_performance_single_prebuild',
-    '_wpnonce': target.closest('.admin-quickbar').data('swift-nonce'),
-    'url': url,
-  }, function (response) {
-    response = (typeof response === 'string' ? JSON.parse(response) : response);
-
-    console.info('add-to-cache', response);
-    if (response.status !== false) {
-      target.addClass('is-in-cache');
-    }
-    target.removeClass('loading');
-  });
-}
-
-/**
- * Set localStorage
- */
-function refreshPostListStorage() {
-  let postListStorage = {};
-  jQuery('.admin-quickbar-postlist').each(function (index, element) {
-    postListStorage[jQuery(element).data('post-type')] = jQuery(element).hasClass('show-list');
-  });
-
-  localStorage.postList = JSON.stringify(postListStorage);
-}
-
-/**
- * Get localStorage
- */
-function getPostListStorage() {
-  if (!localStorage.postList || typeof (localStorage.postList) != 'string') {
-    localStorage.postList = '{}';
-  }
-  return JSON.parse(localStorage.postList);
-}
-
-function loadThumbs() {
-  jQuery('.admin-quickbar .wp-post-image').each(function (index, element) {
-    jQuery(element).prop('src', jQuery(element).data('src'));
-  });
-}
+window.adminQuickbarInstance = new AdminQuickbar();

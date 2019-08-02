@@ -1,4 +1,9 @@
 <div class="admin-quickbar-post" <?php echo $style; ?>>
+    <?php if ( $inCache ): ?>
+        <a title="Cached (Click to clear)"
+                class="dashicons dashicons-yes-alt admin-quickbar-clear-cache"
+                data-url="<?php echo $permalink; ?>"></a>
+    <?php endif; ?>
     <?php
     echo $thumb;
     echo $postTitle;
@@ -17,7 +22,7 @@
 
         <?php if ( empty( $postTypeInfo['noView'] ) ): ?>
             <a class="dashicons dashicons-visibility"
-                    href="<?php echo get_permalink( $post->ID ); ?>"
+                    href="<?php echo $permalink; ?>"
                     title="Go to Page"></a>
         <?php endif; ?>
     </div>

@@ -119,6 +119,22 @@
     }
   });
 
+
+  $(document).on('click', '.admin-quickbar-clear-cache', function(e) {
+    e.preventDefault();
+    let target = $(e.currentTarget),
+      url = target.data('url');
+
+    jQuery.post(ajaxurl, {
+      action: 'swift_performance_single_clear_cache',
+      '_wpnonce': swift_performance.nonce,
+      'url': url,
+    }, function(response) {
+      response = (typeof response === 'string' ? JSON.parse(response) : response);
+      target.remove();
+    });
+  });
+
 })(jQuery);
 
 /**

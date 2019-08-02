@@ -1,6 +1,8 @@
 <?php namespace AdminQuickbar\Admin;
 
 use AdminQuickbar\Lib\Template;
+use Swift_Performance;
+use Swift_Performance_Cache;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -28,6 +30,8 @@ class AdminQuickbarAdmin {
     public $postTypes = [];
     public $filteredPostTypes = [];
     public $categoryList = [];
+
+    public $cacheList = [];
 
     /**
      * The ID of this plugin.
@@ -89,6 +93,13 @@ class AdminQuickbarAdmin {
         }
     }
 
+    public function getCacheList() {
+        if ( !class_exists( 'Swift_Performance' ) ) {
+            return;
+        }
+        $this->cacheList = Swift_Performance::cache_status()['files'];
+    }
+
     /**
      * Adds the sidebar to footer
      *
@@ -97,6 +108,7 @@ class AdminQuickbarAdmin {
      * @throws \ImagickException
      */
     public function renderSidebar( $data ) {
+        $this->getCacheList();
         $this->setPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
         $currentPost = filter_input( INPUT_GET, 'post' );
@@ -184,6 +196,7 @@ class AdminQuickbarAdmin {
         foreach ( $posts as $post ) {
             $style = $this->getMarginStyle( $post, $postType, $lastParent, $margin );
             $postTypeInfo = $this->getPostTypeInfo( $postType, $post );
+            $permalink = get_permalink( $post->ID );
 
             $template = new Template( self::PartialDir . '/loop-posts.php', [
                 'post' => $post,
@@ -191,6 +204,8 @@ class AdminQuickbarAdmin {
                 'style' => $style,
                 'thumb' => $this->getThumb( $post ),
                 'postTitle' => $this->getPostTitle( $post ),
+                'inCache' => in_array( $permalink, $this->cacheList ),
+                'permalink' => $permalink,
             ] );
             $output .= $template->getRendered();
         }
@@ -251,10 +266,10 @@ class AdminQuickbarAdmin {
             return '';
         }
 
-        $template = new Template(self::PartialDir . '/thumbnail.php', [
+        $template = new Template( self::PartialDir . '/thumbnail.php', [
             'url' => $url,
             'class' => $class,
-        ]);
+        ] );
 
         return $template->getRendered();
     }

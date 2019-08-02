@@ -53,6 +53,10 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   .edit-post-layout__content {
     right: 320px;
   }
+
+  #elementor-try-safe-mode {
+    right: 325px;
+  }
 }
 
 .admin-quickbar.toggle .admin-quickbar-inner {
@@ -263,4 +267,15 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 
 .admin-quickbar-new-select {
   width: calc(100% - 43px);
+}
+
+.admin-quickbar-clear-cache {
+  display: inline-block;
+  position: relative;
+  margin-left: -9px;
+  top: 2px;
+  color: #01a252;
+  vertical-align: middle;
+  font-size: 15px;
+  cursor: pointer;
 }

@@ -2,7 +2,7 @@
 
 use AdminQuickbar\Lib\Template;
 use Swift_Performance;
-use Swift_Performance_Cache;
+use Swift_Performance_Lite;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -32,6 +32,7 @@ class AdminQuickbarAdmin {
     public $categoryList = [];
 
     public $cacheList = [];
+    private $hasSwift;
 
     /**
      * The ID of this plugin.
@@ -94,10 +95,16 @@ class AdminQuickbarAdmin {
     }
 
     public function getCacheList() {
-        if ( !class_exists( 'Swift_Performance' ) ) {
+        $this->hasSwift = class_exists( 'Swift_Performance' ) || class_exists( 'Swift_Performance_Lite' );
+        if ( !$this->hasSwift ) {
             return;
         }
-        $this->cacheList = Swift_Performance::cache_status()['files'];
+        $startTime = microtime( true );
+        $this->cacheList = class_exists( 'Swift_Performance' )
+            ? Swift_Performance::cache_status()['files']
+            : Swift_Performance_Lite::cache_status()['files'];
+        $endTime = microtime( true );
+        echo 'Duration:' . ( $endTime - $startTime );
     }
 
     /**
@@ -123,7 +130,7 @@ class AdminQuickbarAdmin {
             'currentPost' => $currentPost,
             'addNewPosts' => $addNewPosts->getRendered(),
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
-            'hasSwift' => class_exists( 'Swift_Performance' ),
+            'hasSwift' => $this->hasSwift,
             'inCache' => in_array( $permalink, $this->cacheList ),
         ] );
         $template->render();
@@ -210,7 +217,7 @@ class AdminQuickbarAdmin {
                 'postTitle' => $this->getPostTitle( $post ),
                 'inCache' => in_array( $permalink, $this->cacheList ),
                 'permalink' => $permalink,
-                'hasSwift' => class_exists( 'Swift_Performance' ),
+                'hasSwift' => $this->hasSwift,
             ] );
             $output .= $template->getRendered();
         }

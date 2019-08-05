@@ -16,27 +16,27 @@ let AdminQuickbar = function () {
       domReady();
     });
 
-    $(document).on('click', '.toggle-quickbar-button', self.toggleSidebar);
-    $(document).on('click', '.admin-quickbar-post-type', self.togglePostTypes);
+    $(doc).on('click', '.toggle-quickbar-button', self.toggleSidebar);
+    $(doc).on('click', '.admin-quickbar-post-type', self.togglePostTypes);
 
     /**
      * Keep open
      */
-    $(document).on('change', '.admin-quickbar-keepopen input', function (e) {
+    $(doc).on('change', '.admin-quickbar-keepopen input', function (e) {
       localStorage.adminQuickbarKeepopen = $('.admin-quickbar-keepopen input').is(':checked');
     });
 
     /**
      * Overlapping
      */
-    $(document).on('change', '.admin-quickbar-overlap input', self.checkOverlap);
+    $(doc).on('change', '.admin-quickbar-overlap input', self.checkOverlap);
 
     /**
      * Load thumbs
      */
-    $(document).on('change', '.admin-quickbar-loadthumbs input', self.checkThumbs);
+    $(doc).on('change', '.admin-quickbar-loadthumbs input', self.checkThumbs);
 
-    $(document).on('click', '.admin-quickbar-control-cache', self.checkSwiftCache);
+    $(doc).on('click', '.admin-quickbar-control-cache', self.checkSwiftCache);
   };
 
   /**

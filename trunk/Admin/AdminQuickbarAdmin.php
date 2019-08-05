@@ -99,12 +99,10 @@ class AdminQuickbarAdmin {
         if ( !$this->hasSwift ) {
             return;
         }
-        $startTime = microtime( true );
+
         $this->cacheList = class_exists( 'Swift_Performance' )
             ? Swift_Performance::cache_status()['files']
             : Swift_Performance_Lite::cache_status()['files'];
-        $endTime = microtime( true );
-        echo 'Duration:' . ( $endTime - $startTime );
     }
 
     /**

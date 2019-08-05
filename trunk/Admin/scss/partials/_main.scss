@@ -57,6 +57,10 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   #elementor-try-safe-mode {
     right: 325px;
   }
+
+  #query-monitor-main {
+    width: calc(100% - 322px) !important;
+  }
 }
 
 .admin-quickbar.toggle .admin-quickbar-inner {
@@ -118,6 +122,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 
 .admin-quickbar-post-options .dashicons {
   vertical-align: bottom;
+  margin-left: -2px;
+  margin-right: -2px;
 }
 
 .admin-quickbar-post {

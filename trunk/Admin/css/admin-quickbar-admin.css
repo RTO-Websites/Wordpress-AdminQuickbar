@@ -44,6 +44,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     right: 320px; }
   body:not(.admin-quickbar-is-overlap).admin-quickbar-visible #elementor-try-safe-mode {
     right: 325px; }
+  body:not(.admin-quickbar-is-overlap).admin-quickbar-visible #query-monitor-main {
+    width: calc(100% - 322px) !important; }
 
 .admin-quickbar.toggle .admin-quickbar-inner {
   display: block; }
@@ -92,7 +94,9 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   float: right; }
 
 .admin-quickbar-post-options .dashicons {
-  vertical-align: bottom; }
+  vertical-align: bottom;
+  margin-left: -2px;
+  margin-right: -2px; }
 
 .admin-quickbar-post {
   padding: 12px 15px;

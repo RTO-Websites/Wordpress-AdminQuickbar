@@ -206,16 +206,19 @@ class AdminQuickbarAdmin {
             $style = $this->getMarginStyle( $post, $postType, $lastParent, $margin );
             $postTypeInfo = $this->getPostTypeInfo( $postType, $post );
             $permalink = get_permalink( $post->ID );
+            $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
 
             $template = new Template( self::PartialDir . '/loop-posts.php', [
                 'post' => $post,
                 'postTypeInfo' => $postTypeInfo,
+                'contextMenuData' => json_encode( $this->getContextMenuData( $postType, $post, $postTypeInfo ) ),
                 'style' => $style,
                 'thumb' => $this->getThumb( $post ),
                 'postTitle' => $this->getPostTitle( $post ),
                 'inCache' => in_array( $permalink, $this->cacheList ),
                 'permalink' => $permalink,
                 'hasSwift' => $this->hasSwift,
+                'activeClass' => $activeClass,
             ] );
             $output .= $template->getRendered();
         }
@@ -416,11 +419,52 @@ class AdminQuickbarAdmin {
 
         }
 
+        if ( !defined( 'ELEMENTOR_VERSION' ) ) {
+            $noElementor = true;
+        }
+
         return [
             'link' => $link,
             'noElementor' => $noElementor,
             'noView' => $noView,
         ];
+    }
+
+
+    /**
+     * Returns data-attributes based on post-type
+     *
+     * @param \WP_Post_Type $postType
+     * @param \WP_Post $post
+     * @param array $postTypeInfo
+     * @return array
+     */
+    public function getContextMenuData( $postType, $post, $postTypeInfo ) {
+        $data = [
+            'favorite' => true,
+            'copy' => [
+                'id' => $post->ID,
+                'edit' => $postTypeInfo['link'] . '&action=edit',
+                'elementor' => empty( $postTypeInfo['noElementor'] ) ? $postTypeInfo['link'] . '&action=elementor' : '',
+                'permalink' => get_permalink( $post->ID ),
+            ],
+        ];
+
+        if ( $this->hasSwift ) {
+            $permalink = get_the_permalink( $post->ID );
+            $data['swift'] = [
+                'inCache' => in_array( $permalink, $this->cacheList ),
+                'permalink' => $permalink,
+            ];
+        }
+
+        switch ( $postType->name ) {
+            case 'elementor_library':
+                $data['copy']['shortcode'] = '[elementor-template id=' . $post->ID . ']';
+                break;
+        }
+
+        return $data;
     }
 
     /**

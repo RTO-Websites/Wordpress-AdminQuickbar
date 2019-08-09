@@ -1,4 +1,4 @@
-<div class="admin-quickbar-post" <?php echo $style; ?>>
+<div class="admin-quickbar-post <?php echo $activeClass; ?>" data-postid="<?php echo $post->ID; ?>" <?php echo $style; ?> data-contextmenu='<?php echo $contextMenuData; ?>'>
     <?php
     echo $thumb;
     echo $postTitle;
@@ -10,12 +10,12 @@
                     data-url="<?php echo $permalink; ?>"></a>
         <?php endif; ?>
 
-        <a class="dashicons dashicons-edit"
+        <a class="dashicons dashicons-wordpress"
                 href="<?php echo $postTypeInfo['link']; ?>&action=edit"
                 title="Go to WP-Editor"></a>
 
 
-        <?php if ( defined( 'ELEMENTOR_VERSION' ) && !$postTypeInfo['noElementor'] ): ?>
+        <?php if ( !$postTypeInfo['noElementor'] ): ?>
             <a class="dashicons dashicons-elementor"
                     href="<?php echo $postTypeInfo['link']; ?>&action=elementor"
                     title="Go to Elementor"></a>

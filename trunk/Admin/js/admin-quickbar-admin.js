@@ -5,6 +5,16 @@ let AdminQuickbar = function () {
     init,
     domReady,
     refreshPostListStorage,
+    closeContextMenu,
+    openContextMenu,
+    buildContextMenu,
+    buildContextMenuCopy,
+    buildContextMenuSwift,
+    buildContextMenuFavorite,
+    buildFavoriteStorage,
+    initFavorites,
+    removeFromFavorites,
+    addToFavorites,
     addPageToSwiftCache;
 
   if (typeof ($) === 'undefined') {
@@ -37,6 +47,10 @@ let AdminQuickbar = function () {
     $(doc).on('change', '.admin-quickbar-loadthumbs input', self.checkThumbs);
 
     $(doc).on('click', '.admin-quickbar-control-cache', self.checkSwiftCache);
+
+    // contextmenu
+    $(doc).on('contextmenu', '.admin-quickbar-post', openContextMenu);
+    $(doc).on('click', closeContextMenu);
   };
 
   /**
@@ -44,6 +58,7 @@ let AdminQuickbar = function () {
    */
   domReady = function () {
     let postLists = self.getPostListStorage();
+    initFavorites();
 
     // open postlists
     $('.admin-quickbar-postlist').each(function (index, element) {
@@ -71,6 +86,202 @@ let AdminQuickbar = function () {
       $('.admin-quickbar-overlap input').prop('checked', true);
       $('body').addClass('admin-quickbar-is-overlap');
     }
+  };
+
+  openContextMenu = function (e) {
+    e.preventDefault();
+
+    let target = $(e.currentTarget),
+      contextMenu = $('.admin-quickbar-contextmenu'),
+      mousePos = {
+        x: e.clientX,
+        y: e.clientY
+      };
+
+    contextMenu.data('postid', target.data('postid'));
+    buildContextMenu(target.data('contextmenu'));
+
+    if (contextMenu.outerWidth() + mousePos.x > $(win).width()) {
+      mousePos.x = $(win).width() - contextMenu.outerWidth();
+    }
+
+    contextMenu.css({
+      top: mousePos.y + 'px',
+      left: mousePos.x + 'px'
+    });
+    contextMenu.addClass('open');
+  };
+
+  buildContextMenu = function (data) {
+    let contextMenu = $('.admin-quickbar-contextmenu');
+
+    contextMenu.html('');
+
+    for (let index in data) {
+      console.info('build cmenu', data[index], index);
+      switch (index) {
+        case 'favorite':
+          contextMenu.append(buildContextMenuFavorite(data[index]));
+          break;
+
+        case 'copy':
+          contextMenu.append(buildContextMenuCopy(data[index]));
+          break;
+
+        case 'swift':
+          contextMenu.append(buildContextMenuSwift(data[index]));
+          break;
+      }
+    }
+  };
+
+  /**
+   * Build menu-item to add item to favorites
+   *
+   * @param data
+   */
+  buildContextMenuSwift = function (data) {
+    let parent = $('<div class="item has-sub item-favorite" />'),
+      contextMenu = $('.admin-quickbar-contextmenu'),
+      postid = contextMenu.data('postid'),
+      listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      item;
+
+    parent.append('<span class="label">Swift</span>');
+
+    item = $('<div class="dashicons dashicons-update-alt admin-quickbar-control-cache" />');
+    if (data.inCache) {
+      item.addClass('is-in-cache');
+    }
+
+    item.prop('title', 'Refresh swift cache');
+    item.data('url', data.permalink);
+    /*item.on('click', function (e) {
+      removeFromFavorites(postid);
+    });*/
+    parent.append(item);
+
+    return parent;
+  };
+
+  /**
+   * Build menu-item to add item to favorites
+   *
+   * @param data
+   */
+  buildContextMenuFavorite = function (data) {
+    let parent = $('<div class="item has-sub item-favorite" />'),
+      contextMenu = $('.admin-quickbar-contextmenu'),
+      postid = contextMenu.data('postid'),
+      listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      item;
+
+    parent.append('<span class="label">Favorites</span>');
+
+    if (!listItem.hasClass('is-favorite')) {
+      item = $('<div class="item subitem" />');
+      item.addClass('item-add-favorite');
+      item.prop('title', 'Add to favorites');
+      item.on('click', function (e) {
+        addToFavorites(postid);
+      });
+    } else {
+      item = $('<div class="item subitem" />');
+      item.addClass('item-remove-favorite');
+      item.prop('title', 'Remove from favorites');
+      item.on('click', function (e) {
+        removeFromFavorites(postid);
+      });
+    }
+    parent.append(item);
+
+    return parent;
+  };
+
+  buildFavoriteStorage = function () {
+    let storage = [];
+    $('.admin-quickbar-post.is-favorite').each(function (index, element) {
+      if (storage.indexOf($(element).data('postid')) === -1) {
+        storage.push($(element).data('postid'));
+      }
+    });
+    localStorage.adminQuickbarFavorites = JSON.stringify(storage);
+  };
+
+  initFavorites = function () {
+    let storage = JSON.parse(localStorage.adminQuickbarFavorites);
+
+    for (let i in storage) {
+      let listItem = $('.admin-quickbar-post[data-postid=' + storage[i] + ']');
+      listItem.addClass('is-favorite');
+      let listItemFav = listItem.clone();
+      listItemFav.css({marginLeft: ''});
+      $('.aqb-favorites .admin-quickbar-postlist-inner').append(listItemFav);
+    }
+  };
+
+  removeFromFavorites = function (postid) {
+    let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
+
+    listItem.removeClass('is-favorite');
+    buildFavoriteStorage();
+    listItemFav.remove();
+  };
+
+  addToFavorites = function (postid) {
+    console.info('add', postid);
+    let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
+
+    listItem.addClass('is-favorite');
+    buildFavoriteStorage();
+
+    if (!listItemFav.length) {
+      listItemFav = listItem.clone();
+      listItemFav.css({marginLeft: ''});
+      $('.aqb-favorites .admin-quickbar-postlist-inner').append(listItemFav);
+    }
+  };
+
+  /**
+   * Build menu-item with icons to copy id, permalink, shortcode, etc
+   *
+   * @param data
+   * @returns {*|jQuery.fn.init|jQuery|HTMLElement}
+   */
+  buildContextMenuCopy = function (data) {
+    let parent = $('<div class="item has-sub item-copy" />'),
+      input,
+      item;
+
+    parent.append('<span class="label">Copy</span>');
+    for (let index in data) {
+      if (!data[index]) {
+        continue;
+      }
+
+      item = $('<div class="item subitem" />');
+      item.on('click', function (e) {
+        let input = $(e.currentTarget).find('input');
+        input.focus();
+        input.select();
+        document.execCommand('copy');
+      });
+      item.addClass('item-' + index);
+      item.prop('title', index);
+      input = $('<input type="text" class="hidden-copy-input" />');
+      input.val(data[index]);
+      item.append(input);
+      parent.append(item);
+    }
+
+    return parent;
+  };
+
+  closeContextMenu = function () {
+    let contextMenu = $('.admin-quickbar-contextmenu');
+    contextMenu.removeClass('open');
   };
 
   /**

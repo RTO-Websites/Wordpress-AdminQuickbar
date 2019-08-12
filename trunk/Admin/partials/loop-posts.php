@@ -1,16 +1,10 @@
 <div class="admin-quickbar-post <?php echo $activeClass; ?>" data-postid="<?php echo $post->ID; ?>" <?php echo $style; ?> data-contextmenu='<?php echo $contextMenuData; ?>'>
     <?php
     echo $thumb;
-    echo $postTitle;
     ?>
+    <span class="label"><?php echo $postTitle; ?></span>
     <div class="admin-quickbar-post-options">
-        <?php if ( $hasSwift ): ?>
-            <a title="Refresh swift cache"
-                    class="dashicons dashicons-update-alt admin-quickbar-control-cache  <?php echo $inCache ? ' is-in-cache' : ''; ?>"
-                    data-url="<?php echo $permalink; ?>"></a>
-        <?php endif; ?>
-
-        <a class="dashicons dashicons-wordpress"
+        <a class="dashicons dashicons-wordpress-alt"
                 href="<?php echo $postTypeInfo['link']; ?>&action=edit"
                 title="Go to WP-Editor"></a>
 

@@ -20,7 +20,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 15px;
+  padding: 15px 8px;
   overflow: auto; }
   .admin-quickbar-inner > label {
     white-space: nowrap; }
@@ -102,6 +102,17 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   padding: 12px 15px;
   background-color: #fff;
   margin-bottom: 3px; }
+  .admin-quickbar-post.is-favorite .label::after {
+    content: '\f155';
+    display: inline-block;
+    position: relative;
+    top: 1px;
+    margin-left: 5px;
+    font-family: Dashicons;
+    font-size: 12px;
+    color: inherit; }
+  .admin-quickbar-post.is-active .label {
+    font-weight: 600; }
 
 .admin-quickbar-post::after {
   content: '';
@@ -118,7 +129,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   position: absolute;
   right: 100%;
   top: 50%;
-  width: 15px;
+  width: 12px;
   height: 50px;
   line-height: 50px;
   -webkit-transform: translateY(-50%);
@@ -128,11 +139,13 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   font-size: 15px;
   -webkit-box-shadow: -3px -1px 5px rgba(0, 0, 0, 0.1);
           box-shadow: -3px -1px 5px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
   cursor: pointer; }
-
-.toggle-quickbar-button::before {
-  content: "\f341";
-  font-family: dashicons; }
+  .toggle-quickbar-button::before {
+    content: "\f341";
+    font-family: dashicons;
+    margin-left: 2px; }
 
 .admin-quickbar.toggle .toggle-quickbar-button::before {
   content: "\f345"; }
@@ -156,16 +169,17 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
       -ms-transform: scale(4.5);
           transform: scale(4.5); }
 
-.admin-quickbar-overlap,
-.admin-quickbar-loadthumbs,
-.admin-quickbar-keepopen {
+.aqb-options label {
   padding-left: 2px;
   margin-bottom: 1em;
-  display: inline-block; }
-  .admin-quickbar-overlap input,
-  .admin-quickbar-loadthumbs input,
-  .admin-quickbar-keepopen input {
-    margin-right: 2px; }
+  display: block;
+  position: relative; }
+  .aqb-options label:first-child {
+    margin-top: 1em; }
+  .aqb-options label input {
+    margin-left: 7px !important;
+    top: -2px;
+    border-color: #8888882e !important; }
 
 .admin-quickbar-keepopen {
   padding-left: 0; }
@@ -194,23 +208,32 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 
 .admin-quickbar-jumpicons {
   position: fixed;
-  bottom: 0;
-  right: 25px;
-  z-index: 999999;
-  background-color: #000;
-  padding: 2px 5px 0; }
+  bottom: 10px;
+  right: 10px;
+  background-color: #fff;
+  padding: 8px 10px 2px;
+  border-radius: 24px;
+  -webkit-box-shadow: 0px 1px 1px #1b1c1d3d;
+          box-shadow: 0px 1px 1px #1b1c1d3d;
+  border-top: 1px solid #1b1c1d12;
+  z-index: 999999; }
+  .admin-quickbar-jumpicons a {
+    display: inline-block;
+    position: relative;
+    width: 22px;
+    height: 25px;
+    color: #0073aa;
+    vertical-align: bottom; }
+    .admin-quickbar-jumpicons a:hover {
+      color: #00a0d2; }
+    .admin-quickbar-jumpicons a.dashicons-elementor {
+      top: 3px; }
 
-.admin-quickbar-jumpicons a {
-  display: inline-block;
+.admin-quickbar-jumpicons .dashicons.dashicons-wordpress-alt,
+.admin-quickbar-post-options .dashicons.dashicons-wordpress-alt {
   position: relative;
-  width: 25px;
-  height: 25px;
-  color: #fff;
-  vertical-align: bottom; }
-  .admin-quickbar-jumpicons a:hover {
-    color: #00a0d2; }
-  .admin-quickbar-jumpicons a.dashicons-elementor {
-    top: 3px; }
+  font-size: 14px;
+  top: 2px; }
 
 .admin-quickbar-category {
   position: relative;
@@ -221,20 +244,23 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   text-transform: uppercase;
   font-size: 0.6rem;
   letter-spacing: 0.1rem;
-  color: #b9b9b9; }
+  color: #6e737d7a; }
 
 .admin-quickbar-category:first-child {
   margin-top: 0; }
 
 .admin-quickbar-new-select {
-  width: calc(100% - 43px); }
+  width: calc(100% - 43px);
+  margin-left: 5px;
+  padding: 0 5px;
+  border-color: #8888882e !important; }
 
 .admin-quickbar-jumpicons a.admin-quickbar-control-cache,
 .admin-quickbar-control-cache {
   display: inline-block;
   position: relative;
   top: 2px;
-  color: #7c1337;
+  color: #c73535;
   vertical-align: middle;
   font-size: 15px;
   cursor: pointer; }
@@ -250,7 +276,99 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
             animation: rotating 1.5s linear infinite; }
 
 .admin-quickbar-jumpicons a.admin-quickbar-control-cache {
-  color: #d4390a; }
+  color: #c73535;
+  font-size: 19px;
+  top: 0; }
+
+.admin-quickbar-contextmenu {
+  display: none;
+  position: fixed;
+  width: 280px;
+  color: #6d7882;
+  border-radius: 5px;
+  background: #fff;
+  -webkit-box-shadow: 1px 2px 4px #1b1c1d24;
+          box-shadow: 1px 2px 4px #1b1c1d24;
+  border-top: 1px solid #1b1c1d12;
+  border-left: 1px solid #1b1c1d12;
+  z-index: 999999999; }
+  .admin-quickbar-contextmenu.open {
+    display: block; }
+  .admin-quickbar-contextmenu > .item {
+    display: block;
+    position: relative;
+    padding: 0 15px;
+    height: 30px;
+    margin: 7px 0;
+    cursor: default; }
+  .admin-quickbar-contextmenu .item:not(.has-sub):hover {
+    background-color: #e6e9ec; }
+  .admin-quickbar-contextmenu .item.has-sub {
+    text-align: right; }
+  .admin-quickbar-contextmenu .item.has-sub .label {
+    display: block;
+    position: absolute;
+    text-align: left;
+    top: 14px; }
+  .admin-quickbar-contextmenu .subitem {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    font-family: Dashicons;
+    background-color: transparent;
+    margin: 0 2px;
+    overflow: hidden; }
+  .admin-quickbar-contextmenu .subitem::before {
+    display: inline-block;
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+    font-size: 20px; }
+  .admin-quickbar-contextmenu .subitem.admin-quickbar-control-cache::before {
+    top: 5px;
+    -webkit-transform: none;
+        -ms-transform: none;
+            transform: none; }
+  .admin-quickbar-contextmenu .item.item-copy .subitem {
+    cursor: copy; }
+  .admin-quickbar-contextmenu .item.item-favorite .subitem {
+    cursor: pointer; }
+  .admin-quickbar-contextmenu .subitem.item-permalink::before {
+    content: "\f177"; }
+  .admin-quickbar-contextmenu .subitem.item-edit::before {
+    content: "\f120";
+    font-size: 16px; }
+  .admin-quickbar-contextmenu .subitem.item-id::before {
+    content: "\f336"; }
+  .admin-quickbar-contextmenu .subitem.item-elementor::before {
+    content: "\e812";
+    font-family: eicons;
+    font-size: 13px;
+    top: calc(50% - 3px); }
+  .admin-quickbar-contextmenu .subitem.item-shortcode::before {
+    content: "\e883";
+    font-family: eicons;
+    font-size: 13px;
+    top: calc(50% - 3px); }
+  .admin-quickbar-contextmenu .subitem.item-add-favorite::before {
+    content: "\f154"; }
+  .admin-quickbar-contextmenu .subitem.item-remove-favorite::before {
+    content: "\f155"; }
+  .admin-quickbar-contextmenu .item input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    -webkit-transform: scale(0);
+        -ms-transform: scale(0);
+            transform: scale(0); }
 
 body.swift-setup .admin-quickbar {
   display: none !important; }
@@ -270,3 +388,38 @@ body.swift-setup .admin-quickbar {
   to {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg); } }
+
+.add-post-button,
+.admin-quickbar-post-type .add-new,
+.admin-quickbar-post-options a,
+.admin-quickbar-jumpicons a {
+  color: #2f87b1; }
+  .add-post-button:hover,
+  .admin-quickbar-post-type .add-new:hover,
+  .admin-quickbar-post-options a:hover,
+  .admin-quickbar-jumpicons a:hover {
+    color: #0aa4ef; }
+  .add-post-button:focus,
+  .admin-quickbar-post-type .add-new:focus,
+  .admin-quickbar-post-options a:focus,
+  .admin-quickbar-jumpicons a:focus {
+    -webkit-box-shadow: none;
+            box-shadow: none; }
+
+.admin-quickbar-is-darkmode .admin-quickbar-contextmenu {
+  background-color: #333; }
+  .admin-quickbar-is-darkmode .admin-quickbar-contextmenu .item:not(.has-sub):hover {
+    background-color: #111; }
+
+.admin-quickbar-is-darkmode .admin-quickbar-jumpicons {
+  background-color: #333; }
+
+.admin-quickbar-is-darkmode .toggle-quickbar-button {
+  background-color: #333; }
+
+.admin-quickbar-is-darkmode .admin-quickbar {
+  background-color: #333;
+  color: #6d7882; }
+
+.admin-quickbar-is-darkmode .admin-quickbar-post {
+  background-color: #3c3c3c; }

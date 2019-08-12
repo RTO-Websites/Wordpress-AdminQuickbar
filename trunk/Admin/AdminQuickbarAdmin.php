@@ -126,6 +126,7 @@ class AdminQuickbarAdmin {
         $template = new Template( self::PartialDir . '/admin-quickbar-admin-display.php', [
             'postTypeLoop' => $postTypeLoop,
             'currentPost' => $currentPost,
+            'permalink' => $permalink,
             'addNewPosts' => $addNewPosts->getRendered(),
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
             'hasSwift' => $this->hasSwift,
@@ -133,7 +134,31 @@ class AdminQuickbarAdmin {
         ] );
         $template->render();
 
+        $template = new Template( self::PartialDir . '/jump-icons.php', [
+            'currentPost' => $currentPost,
+            'permalink' => $permalink,
+            'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
+            'hasSwift' => $this->hasSwift,
+            'inCache' => in_array( $permalink, $this->cacheList ),
+        ] );
+        $template->render();
+
         return $data;
+    }
+
+    public static function renderJumpIcons() {
+        $currentPost = get_the_ID();
+        $permalink = get_the_permalink();
+
+        $template = new Template( self::PartialDir . '/jump-icons.php', [
+            'currentPost' => $currentPost,
+            'permalink' => $permalink,
+            'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
+            'hasSwift' => false,
+            'inCache' => false,
+        ] );
+        $template->render();
+
     }
 
     /**
@@ -487,6 +512,11 @@ class AdminQuickbarAdmin {
          */
 
         wp_enqueue_style( $this->pluginName, AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], $this->version, 'all' );
+
+    }
+
+    public static function enqueueWebsiteStyles() {
+        wp_enqueue_style( 'AdminQuickbar', AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], AdminQuickbar_VERSION, 'all' );
 
     }
 

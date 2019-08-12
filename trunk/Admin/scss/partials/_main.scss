@@ -20,7 +20,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 15px;
+  padding: 15px 8px;
   overflow: auto;
 
   > label {
@@ -127,9 +127,26 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 }
 
 .admin-quickbar-post {
+  //position: relative;
   padding: 12px 15px;
   background-color: #fff;
   margin-bottom: 3px;
+
+
+  &.is-favorite .label::after {
+    content: '\f155';
+    display: inline-block;
+    position: relative;
+    top: 1px;
+    margin-left: 5px;
+    font-family: Dashicons;
+    font-size: 12px;
+    color: inherit;
+  }
+
+  &.is-active .label {
+    font-weight: 600;
+  }
 }
 
 .admin-quickbar-post::after {
@@ -150,7 +167,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   position: absolute;
   right: 100%;
   top: 50%;
-  width: 15px;
+  width: 12px;
   height: 50px;
   line-height: 50px;
   -webkit-transform: translateY(-50%);
@@ -159,12 +176,15 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   background-color: #e6e9ec;
   font-size: 15px;
   box-shadow: -3px -1px 5px rgba(0, 0, 0, .1);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
   cursor: pointer;
-}
 
-.toggle-quickbar-button::before {
-  content: "\f341";
-  font-family: dashicons;
+  &::before {
+    content: "\f341";
+    font-family: dashicons;
+    margin-left: 2px;
+  }
 }
 
 .admin-quickbar.toggle .toggle-quickbar-button::before {
@@ -186,15 +206,20 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   transform: scale(4.5);
 }
 
-.admin-quickbar-overlap,
-.admin-quickbar-loadthumbs,
-.admin-quickbar-keepopen {
+.aqb-options label {
   padding-left: 2px;
   margin-bottom: 1em;
-  display: inline-block;
+  display: block;
+  position: relative;
+
+  &:first-child {
+    margin-top: 1em;
+  }
 
   input {
-    margin-right: 2px;
+    margin-left: 7px !important;
+    top: -2px;
+    border-color: #8888882e !important;
   }
 }
 
@@ -230,29 +255,42 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 
 .admin-quickbar-jumpicons {
   position: fixed;
-  bottom: 0;
-  right: 25px;
+  bottom: 10px;
+  right: 10px;
+  background-color: #fff;
+  padding: 8px 10px 2px;
+  border-radius: 24px;
+  box-shadow: 0px 1px 1px #1b1c1d3d;
+  border-top: 1px solid #1b1c1d12;
   z-index: 999999;
-  background-color: #000;
-  padding: 2px 5px 0;
-}
 
-.admin-quickbar-jumpicons a {
-  display: inline-block;
-  position: relative;
-  width: 25px;
-  height: 25px;
-  color: #fff;
-  vertical-align: bottom;
+  a {
+    display: inline-block;
+    position: relative;
+    width: 22px;
+    height: 25px;
+    color: #0073aa;
+    vertical-align: bottom;
 
-  &:hover {
-    color: #00a0d2;
-  }
+    &:hover {
+      color: #00a0d2;
+    }
 
-  &.dashicons-elementor {
-    top: 3px;
+    &.dashicons-elementor {
+      top: 3px;
+    }
   }
 }
+
+.admin-quickbar-jumpicons,
+.admin-quickbar-post-options {
+  .dashicons.dashicons-wordpress-alt {
+    position: relative;
+    font-size: 14px;
+    top: 2px;
+  }
+}
+
 
 .admin-quickbar-category {
   position: relative;
@@ -264,7 +302,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   text-transform: uppercase;
   font-size: 0.6rem;
   letter-spacing: 0.1rem;
-  color: #b9b9b9;
+  color: #6e737d7a;
 }
 
 .admin-quickbar-category:first-child {
@@ -273,6 +311,9 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 
 .admin-quickbar-new-select {
   width: calc(100% - 43px);
+  margin-left: 5px;
+  padding: 0 5px;
+  border-color: #8888882e !important;
 }
 
 .admin-quickbar-jumpicons a.admin-quickbar-control-cache,
@@ -280,7 +321,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   display: inline-block;
   position: relative;
   top: 2px;
-  color: #7c1337;
+  color: #c73535;
   vertical-align: middle;
   font-size: 15px;
   cursor: pointer;
@@ -299,7 +340,131 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 }
 
 .admin-quickbar-jumpicons a.admin-quickbar-control-cache {
-  color: #d4390a;
+  color: #c73535;
+  font-size: 19px;
+  top: 0;
+}
+
+
+.admin-quickbar-contextmenu {
+  display: none;
+  position: fixed;
+  width: 280px;
+  color: #6d7882;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 1px 2px 4px #1b1c1d24;
+  border-top: 1px solid #1b1c1d12;
+  border-left: 1px solid #1b1c1d12;
+
+  z-index: 999999999;
+
+  &.open {
+    display: block;
+  }
+
+  > .item {
+    display: block;
+    position: relative;
+    padding: 0 15px;
+    height: 30px;
+    margin: 7px 0;
+    cursor: default;
+  }
+
+  .item:not(.has-sub):hover {
+    background-color: #e6e9ec;
+  }
+
+  .item.has-sub {
+    text-align: right;
+  }
+
+  .item.has-sub .label {
+    display: block;
+    position: absolute;
+    text-align: left;
+    top: 14px;
+  }
+
+  .subitem {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    font-family: Dashicons;
+    background-color: transparent;
+    margin: 0 2px;
+    overflow: hidden;
+  }
+
+  .subitem::before {
+    display: inline-block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+  }
+
+  .subitem.admin-quickbar-control-cache::before {
+    top: 5px;
+    transform: none;
+  }
+
+  .item.item-copy .subitem {
+    cursor: copy;
+  }
+
+  .item.item-favorite .subitem {
+    cursor: pointer;
+  }
+
+  .subitem.item-permalink::before {
+    content: "\f177";
+  }
+
+  .subitem.item-edit::before {
+    content: "\f120";
+    font-size: 16px;
+  }
+
+  .subitem.item-id::before {
+    content: "\f336";
+  }
+
+  .subitem.item-elementor::before {
+    content: "\e812";
+    font-family: eicons;
+    font-size: 13px;
+    top: calc(50% - 3px);
+  }
+
+  .subitem.item-shortcode::before {
+    content: "\e883";
+    font-family: eicons;
+    font-size: 13px;
+    top: calc(50% - 3px);
+  }
+
+  .subitem.item-add-favorite::before {
+    content: "\f154";
+  }
+
+  .subitem.item-remove-favorite::before {
+    content: "\f155";
+  }
+
+  .item input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    transform: scale(0);
+  }
 }
 
 body.swift-setup .admin-quickbar {
@@ -314,5 +479,48 @@ body.swift-setup .admin-quickbar {
 
   to {
     transform: rotate(360deg);
+  }
+}
+
+
+.add-post-button,
+.admin-quickbar-post-type .add-new,
+.admin-quickbar-post-options a,
+.admin-quickbar-jumpicons a {
+  color: #2f87b1;
+
+  &:hover {
+    color: #0aa4ef;
+  }
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.admin-quickbar-is-darkmode {
+  .admin-quickbar-contextmenu {
+    background-color: #333;
+
+    .item:not(.has-sub):hover {
+      background-color: #111;
+    }
+  }
+
+  .admin-quickbar-jumpicons {
+    background-color: #333;
+  }
+
+  .toggle-quickbar-button {
+    background-color: #333;
+  }
+
+  .admin-quickbar {
+    background-color: #333;
+    color: #6d7882;
+  }
+
+  .admin-quickbar-post {
+    background-color: #3c3c3c;
   }
 }

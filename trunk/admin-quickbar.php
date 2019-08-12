@@ -32,8 +32,8 @@ use AdminQuickbar\Lib\Deactivator;
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( !defined( 'WPINC' ) ) {
+    die;
 }
 
 define( 'AdminQuickbar_VERSION', '1.4.1' );
@@ -69,6 +69,10 @@ register_deactivation_hook( __FILE__, [ Deactivator::class, 'deactivate' ] );
  */
 
 
-if ( is_admin()) {
+if ( is_admin() ) {
     AdminQuickbar::run();
+} else {
+    add_action( 'plugins_loaded', function () {
+        AdminQuickbar::initFrontend();
+    } );
 }

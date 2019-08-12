@@ -36,6 +36,8 @@ let AdminQuickbar = function () {
       localStorage.adminQuickbarKeepopen = $('.admin-quickbar-keepopen input').is(':checked');
     });
 
+    $(doc).on('change', '.admin-quickbar-darkmode input', self.checkDarkmode);
+
     /**
      * Overlapping
      */
@@ -79,15 +81,24 @@ let AdminQuickbar = function () {
 
     if (localStorage.adminQuickbarLoadthumbs === 'true') {
       $('.admin-quickbar-loadthumbs input').prop('checked', true);
-      loadThumbs();
+      self.loadThumbs();
     }
 
     if (localStorage.adminQuickbarOverlap === 'true') {
       $('.admin-quickbar-overlap input').prop('checked', true);
       $('body').addClass('admin-quickbar-is-overlap');
     }
+
+    if (localStorage.adminQuickbarDarkmode === 'true') {
+      $('.admin-quickbar-darkmode input').prop('checked', true);
+      $('body').addClass('admin-quickbar-is-darkmode');
+    }
   };
 
+  /**
+   *
+   * @param e
+   */
   openContextMenu = function (e) {
     e.preventDefault();
 
@@ -112,13 +123,15 @@ let AdminQuickbar = function () {
     contextMenu.addClass('open');
   };
 
+  /**
+   * @param data
+   */
   buildContextMenu = function (data) {
     let contextMenu = $('.admin-quickbar-contextmenu');
 
     contextMenu.html('');
 
     for (let index in data) {
-      console.info('build cmenu', data[index], index);
       switch (index) {
         case 'favorite':
           contextMenu.append(buildContextMenuFavorite(data[index]));
@@ -149,7 +162,8 @@ let AdminQuickbar = function () {
 
     parent.append('<span class="label">Swift</span>');
 
-    item = $('<div class="dashicons dashicons-update-alt admin-quickbar-control-cache" />');
+    item = $('<div class="item subitem" />');
+    item.addClass('dashicons dashicons-update-alt admin-quickbar-control-cache');
     if (data.inCache) {
       item.addClass('is-in-cache');
     }
@@ -198,6 +212,9 @@ let AdminQuickbar = function () {
     return parent;
   };
 
+  /**
+   * Checks which posts are favorites and add them to local storage
+   */
   buildFavoriteStorage = function () {
     let storage = [];
     $('.admin-quickbar-post.is-favorite').each(function (index, element) {
@@ -208,8 +225,14 @@ let AdminQuickbar = function () {
     localStorage.adminQuickbarFavorites = JSON.stringify(storage);
   };
 
+  /**
+   * Read local storage and moves all posts in it to favorites
+   */
   initFavorites = function () {
-    let storage = JSON.parse(localStorage.adminQuickbarFavorites);
+    let storage = [];
+    if (typeof (localStorage.adminQuickbarFavorites) !== 'undefined') {
+      storage = JSON.parse(localStorage.adminQuickbarFavorites);
+    }
 
     for (let i in storage) {
       let listItem = $('.admin-quickbar-post[data-postid=' + storage[i] + ']');
@@ -220,6 +243,10 @@ let AdminQuickbar = function () {
     }
   };
 
+  /**
+   * Removes a post from favorites
+   * @param postid
+   */
   removeFromFavorites = function (postid) {
     let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
       listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
@@ -229,8 +256,11 @@ let AdminQuickbar = function () {
     listItemFav.remove();
   };
 
+  /**
+   * Adds a post to favorites
+   * @param postid
+   */
   addToFavorites = function (postid) {
-    console.info('add', postid);
     let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
       listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
 
@@ -263,6 +293,7 @@ let AdminQuickbar = function () {
 
       item = $('<div class="item subitem" />');
       item.on('click', function (e) {
+        e.stopPropagation();
         let input = $(e.currentTarget).find('input');
         input.focus();
         input.select();
@@ -299,6 +330,20 @@ let AdminQuickbar = function () {
   };
 
   /**
+   * Checks if overlapping is active
+   * @param e
+   */
+  self.checkDarkmode = function (e) {
+    localStorage.adminQuickbarDarkmode = $('.admin-quickbar-darkmode input').is(':checked');
+
+    if (localStorage.adminQuickbarDarkmode === 'true') {
+      $('body').addClass('admin-quickbar-is-darkmode');
+    } else {
+      $('body').removeClass('admin-quickbar-is-darkmode');
+    }
+  };
+
+  /**
    * Check if load-thumbs is active
    *
    * @param e
@@ -321,6 +366,7 @@ let AdminQuickbar = function () {
    */
   self.checkSwiftCache = function (e) {
     e.preventDefault();
+    e.stopPropagation();
     let target = $(e.currentTarget);
 
     if (target.hasClass('is-in-cache')) {
@@ -392,7 +438,7 @@ let AdminQuickbar = function () {
     }, function (response) {
       response = (typeof response === 'string' ? JSON.parse(response) : response);
 
-      if (response.status !== false) {
+      if (response.status === 'success') {
         target.addClass('is-in-cache');
       }
       target.removeClass('loading');

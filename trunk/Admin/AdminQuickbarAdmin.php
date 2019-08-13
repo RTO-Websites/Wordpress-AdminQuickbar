@@ -159,6 +159,8 @@ class AdminQuickbarAdmin {
         ] );
         $template->render();
 
+        $template = new Template( self::PartialDir . '/jump-icons-inline-script.php');
+        $template->render();
     }
 
     /**
@@ -469,9 +471,9 @@ class AdminQuickbarAdmin {
             'favorite' => true,
             'copy' => [
                 'id' => $post->ID,
-                'edit' => $postTypeInfo['link'] . '&action=edit',
+                'wordpress' => $postTypeInfo['link'] . '&action=edit',
                 'elementor' => empty( $postTypeInfo['noElementor'] ) ? $postTypeInfo['link'] . '&action=elementor' : '',
-                'permalink' => get_permalink( $post->ID ),
+                'website' => get_permalink( $post->ID ),
             ],
         ];
 
@@ -517,7 +519,7 @@ class AdminQuickbarAdmin {
 
     public static function enqueueWebsiteStyles() {
         wp_enqueue_style( 'AdminQuickbar', AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], AdminQuickbar_VERSION, 'all' );
-
+        wp_enqueue_style( 'dashicons' );
     }
 
     /**

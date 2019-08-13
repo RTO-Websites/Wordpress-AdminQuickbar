@@ -1,0 +1,97 @@
+
+.admin-quickbar-contextmenu {
+  display: none;
+  position: fixed;
+  width: 280px;
+  color: #6d7882;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 1px 2px 4px #1b1c1d24;
+  border-top: 1px solid #1b1c1d12;
+  border-left: 1px solid #1b1c1d12;
+
+  z-index: 999999999;
+
+  &.open {
+    display: block;
+  }
+
+  > .item {
+    display: block;
+    position: relative;
+    padding: 0 15px;
+    height: 30px;
+    margin: 7px 0;
+    cursor: default;
+  }
+
+  .item:not(.has-sub):hover {
+    background-color: #e6e9ec;
+  }
+
+  .item.has-sub {
+    text-align: right;
+  }
+
+  .item.has-sub .label {
+    display: block;
+    position: absolute;
+    text-align: left;
+    top: 8px;
+  }
+
+  .subitem {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background-color: transparent;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .subitem::before {
+    display: inline-block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+  }
+
+  .subitem.aqb-icon-swift::before {
+    top: 5px;
+    transform: none;
+  }
+
+  .item.item-copy .subitem {
+    cursor: copy;
+  }
+
+  .item.item-favorite .subitem {
+    cursor: pointer;
+  }
+
+  .subitem.item-elementor::before {
+    font-size: 13px;
+    top: calc(50% - 1px);
+  }
+
+  .subitem.item-shortcode::before {
+    content: "\e883";
+    font-family: eicons;
+    font-size: 13px;
+    top: calc(50% - 3px);
+  }
+
+  .item input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    transform: scale(0);
+  }
+}

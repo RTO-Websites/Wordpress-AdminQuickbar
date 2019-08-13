@@ -1,0 +1,39 @@
+.admin-quickbar-is-darkmode {
+  .admin-quickbar-contextmenu {
+    background-color: #333;
+
+    .item:not(.has-sub):hover {
+      background-color: #111;
+    }
+  }
+
+  .admin-quickbar-jumpicons {
+    background-color: #3c3c3c;
+  }
+
+  .toggle-quickbar-button {
+    background-color: #333;
+  }
+
+  .admin-quickbar {
+    background-color: #333;
+    color: #767e86;
+  }
+
+  .admin-quickbar-post {
+    background-color: #3c3c3c;
+  }
+
+  .aqb-tab-button {
+    background-color: #3c3c3c;
+  }
+
+
+  .aqb-css-list {
+    background-color: #3c3c3c;
+
+    .item {
+      background-color: #111;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 <?php namespace AdminQuickbar\Lib;
 
 use AdminQuickbar\Admin\AdminQuickbarAdmin;
+use Elementor\Plugin;
 
 /**
  * The file that defines the core plugin class
@@ -142,6 +143,10 @@ class AdminQuickbar {
         if ( !current_user_can( 'administrator' ) ) {
             return;
         }
+
+        /*if ( \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+            return;
+        }*/
 
         add_action( 'wp_enqueue_scripts', function () {
             AdminQuickbarAdmin::enqueueWebsiteStyles();

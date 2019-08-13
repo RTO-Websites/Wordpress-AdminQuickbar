@@ -28,6 +28,7 @@ let AdminQuickbar = function () {
 
     $(doc).on('click', '.toggle-quickbar-button', self.toggleSidebar);
     $(doc).on('click', '.admin-quickbar-post-type', self.togglePostTypes);
+    $(doc).on('click', '.aqb-tab-button', self.changeTab);
 
     /**
      * Keep open
@@ -36,7 +37,17 @@ let AdminQuickbar = function () {
       localStorage.adminQuickbarKeepopen = $('.admin-quickbar-keepopen input').is(':checked');
     });
 
+    /**
+     * Darkmode
+     */
     $(doc).on('change', '.admin-quickbar-darkmode input', self.checkDarkmode);
+
+    /**
+     * Hide on website
+     */
+    $(doc).on('change', '.admin-quickbar-hide-on-website input', function (e) {
+      localStorage.adminQuickbarHideOnWebsite = $('.admin-quickbar-hide-on-website input').is(':checked');
+    });
 
     /**
      * Overlapping
@@ -48,7 +59,14 @@ let AdminQuickbar = function () {
      */
     $(doc).on('change', '.admin-quickbar-loadthumbs input', self.checkThumbs);
 
-    $(doc).on('click', '.admin-quickbar-control-cache', self.checkSwiftCache);
+    $(doc).on('click', '.aqb-icon-swift', self.checkSwiftCache);
+
+    /**
+     * Open default contextmenu on icons
+     */
+    $(doc).on('contextmenu', '.aqb-icon', function (e) {
+      e.stopPropagation();
+    });
 
     // contextmenu
     $(doc).on('contextmenu', '.admin-quickbar-post', openContextMenu);
@@ -79,6 +97,10 @@ let AdminQuickbar = function () {
       $('.admin-quickbar-keepopen input').prop('checked', true);
     }
 
+    if (localStorage.adminQuickbarHideOnWebsite === 'true') {
+      $('.admin-quickbar-hide-on-website input').prop('checked', true);
+    }
+
     if (localStorage.adminQuickbarLoadthumbs === 'true') {
       $('.admin-quickbar-loadthumbs input').prop('checked', true);
       self.loadThumbs();
@@ -93,6 +115,20 @@ let AdminQuickbar = function () {
       $('.admin-quickbar-darkmode input').prop('checked', true);
       $('body').addClass('admin-quickbar-is-darkmode');
     }
+  };
+
+  /**
+   *
+   * @param e
+   */
+  self.changeTab = function (e) {
+    let target = $(e.currentTarget),
+      tabSlug = target.data('tab');
+
+    $('.aqb-tab-button, .aqb-tab').removeClass('active');
+
+    target.addClass('active');
+    $('.aqb-tab-' + tabSlug).addClass('active');
   };
 
   /**
@@ -156,23 +192,18 @@ let AdminQuickbar = function () {
   buildContextMenuSwift = function (data) {
     let parent = $('<div class="item has-sub item-favorite" />'),
       contextMenu = $('.admin-quickbar-contextmenu'),
-      postid = contextMenu.data('postid'),
-      listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
       item;
 
     parent.append('<span class="label">Swift</span>');
 
     item = $('<div class="item subitem" />');
-    item.addClass('dashicons dashicons-update-alt admin-quickbar-control-cache');
+    item.addClass('aqb-icon aqb-icon-swift');
     if (data.inCache) {
       item.addClass('is-in-cache');
     }
 
     item.prop('title', 'Refresh swift cache');
     item.data('url', data.permalink);
-    /*item.on('click', function (e) {
-      removeFromFavorites(postid);
-    });*/
     parent.append(item);
 
     return parent;
@@ -192,16 +223,16 @@ let AdminQuickbar = function () {
 
     parent.append('<span class="label">Favorites</span>');
 
+    item = $('<div class="item subitem aqb-icon" />');
+    item.addClass('aqb-icon aqb-icon-favorite');
     if (!listItem.hasClass('is-favorite')) {
-      item = $('<div class="item subitem" />');
-      item.addClass('item-add-favorite');
+      item.addClass('aqb-icon-favorite');
       item.prop('title', 'Add to favorites');
       item.on('click', function (e) {
         addToFavorites(postid);
       });
     } else {
-      item = $('<div class="item subitem" />');
-      item.addClass('item-remove-favorite');
+      item.addClass('aqb-icon-favorite-alt');
       item.prop('title', 'Remove from favorites');
       item.on('click', function (e) {
         removeFromFavorites(postid);
@@ -300,7 +331,8 @@ let AdminQuickbar = function () {
         document.execCommand('copy');
       });
       item.addClass('item-' + index);
-      item.prop('title', index);
+      item.addClass('aqb-icon aqb-icon-' + index);
+      item.prop('title', index.charAt(0).toUpperCase() + index.slice(1));
       input = $('<input type="text" class="hidden-copy-input" />');
       input.val(data[index]);
       item.append(input);

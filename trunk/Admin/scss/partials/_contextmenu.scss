@@ -1,14 +1,14 @@
-
+.aqb-css-list,
 .admin-quickbar-contextmenu {
   display: none;
-  position: fixed;
-  width: 280px;
+  position: absolute;
+  left: 0;
+  right: 0;
   color: #6d7882;
-  border-radius: 5px;
+  border-radius: 0;
   background: #fff;
-  box-shadow: 1px 2px 4px #1b1c1d24;
+  box-shadow: 1px 3px 4px #1b1c1d24;
   border-top: 1px solid #1b1c1d12;
-  border-left: 1px solid #1b1c1d12;
 
   z-index: 999999999;
 
@@ -31,6 +31,11 @@
 
   .item.has-sub {
     text-align: right;
+  }
+
+  .item .label {
+    font-size: 13px;
+    letter-spacing: initial;
   }
 
   .item.has-sub .label {

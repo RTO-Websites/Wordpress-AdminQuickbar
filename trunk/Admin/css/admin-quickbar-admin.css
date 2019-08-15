@@ -9,8 +9,6 @@
   width: 0;
   bottom: 0;
   background-color: #e6e9ec;
-  -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-          box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   font-size: 13px;
   line-height: 1.4em;
   font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
@@ -247,16 +245,19 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .add-post-button,
 .admin-quickbar-post-type .add-new,
 .admin-quickbar-post-options a,
+.admin-quickbar-jumpicons .aqb-icon-css,
 .admin-quickbar-jumpicons a {
   color: #2f87b1; }
   .add-post-button:hover,
   .admin-quickbar-post-type .add-new:hover,
   .admin-quickbar-post-options a:hover,
+  .admin-quickbar-jumpicons .aqb-icon-css:hover,
   .admin-quickbar-jumpicons a:hover {
     color: #0aa4ef; }
   .add-post-button:focus,
   .admin-quickbar-post-type .add-new:focus,
   .admin-quickbar-post-options a:focus,
+  .admin-quickbar-jumpicons .aqb-icon-css:focus,
   .admin-quickbar-jumpicons a:focus {
     -webkit-box-shadow: none;
             box-shadow: none; }
@@ -277,6 +278,9 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   .aqb-icon-elementor::before {
     content: "\e812";
     font-family: eicons; }
+
+.aqb-icon-edit::before {
+  content: "\f464"; }
 
 .aqb-icon-website {
   top: 1px; }
@@ -324,16 +328,12 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     font-size: 19px; }
   .admin-quickbar-jumpicons .aqb-icon-css {
     cursor: pointer;
-    padding-top: 2px;
-    font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
-    font-size: 14px; }
-    .admin-quickbar-jumpicons .aqb-icon-css::after {
-      content: '';
-      position: absolute;
-      bottom: 100%;
-      height: 20px;
-      right: 0;
-      width: 300%; }
+    padding-top: 4px;
+    font-family: Roboto,Arial,Helvetica,Verdana,sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding-left: 6px;
+    font-weight: 500; }
 
 .admin-quickbar-post-options .aqb-icon {
   font-size: 19px; }
@@ -344,43 +344,23 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-post-options .aqb-icon-wordpress {
   font-size: 17px; }
 
-.aqb-css-list {
-  display: none;
-  position: absolute;
-  bottom: 100%;
-  right: 0;
-  width: 240px;
-  color: #6d7882;
-  border-radius: 5px;
-  background: #fff;
-  -webkit-box-shadow: 1px 2px 4px #1b1c1d24;
-          box-shadow: 1px 2px 4px #1b1c1d24;
-  border-top: 1px solid #1b1c1d12;
-  border-left: 1px solid #1b1c1d12;
-  z-index: 999999999; }
-  .aqb-css-list .item {
-    display: block;
-    padding: 10px;
-    margin: 2px;
-    background-color: #e6e9ec; }
-
-.aqb-icon-css:hover .aqb-css-list {
-  display: block; }
-
+.aqb-css-list,
 .admin-quickbar-contextmenu {
   display: none;
-  position: fixed;
-  width: 280px;
+  position: absolute;
+  left: 0;
+  right: 0;
   color: #6d7882;
-  border-radius: 5px;
+  border-radius: 0;
   background: #fff;
-  -webkit-box-shadow: 1px 2px 4px #1b1c1d24;
-          box-shadow: 1px 2px 4px #1b1c1d24;
+  -webkit-box-shadow: 1px 3px 4px #1b1c1d24;
+          box-shadow: 1px 3px 4px #1b1c1d24;
   border-top: 1px solid #1b1c1d12;
-  border-left: 1px solid #1b1c1d12;
   z-index: 999999999; }
+  .aqb-css-list.open,
   .admin-quickbar-contextmenu.open {
     display: block; }
+  .aqb-css-list > .item,
   .admin-quickbar-contextmenu > .item {
     display: block;
     position: relative;
@@ -388,15 +368,23 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     height: 30px;
     margin: 7px 0;
     cursor: default; }
+  .aqb-css-list .item:not(.has-sub):hover,
   .admin-quickbar-contextmenu .item:not(.has-sub):hover {
     background-color: #e6e9ec; }
+  .aqb-css-list .item.has-sub,
   .admin-quickbar-contextmenu .item.has-sub {
     text-align: right; }
+  .aqb-css-list .item .label,
+  .admin-quickbar-contextmenu .item .label {
+    font-size: 13px;
+    letter-spacing: initial; }
+  .aqb-css-list .item.has-sub .label,
   .admin-quickbar-contextmenu .item.has-sub .label {
     display: block;
     position: absolute;
     text-align: left;
     top: 8px; }
+  .aqb-css-list .subitem,
   .admin-quickbar-contextmenu .subitem {
     position: relative;
     display: inline-block;
@@ -408,6 +396,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     background-color: transparent;
     margin: 0;
     overflow: hidden; }
+  .aqb-css-list .subitem::before,
   .admin-quickbar-contextmenu .subitem::before {
     display: inline-block;
     position: relative;
@@ -416,23 +405,29 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
         -ms-transform: translateY(-50%);
             transform: translateY(-50%);
     font-size: 20px; }
+  .aqb-css-list .subitem.aqb-icon-swift::before,
   .admin-quickbar-contextmenu .subitem.aqb-icon-swift::before {
     top: 5px;
     -webkit-transform: none;
         -ms-transform: none;
             transform: none; }
+  .aqb-css-list .item.item-copy .subitem,
   .admin-quickbar-contextmenu .item.item-copy .subitem {
     cursor: copy; }
+  .aqb-css-list .item.item-favorite .subitem,
   .admin-quickbar-contextmenu .item.item-favorite .subitem {
     cursor: pointer; }
+  .aqb-css-list .subitem.item-elementor::before,
   .admin-quickbar-contextmenu .subitem.item-elementor::before {
     font-size: 13px;
     top: calc(50% - 1px); }
+  .aqb-css-list .subitem.item-shortcode::before,
   .admin-quickbar-contextmenu .subitem.item-shortcode::before {
     content: "\e883";
     font-family: eicons;
     font-size: 13px;
     top: calc(50% - 3px); }
+  .aqb-css-list .item input,
   .admin-quickbar-contextmenu .item input {
     position: absolute;
     top: 0;
@@ -443,8 +438,10 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
         -ms-transform: scale(0);
             transform: scale(0); }
 
+.admin-quickbar-is-darkmode .aqb-css-list,
 .admin-quickbar-is-darkmode .admin-quickbar-contextmenu {
   background-color: #333; }
+  .admin-quickbar-is-darkmode .aqb-css-list .item:not(.has-sub):hover,
   .admin-quickbar-is-darkmode .admin-quickbar-contextmenu .item:not(.has-sub):hover {
     background-color: #111; }
 
@@ -454,6 +451,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-is-darkmode .toggle-quickbar-button {
   background-color: #333; }
 
+.admin-quickbar-is-darkmode .aqb-css-list,
 .admin-quickbar-is-darkmode .admin-quickbar {
   background-color: #333;
   color: #767e86; }
@@ -463,11 +461,6 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 
 .admin-quickbar-is-darkmode .aqb-tab-button {
   background-color: #3c3c3c; }
-
-.admin-quickbar-is-darkmode .aqb-css-list {
-  background-color: #3c3c3c; }
-  .admin-quickbar-is-darkmode .aqb-css-list .item {
-    background-color: #111; }
 
 .aqb-tab {
   display: none; }
@@ -533,3 +526,23 @@ body.swift-setup .admin-quickbar {
   to {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg); } }
+
+.aqb-css-list {
+  display: none;
+  position: absolute;
+  top: auto;
+  left: auto;
+  bottom: 100%;
+  margin-bottom: 10px;
+  right: -10px;
+  width: 240px; }
+  .aqb-css-list::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    height: 20px;
+    right: 0;
+    width: 100%; }
+
+.aqb-icon-css:hover .aqb-css-list {
+  display: block; }

@@ -34,6 +34,8 @@ class AdminQuickbarAdmin {
     public $cacheList = [];
     private $hasSwift;
 
+    private $cssPosts;
+
     /**
      * The ID of this plugin.
      *
@@ -140,6 +142,7 @@ class AdminQuickbarAdmin {
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
             'hasSwift' => $this->hasSwift,
             'inCache' => in_array( $permalink, $this->cacheList ),
+            'cssPosts' => $this->cssPosts,
         ] );
         $template->render();
 
@@ -159,7 +162,7 @@ class AdminQuickbarAdmin {
         ] );
         $template->render();
 
-        $template = new Template( self::PartialDir . '/jump-icons-inline-script.php');
+        $template = new Template( self::PartialDir . '/jump-icons-inline-script.php' );
         $template->render();
     }
 
@@ -177,6 +180,7 @@ class AdminQuickbarAdmin {
             }
 
             $posts = $this->getPostsByPostType( $postType );
+
             $countPostType = $posts['count'];
             $categories = $posts['categories'];
 
@@ -211,6 +215,9 @@ class AdminQuickbarAdmin {
         foreach ( $categories as $categoryName => $posts ) {
             if ( empty( $posts ) ) {
                 continue;
+            }
+            if ( $postType->name === 'elebee-global-css' ) {
+                $this->cssPosts = $posts;
             }
 
             $output[$categoryName] = $this->getLoopPosts( $postType, $posts );

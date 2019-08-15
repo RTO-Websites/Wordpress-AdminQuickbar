@@ -60,6 +60,7 @@ let AdminQuickbar = function () {
     $(doc).on('change', '.admin-quickbar-loadthumbs input', self.checkThumbs);
 
     $(doc).on('click', '.aqb-icon-swift', self.checkSwiftCache);
+    $(doc).on('click', '.aqb-icon-external', self.openWindow);
 
     /**
      * Open default contextmenu on icons
@@ -143,19 +144,24 @@ let AdminQuickbar = function () {
       mousePos = {
         x: e.clientX,
         y: e.clientY
-      };
+      },
+      offsetTop = $('.admin-quickbar-inner').scrollTop() + target.offset().top + 35;
 
     contextMenu.data('postid', target.data('postid'));
     buildContextMenu(target.data('contextmenu'));
 
-    if (contextMenu.outerWidth() + mousePos.x > $(win).width()) {
+    contextMenu.css({
+      top: offsetTop + 'px'
+    });
+
+    /*if (contextMenu.outerWidth() + mousePos.x > $(win).width()) {
       mousePos.x = $(win).width() - contextMenu.outerWidth();
     }
 
     contextMenu.css({
       top: mousePos.y + 'px',
       left: mousePos.x + 'px'
-    });
+    });*/
     contextMenu.addClass('open');
   };
 
@@ -506,6 +512,12 @@ let AdminQuickbar = function () {
     $('.admin-quickbar .wp-post-image').each(function (index, element) {
       $(element).prop('src', $(element).data('src'));
     });
+  };
+
+
+  self.openWindow = function () {
+    let url = $(this).next('.dashicons-edit').attr('href');
+    window.open(url, '_blank', 'width=700,height=500,left=200,top=100');
   };
 
   init();

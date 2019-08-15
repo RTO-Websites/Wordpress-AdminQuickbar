@@ -4,7 +4,7 @@
     ?>
     <span class="label"><?php echo $postTitle; ?></span>
     <div class="admin-quickbar-post-options">
-        <a class="aqb-icon aqb-icon-wordpress"
+        <a class="aqb-icon aqb-icon-wordpress dashicons-edit"
                 href="<?php echo $postTypeInfo['link']; ?>&action=edit"
                 title="Go to WP-Editor"></a>
 

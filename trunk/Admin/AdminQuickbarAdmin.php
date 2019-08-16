@@ -67,29 +67,6 @@ class AdminQuickbarAdmin {
         $this->version = $version;
 
         $this->categoryList = get_categories();
-
-        /*add_action( 'admin_print_footer_scripts', [ $this, 'renderSidebar' ] );
-
-        add_action( 'admin_enqueue_scripts', [ $this, 'enqueueStyles' ] );
-        add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
-
-        add_action( 'elementor/editor/before_enqueue_styles', [ $this, 'enqueueStyles' ] );
-        add_action( 'elementor/editor/before_enqueue_scripts', [ $this, 'enqueueScripts' ], 99999 );
-
-        if ( filter_has_var( INPUT_GET, 'noaqb' ) ) {
-            add_filter( 'admin_body_class', [ $this, 'addHideBodyClass' ] );
-        }*/
-
-    }
-
-    /**
-     * Add class to body to hide quickbar
-     *
-     * @param string $classes
-     * @return string
-     */
-    public function addHideBodyClass( $classes ) {
-        return $classes . ' hide-admin-quickbar admin-quickbar-is-overlap';
     }
 
     /**
@@ -573,7 +550,7 @@ class AdminQuickbarAdmin {
          * class.
          */
 
-        wp_enqueue_script( $this->pluginName, AdminQuickbar_URL . '/Admin/js/admin-quickbar-admin.js', [ 'jquery' ], $this->version, false );
+        wp_enqueue_script( $this->pluginName, AdminQuickbar_URL . '/Admin/js/admin-quickbar-admin.js', [ 'jquery' ], $this->version, true );
 
     }
 

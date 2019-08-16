@@ -72,6 +72,15 @@ let AdminQuickbar = function () {
     // contextmenu
     $(doc).on('contextmenu', '.admin-quickbar-post', openContextMenu);
     $(doc).on('click', closeContextMenu);
+
+
+    if (localStorage.adminQuickbarOverlap === 'true') {
+      $('body').addClass('admin-quickbar-is-overlap');
+    }
+
+    if (localStorage.adminQuickbarDarkmode === 'true') {
+      $('body').addClass('admin-quickbar-is-darkmode');
+    }
   };
 
   /**

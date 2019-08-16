@@ -135,6 +135,7 @@ class AdminQuickbar {
         $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
         $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueScripts' );
 
+        // admin_footer
         $this->loader->addAction( 'admin_print_footer_scripts', $pluginAdmin, 'renderSidebar' );
 
         $this->loader->addAction( 'elementor/editor/before_enqueue_styles', $pluginAdmin, 'enqueueStyles' );

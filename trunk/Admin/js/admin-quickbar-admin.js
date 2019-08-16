@@ -141,11 +141,7 @@ let AdminQuickbar = function () {
 
     let target = $(e.currentTarget),
       contextMenu = $('.admin-quickbar-contextmenu'),
-      mousePos = {
-        x: e.clientX,
-        y: e.clientY
-      },
-      offsetTop = $('.admin-quickbar-inner').scrollTop() + target.offset().top + 35;
+      offsetTop = $('.admin-quickbar-inner').scrollTop() + target.offset().top - $('.admin-quickbar').offset().top + 35;
 
     contextMenu.data('postid', target.data('postid'));
     buildContextMenu(target.data('contextmenu'));

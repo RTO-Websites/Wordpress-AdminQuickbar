@@ -58,11 +58,9 @@
 
             <?php echo $postTypeLoop; ?>
         </div>
-        <div class="admin-quickbar-contextmenu">
+        <div class="admin-quickbar-contextmenu"></div>
     </div>
     <div class="toggle-quickbar-button"></div>
-
-    </div>
 </div>
 
 

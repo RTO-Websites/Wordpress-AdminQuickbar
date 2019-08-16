@@ -102,6 +102,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     font-size: 12px;
     vertical-align: bottom;
     padding-top: 3px;
+    box-sizing: border-box;
   }
 }
 
@@ -119,6 +120,9 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   background-color: #fff;
   margin-bottom: 3px;
 
+  .label {
+    cursor: default;
+  }
 
   &.is-favorite .label::after {
     content: '\f155';

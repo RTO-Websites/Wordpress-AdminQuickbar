@@ -142,7 +142,7 @@ class AdminQuickbarAdmin {
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
             'hasSwift' => $this->hasSwift,
             'inCache' => in_array( $permalink, $this->cacheList ),
-            'cssPosts' => $this->cssPosts,
+            'cssPosts' => array_reverse( $this->cssPosts ),
         ] );
         $template->render();
 

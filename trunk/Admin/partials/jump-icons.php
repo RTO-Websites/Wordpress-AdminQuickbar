@@ -6,11 +6,11 @@
     <?php endif; ?>
 
     <?php if ( !empty( $cssPosts ) ): ?>
-        <span class="aqb-icon aqb-icon-css"
-                href="<?php echo $permalink; ?>"
-                title="Go to Page">CSS
+        <span class="aqb-icon aqb-icon-css"><a class="icon-inner"
+                    href="<?php echo admin_url() . 'post.php?post=' . end( $cssPosts )->ID; ?>&action=edit">CSS</a>
             <span class="aqb-css-list">
-                <?php foreach ( $cssPosts as $cssPost ): ?>
+                <?php reset( $cssPosts );
+                foreach ( $cssPosts as $cssPost ): ?>
                     <span class="item has-sub">
                         <span class="label"><?php echo $cssPost->post_title; ?></span>
                         <a href="#" class="subitem aqb-icon aqb-icon-external dashicons dashicons-external"></a>

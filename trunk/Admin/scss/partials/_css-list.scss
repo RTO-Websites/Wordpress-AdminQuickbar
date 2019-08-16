@@ -6,8 +6,9 @@
   left: auto;
   bottom: 100%;
   margin-bottom: 10px;
-  right: -10px;
+  right: -17px;
   width: 240px;
+  z-index: 10;
 
   &::after {
     content: '';

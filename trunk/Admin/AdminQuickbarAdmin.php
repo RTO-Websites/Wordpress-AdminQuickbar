@@ -68,7 +68,7 @@ class AdminQuickbarAdmin {
 
         $this->categoryList = get_categories();
 
-        add_action( 'admin_print_footer_scripts', [ $this, 'renderSidebar' ] );
+        /*add_action( 'admin_print_footer_scripts', [ $this, 'renderSidebar' ] );
 
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueueStyles' ] );
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
@@ -76,8 +76,21 @@ class AdminQuickbarAdmin {
         add_action( 'elementor/editor/before_enqueue_styles', [ $this, 'enqueueStyles' ] );
         add_action( 'elementor/editor/before_enqueue_scripts', [ $this, 'enqueueScripts' ], 99999 );
 
+        if ( filter_has_var( INPUT_GET, 'noaqb' ) ) {
+            add_filter( 'admin_body_class', [ $this, 'addHideBodyClass' ] );
+        }*/
+
     }
 
+    /**
+     * Add class to body to hide quickbar
+     *
+     * @param string $classes
+     * @return string
+     */
+    public function addHideBodyClass( $classes ) {
+        return $classes . ' hide-admin-quickbar admin-quickbar-is-overlap';
+    }
 
     /**
      * Set post-types and filtered post-types
@@ -149,9 +162,20 @@ class AdminQuickbarAdmin {
         return $data;
     }
 
+    /**
+     * Static method to allow rending without instance
+     */
     public static function renderJumpIcons() {
         $currentPost = get_the_ID();
         $permalink = get_the_permalink();
+
+        $cssPosts = get_posts( [
+            'post_type' => 'elebee-global-css',
+            'posts_per_page' => -1,
+            'suppress_filters' => false,
+            'orderby' => 'menu_order',
+            'order' => 'ASC',
+        ] );
 
         $template = new Template( self::PartialDir . '/jump-icons.php', [
             'currentPost' => $currentPost,
@@ -159,6 +183,7 @@ class AdminQuickbarAdmin {
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
             'hasSwift' => false,
             'inCache' => false,
+            'cssPosts' => array_reverse( $cssPosts ),
         ] );
         $template->render();
 

@@ -42,12 +42,6 @@
   }
 }
 
-.aqb-icon-id {
-  &::before {
-    content: "\f336";
-  }
-}
-
 .aqb-icon-swift {
   &::before {
     content: "\f113";
@@ -56,18 +50,22 @@
 
 .aqb-icon-favorite {
   &::before {
+    font-size: 22px !important;
     content: "\f154";
   }
 }
 
 .aqb-icon-favorite-alt {
   &::before {
+    font-size: 22px !important;
     content: "\f155";
   }
 }
 
 .aqb-icon-id {
+
   &::before {
+    font-size: 24px !important;
     content: "\f336";
   }
 }

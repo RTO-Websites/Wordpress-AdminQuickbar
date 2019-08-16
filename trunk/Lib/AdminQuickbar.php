@@ -126,11 +126,20 @@ class AdminQuickbar {
      * @access   private
      */
     private function defineAdminHooks() {
+        if ( filter_has_var( INPUT_GET, 'noaqb' ) ) {
+            return;
+        }
 
         $pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
 
         $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
         $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueScripts' );
+
+        $this->loader->addAction( 'admin_print_footer_scripts', $pluginAdmin, 'renderSidebar' );
+
+        $this->loader->addAction( 'elementor/editor/before_enqueue_styles', $pluginAdmin, 'enqueueStyles' );
+        $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $pluginAdmin, 'enqueueScripts', 99999 );
+
 
         if ( !is_admin() && current_user_can( 'administrator' ) ) {
             $this->loader->addAction( 'wp_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
@@ -144,9 +153,9 @@ class AdminQuickbar {
             return;
         }
 
-        /*if ( \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+        if ( filter_has_var( INPUT_GET, 'elementor-preview' ) ) {
             return;
-        }*/
+        }
 
         add_action( 'wp_enqueue_scripts', function () {
             AdminQuickbarAdmin::enqueueWebsiteStyles();

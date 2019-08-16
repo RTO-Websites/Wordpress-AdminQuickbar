@@ -270,7 +270,7 @@ let AdminQuickbar = function () {
     for (let i in storage) {
       let listItem = $('.admin-quickbar-post[data-postid=' + storage[i] + ']');
       listItem.addClass('is-favorite');
-      let listItemFav = listItem.clone();
+      let listItemFav = listItem.first().clone();
       listItemFav.css({marginLeft: ''});
       $('.aqb-favorites .admin-quickbar-postlist-inner').append(listItemFav);
     }
@@ -301,7 +301,7 @@ let AdminQuickbar = function () {
     buildFavoriteStorage();
 
     if (!listItemFav.length) {
-      listItemFav = listItem.clone();
+      listItemFav = listItem.first().clone();
       listItemFav.css({marginLeft: ''});
       $('.aqb-favorites .admin-quickbar-postlist-inner').append(listItemFav);
     }
@@ -512,7 +512,7 @@ let AdminQuickbar = function () {
 
 
   self.openWindow = function () {
-    let url = $(this).next('.dashicons-edit').attr('href');
+    let url = $(this).next('.dashicons-edit').attr('href') + '&noaqb';
     window.open(url, '_blank', 'width=700,height=500,left=200,top=100');
   };
 

@@ -26,7 +26,9 @@
   }
 
   .item:not(.has-sub):hover {
-    background-color: #e6e9ec;
+    color: #c1c1c1;
+    background-color: transparent;
+
   }
 
   .item.has-sub {
@@ -43,6 +45,11 @@
     position: absolute;
     text-align: left;
     top: 8px;
+    background-color: transparent;
+    line-height: 19px;
+    color: #6d7882;
+    font-weight: 400;
+    padding: 0;
   }
 
   .subitem {
@@ -80,15 +87,15 @@
   }
 
   .subitem.item-elementor::before {
-    font-size: 13px;
+    font-size: 15px;
     top: calc(50% - 1px);
   }
 
   .subitem.item-shortcode::before {
     content: "\e883";
     font-family: eicons;
-    font-size: 13px;
-    top: calc(50% - 3px);
+    font-size: 24px;
+    top: 50%;
   }
 
   .item input {

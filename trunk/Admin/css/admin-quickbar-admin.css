@@ -100,7 +100,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     margin-left: 5px;
     font-family: Dashicons;
     font-size: 12px;
-    color: inherit; }
+    color: #2f87b1; }
   .admin-quickbar-post.is-active .label {
     font-weight: 600; }
 
@@ -194,14 +194,15 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 
 .admin-quickbar .add-post-button {
   display: inline-block;
-  margin-bottom: 5px !important;
   width: 25px;
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0 0 7px;
+  font-size: 18px;
   text-align: center; }
   .admin-quickbar .add-post-button::before {
     content: "\f132 ";
     display: inline-block;
+    position: relative;
+    top: 2px;
     margin-right: 2px;
     font-family: Dashicons;
     vertical-align: middle; }
@@ -294,19 +295,19 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .aqb-icon-wordpress::before {
   content: "\f324"; }
 
-.aqb-icon-id::before {
-  content: "\f336"; }
-
 .aqb-icon-swift::before {
   content: "\f113"; }
 
 .aqb-icon-favorite::before {
+  font-size: 22px !important;
   content: "\f154"; }
 
 .aqb-icon-favorite-alt::before {
+  font-size: 22px !important;
   content: "\f155"; }
 
 .aqb-icon-id::before {
+  font-size: 24px !important;
   content: "\f336"; }
 
 .admin-quickbar-jumpicons {
@@ -386,7 +387,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     cursor: default; }
   .aqb-css-list .item:not(.has-sub):hover,
   .admin-quickbar-contextmenu .item:not(.has-sub):hover {
-    background-color: #e6e9ec; }
+    color: #c1c1c1;
+    background-color: transparent; }
   .aqb-css-list .item.has-sub,
   .admin-quickbar-contextmenu .item.has-sub {
     text-align: right; }
@@ -399,7 +401,12 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     display: block;
     position: absolute;
     text-align: left;
-    top: 8px; }
+    top: 8px;
+    background-color: transparent;
+    line-height: 19px;
+    color: #6d7882;
+    font-weight: 400;
+    padding: 0; }
   .aqb-css-list .subitem,
   .admin-quickbar-contextmenu .subitem {
     position: relative;
@@ -435,14 +442,14 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     cursor: pointer; }
   .aqb-css-list .subitem.item-elementor::before,
   .admin-quickbar-contextmenu .subitem.item-elementor::before {
-    font-size: 13px;
+    font-size: 15px;
     top: calc(50% - 1px); }
   .aqb-css-list .subitem.item-shortcode::before,
   .admin-quickbar-contextmenu .subitem.item-shortcode::before {
     content: "\e883";
     font-family: eicons;
-    font-size: 13px;
-    top: calc(50% - 3px); }
+    font-size: 24px;
+    top: 50%; }
   .aqb-css-list .item input,
   .admin-quickbar-contextmenu .item input {
     position: absolute;
@@ -459,7 +466,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   background-color: #333; }
   .admin-quickbar-is-darkmode .aqb-css-list .item:not(.has-sub):hover,
   .admin-quickbar-is-darkmode .admin-quickbar-contextmenu .item:not(.has-sub):hover {
-    background-color: #111; }
+    color: #c7c7c7;
+    background-color: transparent; }
 
 .admin-quickbar-is-darkmode .admin-quickbar-jumpicons {
   background-color: #3c3c3c; }
@@ -470,6 +478,9 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-is-darkmode .aqb-css-list,
 .admin-quickbar-is-darkmode .admin-quickbar {
   background-color: #333;
+  color: #767e86; }
+
+.admin-quickbar-is-darkmode .aqb-css-list .item.has-sub .label {
   color: #767e86; }
 
 .admin-quickbar-is-darkmode .admin-quickbar-post {
@@ -495,6 +506,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   text-align: center;
   padding-top: 12px;
   padding-bottom: 12px;
+  letter-spacing: 1.4px;
   background-color: #fff;
   border-bottom: 3px solid transparent;
   cursor: pointer; }

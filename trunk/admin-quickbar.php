@@ -69,10 +69,4 @@ register_deactivation_hook( __FILE__, [ Deactivator::class, 'deactivate' ] );
  */
 
 
-if ( is_admin() ) {
-    AdminQuickbar::run();
-} else {
-    add_action( 'plugins_loaded', function () {
-        AdminQuickbar::initFrontend();
-    } );
-}
+AdminQuickbar::run();

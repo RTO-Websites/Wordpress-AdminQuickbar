@@ -139,34 +139,6 @@ class AdminQuickbarAdmin {
         return $data;
     }
 
-    /**
-     * Static method to allow rending without instance
-     */
-    public static function renderJumpIcons() {
-        $currentPost = get_the_ID();
-        $permalink = get_the_permalink();
-
-        $cssPosts = get_posts( [
-            'post_type' => 'elebee-global-css',
-            'posts_per_page' => -1,
-            'suppress_filters' => false,
-            'orderby' => 'menu_order',
-            'order' => 'ASC',
-        ] );
-
-        $template = new Template( self::PartialDir . '/jump-icons.php', [
-            'currentPost' => $currentPost,
-            'permalink' => $permalink,
-            'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
-            'hasSwift' => false,
-            'inCache' => false,
-            'cssPosts' => array_reverse( $cssPosts ),
-        ] );
-        $template->render();
-
-        $template = new Template( self::PartialDir . '/jump-icons-inline-script.php' );
-        $template->render();
-    }
 
     /**
      * Gets rendered post-type loop
@@ -524,11 +496,6 @@ class AdminQuickbarAdmin {
 
         wp_enqueue_style( $this->pluginName, AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], $this->version, 'all' );
 
-    }
-
-    public static function enqueueWebsiteStyles() {
-        wp_enqueue_style( 'AdminQuickbar', AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], AdminQuickbar_VERSION, 'all' );
-        wp_enqueue_style( 'dashicons' );
     }
 
     /**

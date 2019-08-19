@@ -1,6 +1,7 @@
 <?php namespace AdminQuickbar\Lib;
 
 use AdminQuickbar\Admin\AdminQuickbarAdmin;
+use AdminQuickbar\Pub\AdminQuickbarPublic;
 use Elementor\Plugin;
 
 /**
@@ -75,8 +76,12 @@ class AdminQuickbar {
 
         $this->loadDependencies();
         #$this->setLocale();
-        $this->defineAdminHooks();
 
+        if ( is_admin() ) {
+            $this->defineAdminHooks();
+        } else {
+            $this->definePublicHooks();
+        }
     }
 
     /**
@@ -140,16 +145,23 @@ class AdminQuickbar {
 
         $this->loader->addAction( 'elementor/editor/before_enqueue_styles', $pluginAdmin, 'enqueueStyles' );
         $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $pluginAdmin, 'enqueueScripts', 99999 );
-
-
-        if ( !is_admin() && current_user_can( 'administrator' ) ) {
-            $this->loader->addAction( 'wp_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
-            $this->loader->addAction( 'wp_footer', $pluginAdmin, 'renderJumpIcons' );
-        }
     }
 
-    public static function initFrontend() {
+    /**
+     * Register all of the hooks related to the admin area functionality
+     * of the plugin.
+     *
+     * @since    1.0.0
+     * @access   private
+     */
+    private function definePublicHooks() {
+        $this->loader->addAction( 'plugins_loaded', $this, 'checkLoginOnWebsite' );
+    }
 
+    /**
+     * Checks if user is logged in and register actions for public-jumpicons
+     */
+    public function checkLoginOnWebsite() {
         if ( !current_user_can( 'administrator' ) ) {
             return;
         }
@@ -158,12 +170,11 @@ class AdminQuickbar {
             return;
         }
 
-        add_action( 'wp_enqueue_scripts', function () {
-            AdminQuickbarAdmin::enqueueWebsiteStyles();
-        } );
-        add_action( 'wp_footer', function () {
-            AdminQuickbarAdmin::renderJumpIcons();
-        } );
+        $pluginPublic = new AdminQuickbarPublic( $this->getAdminQuickbar(), $this->getVersion() );
+
+        // can´t use loader->addAction here, cause it is nested in plugins_loaded
+        add_action( 'wp_footer', [ $pluginPublic, 'renderJumpIcons' ] );
+        add_action( 'wp_enqueue_scripts', [ $pluginPublic, 'enqueueStyles' ] );
     }
 
     /**

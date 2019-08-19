@@ -50,7 +50,6 @@ class AdminQuickbarPublic {
      * Render jump-icons
      */
     public function renderJumpIcons() {
-        die('blub3');
         $currentPost = get_the_ID();
         $permalink = get_the_permalink();
 

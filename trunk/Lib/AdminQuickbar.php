@@ -77,6 +77,10 @@ class AdminQuickbar {
         $this->loadDependencies();
         #$this->setLocale();
 
+        if ( filter_has_var( INPUT_GET, 'noaqb' ) ) {
+            return;
+        }
+
         if ( is_admin() ) {
             $this->defineAdminHooks();
         } else {
@@ -131,10 +135,6 @@ class AdminQuickbar {
      * @access   private
      */
     private function defineAdminHooks() {
-        if ( filter_has_var( INPUT_GET, 'noaqb' ) ) {
-            return;
-        }
-
         $pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
 
         $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );

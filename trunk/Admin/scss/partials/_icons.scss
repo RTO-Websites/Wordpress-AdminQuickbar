@@ -14,7 +14,7 @@
 }
 
 .aqb-icon-elementor {
-  top: 1px;
+  top: 0;
 
   &::before {
     content: "\e812";
@@ -87,11 +87,16 @@
   }
 
   .aqb-icon-elementor {
+    top: 0;
     font-size: 15px;
   }
 
   .aqb-icon-wordpress {
     font-size: 17px;
+  }
+
+  .aqb-icon-website {
+    top: -0.5px;
   }
 
   .aqb-icon-swift {

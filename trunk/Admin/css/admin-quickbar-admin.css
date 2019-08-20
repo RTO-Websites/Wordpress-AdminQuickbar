@@ -279,7 +279,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     vertical-align: top; }
 
 .aqb-icon-elementor {
-  top: 1px; }
+  top: 0; }
   .aqb-icon-elementor::before {
     content: "\e812";
     font-family: eicons; }
@@ -325,9 +325,12 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   .admin-quickbar-jumpicons .aqb-icon {
     font-size: 19px; }
   .admin-quickbar-jumpicons .aqb-icon-elementor {
+    top: 0;
     font-size: 15px; }
   .admin-quickbar-jumpicons .aqb-icon-wordpress {
     font-size: 17px; }
+  .admin-quickbar-jumpicons .aqb-icon-website {
+    top: -0.5px; }
   .admin-quickbar-jumpicons .aqb-icon-swift {
     top: -2px;
     font-size: 19px; }

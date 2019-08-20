@@ -24,10 +24,11 @@
         </span>
     <?php endif; ?>
 
+    <a class="aqb-icon aqb-icon-wordpress"
+            href="<?php echo admin_url() . 'post.php?post=' . $currentPost; ?>&action=edit"
+            title="Go to WP-Editor"></a>
+
     <?php if ( defined( 'ELEMENTOR_VERSION' ) ): ?>
-        <a class="aqb-icon aqb-icon-wordpress"
-                href="<?php echo admin_url() . 'post.php?post=' . $currentPost; ?>&action=edit"
-                title="Go to WP-Editor"></a>
         <a class="aqb-icon aqb-icon-elementor"
                 href="<?php echo admin_url() . 'post.php?post=' . $currentPost; ?>&action=elementor"
                 title="Go to Elementor"></a>

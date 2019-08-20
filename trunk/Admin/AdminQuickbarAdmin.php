@@ -34,7 +34,7 @@ class AdminQuickbarAdmin {
     public $cacheList = [];
     private $hasSwift;
 
-    private $cssPosts;
+    private $cssPosts = [];
 
     /**
      * The ID of this plugin.

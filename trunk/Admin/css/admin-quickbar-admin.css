@@ -267,6 +267,16 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     -webkit-box-shadow: none;
             box-shadow: none; }
 
+.admin-quickbar-hide-posttypes {
+  position: relative;
+  margin-left: 8px; }
+  .admin-quickbar-hide-posttypes select {
+    position: relative;
+    margin-top: 0.25em;
+    min-height: 10em;
+    width: 100%;
+    resize: vertical; }
+
 .aqb-icon {
   display: inline-block;
   position: relative;
@@ -318,14 +328,14 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   line-height: 1;
   background-color: #fff;
   border-radius: 24px;
-  -webkit-box-shadow: 0 1px 2px #0000003d;
-          box-shadow: 0 1px 2px #0000003d;
+  -webkit-box-shadow: 0 1px 0 #0000003d;
+          box-shadow: 0 1px 0 #0000003d;
   border-top: 1px solid #0000000f;
   z-index: 999999; }
   .admin-quickbar-jumpicons .aqb-icon {
     font-size: 19px; }
   .admin-quickbar-jumpicons .aqb-icon-elementor {
-    top: 0;
+    top: 1px;
     font-size: 15px; }
   .admin-quickbar-jumpicons .aqb-icon-wordpress {
     font-size: 17px; }
@@ -481,7 +491,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-is-darkmode .aqb-css-list,
 .admin-quickbar-is-darkmode .admin-quickbar {
   background-color: #333;
-  color: #767e86; }
+  color: #79838c; }
 
 .admin-quickbar-is-darkmode .aqb-css-list .item.has-sub .label {
   color: #767e86; }

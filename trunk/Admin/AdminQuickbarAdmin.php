@@ -117,6 +117,7 @@ class AdminQuickbarAdmin {
 
         $template = new Template( self::PartialDir . '/admin-quickbar-admin-display.php', [
             'postTypeLoop' => $postTypeLoop,
+            'filteredPostTypes' => $this->filteredPostTypes,
             'currentPost' => $currentPost,
             'permalink' => $permalink,
             'addNewPosts' => $addNewPosts->getRendered(),

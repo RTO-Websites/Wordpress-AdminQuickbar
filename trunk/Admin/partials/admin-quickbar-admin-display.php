@@ -45,6 +45,16 @@
                 <input type="checkbox" name="admin-quickbar-hide-on-website"/>
                 <?php _e( 'Hide on website', 'admin-quickbar' ); ?>
             </label>
+
+
+            <label class="admin-quickbar-hide-posttypes">
+                <?php _e( 'Hide PostTypes', 'admin-quickbar' ); ?><br />
+                <select class="aqm-hide-posttypes" multiple>
+                    <?php foreach ( $filteredPostTypes as $postType ): ?>
+                        <option value="<?php echo $postType->name; ?>"><?php echo $postType->label; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
         </div>
 
         <div class="aqb-tab aqb-tab-quickbar active">

@@ -313,3 +313,16 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     box-shadow: none;
   }
 }
+
+.admin-quickbar-hide-posttypes {
+  position: relative;
+  margin-left: 8px;
+
+  select {
+    position: relative;
+    margin-top: 0.25em;
+    min-height: 10em;
+    width: 100%;
+    resize: vertical;
+  }
+}

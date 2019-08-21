@@ -86,7 +86,10 @@ class AdminQuickbarAdmin {
         }
     }
 
-    public function getCacheList() {
+    /**
+     * Get cache list from swift and writes to $cacheList
+     */
+    public function initCacheList() {
         $this->hasSwift = class_exists( 'Swift_Performance' ) || class_exists( 'Swift_Performance_Lite' );
         if ( !$this->hasSwift ) {
             return;
@@ -105,7 +108,7 @@ class AdminQuickbarAdmin {
      * @throws \ImagickException
      */
     public function renderSidebar( $data ) {
-        $this->getCacheList();
+        $this->initCacheList();
         $this->setPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
         $currentPost = filter_input( INPUT_GET, 'post' );
@@ -303,7 +306,6 @@ class AdminQuickbarAdmin {
      * @return string
      */
     public function getPostTitle( $post ) {
-        $output = '';
         if ( !empty( $post->post_title ) ) {
             $output = $post->post_title;
         } else if ( !empty( $post->post_name ) ) {

@@ -233,10 +233,11 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-category:first-child {
   margin-top: 0; }
 
+.admin-quickbar-hide-posttypes select,
 .admin-quickbar-new-select {
   width: calc(100% - 43px);
   margin-left: 5px;
-  padding: 0 5px;
+  padding: 2px 5px;
   border-color: #8888882e !important;
   border-radius: 3px;
   font-size: 12px;
@@ -272,9 +273,11 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   margin-left: 8px; }
   .admin-quickbar-hide-posttypes select {
     position: relative;
+    margin-left: 0;
     margin-top: 0.25em;
-    min-height: 10em;
+    min-height: 15em;
     width: 100%;
+    padding: 4px 5px;
     resize: vertical; }
 
 .aqb-icon {

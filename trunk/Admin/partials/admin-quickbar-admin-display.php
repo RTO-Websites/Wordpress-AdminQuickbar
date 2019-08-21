@@ -50,6 +50,7 @@
             <label class="admin-quickbar-hide-posttypes">
                 <?php _e( 'Hide PostTypes', 'admin-quickbar' ); ?><br />
                 <select class="aqm-hide-posttypes" multiple>
+                    <option value="aqb-favorites"><?php echo __( 'Favorites' ); ?></option>
                     <?php foreach ( $filteredPostTypes as $postType ): ?>
                         <option value="<?php echo $postType->name; ?>"><?php echo $postType->label; ?></option>
                     <?php endforeach; ?>

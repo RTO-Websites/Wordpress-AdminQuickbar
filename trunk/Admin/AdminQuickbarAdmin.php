@@ -408,6 +408,7 @@ class AdminQuickbarAdmin {
 
         switch ( $postType->name ) {
             case 'wpcf7':
+            case 'wpcf7_contact_form':
                 $link = admin_url() . 'admin.php?page=wpcf7&post=' . $post->ID;
                 $noElementor = true;
                 break;
@@ -421,7 +422,6 @@ class AdminQuickbarAdmin {
             case 'elebee-global-css':
             case 'postgalleryslider':
             case 'acf-field-group':
-            case 'attachment':
                 $noElementor = true;
                 $noView = true;
                 break;

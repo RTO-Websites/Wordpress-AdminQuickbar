@@ -139,7 +139,7 @@ let AdminQuickbar = function () {
   /**
    * Read from localstorage, set select-field and hide post-types
    */
-  self.initHiddenPostTypes = function() {
+  self.initHiddenPostTypes = function () {
     if (typeof (localStorage.adminQuickbarHiddenPostTypes) === 'undefined') {
       localStorage.adminQuickbarHiddenPostTypes = '[]';
     }

@@ -8,8 +8,7 @@
  * @link       https://www.rto.de
  * @since      1.0.0
  *
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/admin/partials
+ * @package    AdminQuickbar
  */
 ?>
 <div class="admin-quickbar" data-swift-nonce="<?php echo $swiftNonce; ?>">

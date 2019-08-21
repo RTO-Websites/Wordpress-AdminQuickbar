@@ -2,7 +2,6 @@
 
 use AdminQuickbar\Admin\AdminQuickbarAdmin;
 use AdminQuickbar\Pub\AdminQuickbarPublic;
-use Elementor\Plugin;
 
 /**
  * The file that defines the core plugin class
@@ -27,8 +26,6 @@ use Elementor\Plugin;
  *
  * @since      1.0.0
  * @package    AdminQuickbar
- * @subpackage AdminQuickbar/includes
- * @author     Sascha Hennemann <s.hennemann@rto.de>
  */
 class AdminQuickbar {
 

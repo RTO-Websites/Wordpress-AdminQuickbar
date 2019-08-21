@@ -19,8 +19,7 @@ use Swift_Performance_Lite;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/admin
+ * @package    AdminQuickbar
  * @author     RTO GmbH
  */
 class AdminQuickbarAdmin {

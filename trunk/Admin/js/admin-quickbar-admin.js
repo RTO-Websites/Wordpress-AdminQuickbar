@@ -16,6 +16,7 @@ let AdminQuickbar = function () {
     removeFromFavorites,
     addToFavorites,
     addPageToSwiftCache,
+    initDefaultConfig,
     addTitleToElement;
 
   if (typeof ($) === 'undefined') {
@@ -26,6 +27,8 @@ let AdminQuickbar = function () {
     $(function ($) {
       domReady();
     });
+
+    initDefaultConfig();
 
     $(doc).on('click', '.toggle-quickbar-button', self.toggleSidebar);
     $(doc).on('click', '.admin-quickbar-post-type', self.togglePostTypes);
@@ -86,6 +89,18 @@ let AdminQuickbar = function () {
 
     if (localStorage.adminQuickbarDarkmode === 'true') {
       $('body').addClass('admin-quickbar-is-darkmode');
+    }
+  };
+
+  /**
+   * Inits default config-options
+   */
+  initDefaultConfig = function () {
+    if (typeof (localStorage.adminQuickbarKeepopen) === 'undefined') {
+      localStorage.adminQuickbarKeepopen = 'true';
+    }
+    if (typeof (localStorage.adminQuickbarToggle) === 'undefined') {
+      localStorage.adminQuickbarToggle = 'true';
     }
   };
 

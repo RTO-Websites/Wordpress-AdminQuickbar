@@ -15,9 +15,7 @@
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/includes
- * @author     Sascha Hennemann <s.hennemann@rto.de>
+ * @package    AdminQuickbar
  */
 class Deactivator {
 

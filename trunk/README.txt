@@ -27,6 +27,12 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.5.0 =
+* Swift Performance integration
+* Contextmenu for favorites and quick-copy
+* Darkmode
+* New style
+
 = 1.4.0 =
 * Usability improvements
 

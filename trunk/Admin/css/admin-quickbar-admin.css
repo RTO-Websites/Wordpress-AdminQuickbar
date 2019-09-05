@@ -9,8 +9,9 @@
   width: 0;
   bottom: 0;
   background-color: #e6e9ec;
-  -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
-          box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  font-size: 13px;
+  line-height: 1.4em;
+  font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
   z-index: 99999; }
 
 .admin-quickbar-inner {
@@ -20,7 +21,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 15px;
+  padding: 0 8px 15px;
   overflow: auto; }
   .admin-quickbar-inner > label {
     white-space: nowrap; }
@@ -42,6 +43,10 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   body:not(.admin-quickbar-is-overlap).admin-quickbar-visible .edit-post-header,
   body:not(.admin-quickbar-is-overlap).admin-quickbar-visible .edit-post-layout__content {
     right: 320px; }
+  body:not(.admin-quickbar-is-overlap).admin-quickbar-visible #elementor-try-safe-mode {
+    right: 325px; }
+  body:not(.admin-quickbar-is-overlap).admin-quickbar-visible #query-monitor-main {
+    width: calc(100% - 322px) !important; }
 
 .admin-quickbar.toggle .admin-quickbar-inner {
   display: block; }
@@ -49,22 +54,12 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .elementor-editor-active:not(.wp-admin) .admin-quickbar {
   top: 0; }
 
-.dashicons-elementor {
-  top: 3px;
-  position: relative; }
-
-.dashicons-elementor::before {
-  content: "\e812";
-  font-family: eicons;
-  font-size: 13px;
-  vertical-align: top; }
-
 .admin-quickbar-post-type {
-  padding: 12px 15px 12px 0;
+  padding: 10px 15px 12px 0;
+  font-weight: 400;
+  letter-spacing: 0.095rem;
   text-transform: uppercase;
-  font-weight: 600;
   font-size: 0.7rem;
-  letter-spacing: 0.1rem;
   cursor: pointer; }
   .admin-quickbar-post-type::before {
     content: "\f140";
@@ -78,10 +73,12 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     vertical-align: middle; }
   .admin-quickbar-post-type .add-new {
     position: relative;
-    top: 6px;
+    top: 2px;
     font-size: 12px;
     vertical-align: bottom;
-    padding-top: 3px; }
+    padding-top: 3px;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box; }
 
 .show-list .admin-quickbar-post-type::before {
   content: "\f142"; }
@@ -89,13 +86,23 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-post-options {
   float: right; }
 
-.admin-quickbar-post-options .dashicons {
-  vertical-align: bottom; }
-
 .admin-quickbar-post {
   padding: 12px 15px;
   background-color: #fff;
   margin-bottom: 3px; }
+  .admin-quickbar-post .label {
+    cursor: default; }
+  .admin-quickbar-post.is-favorite .label::after {
+    content: '\f155';
+    display: inline-block;
+    position: relative;
+    top: 1px;
+    margin-left: 5px;
+    font-family: Dashicons;
+    font-size: 12px;
+    color: #2f87b1; }
+  .admin-quickbar-post.is-active .label {
+    font-weight: 600; }
 
 .admin-quickbar-post::after {
   content: '';
@@ -112,21 +119,38 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   position: absolute;
   right: 100%;
   top: 50%;
-  width: 15px;
+  width: 22px;
   height: 50px;
   line-height: 50px;
   -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
   background-color: #e6e9ec;
   font-size: 15px;
   -webkit-box-shadow: -3px -1px 5px rgba(0, 0, 0, 0.1);
           box-shadow: -3px -1px 5px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  -webkit-transition: width .3s ease 50ms;
+  -o-transition: width .3s ease 50ms;
+  transition: width .3s ease 50ms;
   cursor: pointer; }
+  .toggle-quickbar-button::before {
+    content: "\f341";
+    font-family: dashicons;
+    margin-left: 2px; }
+  .toggle-quickbar-button::after {
+    content: '';
+    width: 16px;
+    background: transparent;
+    display: inline-block;
+    height: 49px;
+    position: absolute;
+    right: 22px;
+    top: 0; }
 
-.toggle-quickbar-button::before {
-  content: "\f341";
-  font-family: dashicons; }
+.admin-quickbar.toggle .toggle-quickbar-button {
+  width: 13px; }
 
 .admin-quickbar.toggle .toggle-quickbar-button::before {
   content: "\f345"; }
@@ -150,29 +174,38 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
       -ms-transform: scale(4.5);
           transform: scale(4.5); }
 
-.admin-quickbar-overlap,
-.admin-quickbar-loadthumbs,
-.admin-quickbar-keepopen {
+.aqb-options label {
   padding-left: 2px;
   margin-bottom: 1em;
-  display: inline-block; }
-  .admin-quickbar-overlap input,
-  .admin-quickbar-loadthumbs input,
-  .admin-quickbar-keepopen input {
-    margin-right: 2px; }
+  display: block;
+  position: relative; }
+  .aqb-options label:first-child {
+    margin-top: 0; }
+  .aqb-options label input {
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    margin-left: 7px !important;
+    border-color: #8888882e !important;
+    -webkit-appearance: checkbox; }
 
 .admin-quickbar-keepopen {
   padding-left: 0; }
 
-.add-post-button {
-  margin-bottom: 5px !important; }
-
-.add-post-button::before {
-  content: "\f132 ";
+.admin-quickbar .add-post-button {
   display: inline-block;
-  margin-right: 2px;
-  font-family: Dashicons;
-  vertical-align: middle; }
+  width: 25px;
+  padding: 0 0 7px;
+  font-size: 18px;
+  text-align: center; }
+  .admin-quickbar .add-post-button::before {
+    content: "\f132 ";
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    margin-right: 2px;
+    font-family: Dashicons;
+    vertical-align: middle; }
 
 .admin-quickbar-post-type::-moz-selection {
   /* Code for Firefox */
@@ -186,26 +219,6 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar .wp-post-image[src=""] {
   display: none; }
 
-.admin-quickbar-jumpicons {
-  position: fixed;
-  bottom: 0;
-  right: 25px;
-  z-index: 999999;
-  background-color: #000;
-  padding: 2px 5px 0; }
-
-.admin-quickbar-jumpicons a {
-  display: inline-block;
-  position: relative;
-  width: 25px;
-  height: 25px;
-  color: #fff;
-  vertical-align: bottom; }
-  .admin-quickbar-jumpicons a:hover {
-    color: #00a0d2; }
-  .admin-quickbar-jumpicons a.dashicons-elementor {
-    top: 3px; }
-
 .admin-quickbar-category {
   position: relative;
   margin-bottom: 0.75em;
@@ -215,10 +228,368 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   text-transform: uppercase;
   font-size: 0.6rem;
   letter-spacing: 0.1rem;
-  color: #b9b9b9; }
+  color: #6e737da6; }
 
 .admin-quickbar-category:first-child {
   margin-top: 0; }
 
+.admin-quickbar-hide-posttypes select,
 .admin-quickbar-new-select {
-  width: calc(100% - 43px); }
+  width: calc(100% - 43px);
+  margin-left: 5px;
+  padding: 2px 5px;
+  border-color: #8888882e !important;
+  border-radius: 3px;
+  font-size: 12px;
+  background: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  color: #6d7882;
+  border: 1px solid;
+  outline: none; }
+
+.add-post-button,
+.admin-quickbar-post-type .add-new,
+.admin-quickbar-post-options a,
+.admin-quickbar-jumpicons .aqb-icon-css,
+.admin-quickbar-jumpicons a {
+  color: #2f87b1; }
+  .add-post-button:hover,
+  .admin-quickbar-post-type .add-new:hover,
+  .admin-quickbar-post-options a:hover,
+  .admin-quickbar-jumpicons .aqb-icon-css:hover,
+  .admin-quickbar-jumpicons a:hover {
+    color: #0aa4ef; }
+  .add-post-button:focus,
+  .admin-quickbar-post-type .add-new:focus,
+  .admin-quickbar-post-options a:focus,
+  .admin-quickbar-jumpicons .aqb-icon-css:focus,
+  .admin-quickbar-jumpicons a:focus {
+    -webkit-box-shadow: none;
+            box-shadow: none; }
+
+.admin-quickbar-hide-posttypes {
+  position: relative;
+  margin-left: 8px; }
+  .admin-quickbar-hide-posttypes select {
+    position: relative;
+    margin-left: 0;
+    margin-top: 0.25em;
+    min-height: 15em;
+    width: 100%;
+    padding: 4px 5px;
+    resize: vertical; }
+
+.aqb-icon {
+  display: inline-block;
+  position: relative;
+  font-family: Dashicons;
+  padding-left: 2px;
+  padding-right: 1px;
+  vertical-align: top;
+  text-decoration: none; }
+  .aqb-icon::before {
+    vertical-align: top; }
+
+.aqb-icon-elementor {
+  top: 0; }
+  .aqb-icon-elementor::before {
+    content: "\e812";
+    font-family: eicons; }
+
+.aqb-icon-edit::before {
+  content: "\f464"; }
+
+.aqb-icon-website {
+  top: 1px; }
+  .aqb-icon-website::before {
+    content: "\f319"; }
+
+.aqb-icon-wordpress::before {
+  content: "\f324"; }
+
+.aqb-icon-swift::before {
+  content: "\f113"; }
+
+.aqb-icon-favorite::before {
+  font-size: 22px !important;
+  content: "\f154"; }
+
+.aqb-icon-favorite-alt::before {
+  font-size: 22px !important;
+  content: "\f155"; }
+
+.aqb-icon-id::before {
+  font-size: 24px !important;
+  content: "\f336"; }
+
+.admin-quickbar-jumpicons {
+  position: fixed;
+  bottom: 10px;
+  right: 25px;
+  padding: 9px 9px 7px 9px;
+  line-height: 1;
+  background-color: #fff;
+  border-radius: 24px;
+  -webkit-box-shadow: 0 1px 0 #0000003d;
+          box-shadow: 0 1px 0 #0000003d;
+  border-top: 1px solid #0000000f;
+  z-index: 999999; }
+  .admin-quickbar-jumpicons .aqb-icon {
+    font-size: 19px; }
+  .admin-quickbar-jumpicons .aqb-icon-elementor {
+    top: 1px;
+    font-size: 15px; }
+  .admin-quickbar-jumpicons .aqb-icon-wordpress {
+    font-size: 17px; }
+  .admin-quickbar-jumpicons .aqb-icon-website {
+    top: -0.5px; }
+  .admin-quickbar-jumpicons .aqb-icon-swift {
+    top: -2px;
+    font-size: 19px; }
+  .admin-quickbar-jumpicons .aqb-icon-css {
+    cursor: pointer; }
+    .admin-quickbar-jumpicons .aqb-icon-css .icon-inner {
+      display: inline-block;
+      position: relative;
+      font-size: 11px;
+      letter-spacing: 1px;
+      font-weight: 400;
+      padding-top: 4px;
+      font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
+      vertical-align: top;
+      text-decoration: none;
+      z-index: 20; }
+      .admin-quickbar-jumpicons .aqb-icon-css .icon-inner::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        bottom: -11px;
+        left: 0;
+        right: 0; }
+
+.admin-quickbar-post-options .aqb-icon {
+  font-size: 19px; }
+
+.admin-quickbar-post-options .aqb-icon-elementor {
+  font-size: 15px; }
+
+.admin-quickbar-post-options .aqb-icon-wordpress {
+  font-size: 17px; }
+
+.aqb-css-list,
+.admin-quickbar-contextmenu {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  color: #6d7882;
+  border-radius: 0;
+  background: #fff;
+  -webkit-box-shadow: 1px 3px 4px #1b1c1d24;
+          box-shadow: 1px 3px 4px #1b1c1d24;
+  border-top: 1px solid #1b1c1d12;
+  z-index: 999999999; }
+  .aqb-css-list.open,
+  .admin-quickbar-contextmenu.open {
+    display: block; }
+  .aqb-css-list > .item,
+  .admin-quickbar-contextmenu > .item {
+    display: block;
+    position: relative;
+    padding: 0 15px;
+    height: 30px;
+    margin: 7px 0;
+    cursor: default; }
+  .aqb-css-list .item:not(.has-sub):hover,
+  .admin-quickbar-contextmenu .item:not(.has-sub):hover {
+    color: #c1c1c1;
+    background-color: transparent; }
+  .aqb-css-list .item.has-sub,
+  .admin-quickbar-contextmenu .item.has-sub {
+    text-align: right; }
+  .aqb-css-list .item .label,
+  .admin-quickbar-contextmenu .item .label {
+    font-size: 13px;
+    font-family: Roboto, Arial, Helvetica, Verdana, sans-serif; }
+  .aqb-css-list .item.has-sub .label,
+  .admin-quickbar-contextmenu .item.has-sub .label {
+    display: block;
+    position: absolute;
+    text-align: left;
+    top: 8px;
+    background-color: transparent;
+    line-height: 19px;
+    color: #6d7882;
+    font-weight: 400;
+    padding: 0; }
+  .aqb-css-list .subitem,
+  .admin-quickbar-contextmenu .subitem {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background-color: transparent;
+    margin: 0;
+    overflow: hidden; }
+  .aqb-css-list .subitem::before,
+  .admin-quickbar-contextmenu .subitem::before {
+    display: inline-block;
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+    font-size: 20px; }
+  .aqb-css-list .subitem.aqb-icon-swift::before,
+  .admin-quickbar-contextmenu .subitem.aqb-icon-swift::before {
+    top: 5px;
+    -webkit-transform: none;
+        -ms-transform: none;
+            transform: none; }
+  .aqb-css-list .item.item-copy .subitem,
+  .admin-quickbar-contextmenu .item.item-copy .subitem {
+    cursor: copy; }
+  .aqb-css-list .item.item-favorite .subitem,
+  .admin-quickbar-contextmenu .item.item-favorite .subitem {
+    cursor: pointer; }
+  .aqb-css-list .subitem.item-elementor::before,
+  .admin-quickbar-contextmenu .subitem.item-elementor::before {
+    font-size: 15px;
+    top: calc(50% - 1px); }
+  .aqb-css-list .subitem.item-shortcode::before,
+  .admin-quickbar-contextmenu .subitem.item-shortcode::before {
+    content: "\e883";
+    font-family: eicons;
+    font-size: 24px;
+    top: 50%; }
+  .aqb-css-list .item input,
+  .admin-quickbar-contextmenu .item input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    -webkit-transform: scale(0);
+        -ms-transform: scale(0);
+            transform: scale(0); }
+
+.admin-quickbar-is-darkmode .aqb-css-list,
+.admin-quickbar-is-darkmode .admin-quickbar-contextmenu {
+  background-color: #333; }
+  .admin-quickbar-is-darkmode .aqb-css-list .item:not(.has-sub):hover,
+  .admin-quickbar-is-darkmode .admin-quickbar-contextmenu .item:not(.has-sub):hover {
+    color: #c7c7c7;
+    background-color: transparent; }
+
+.admin-quickbar-is-darkmode .admin-quickbar-jumpicons {
+  background-color: #3c3c3c; }
+
+.admin-quickbar-is-darkmode .toggle-quickbar-button {
+  background-color: #333; }
+
+.admin-quickbar-is-darkmode .aqb-css-list,
+.admin-quickbar-is-darkmode .admin-quickbar {
+  background-color: #333;
+  color: #79838c; }
+
+.admin-quickbar-is-darkmode .aqb-css-list .item.has-sub .label {
+  color: #767e86; }
+
+.admin-quickbar-is-darkmode .admin-quickbar-post {
+  background-color: #3c3c3c; }
+
+.admin-quickbar-is-darkmode .aqb-tab-button {
+  background-color: #3c3c3c; }
+
+.aqb-tab {
+  display: none;
+  position: relative;
+  padding-bottom: 50px; }
+  .aqb-tab.active {
+    display: block; }
+
+.aqb-tab-button {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  letter-spacing: 1.4px;
+  background-color: #fff;
+  border-bottom: 3px solid transparent;
+  cursor: pointer; }
+  .aqb-tab-button.active {
+    border-color: #2f87b1; }
+
+.aqb-tab-button-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: -8px;
+  margin-right: -8px; }
+
+.aqb-tab-options {
+  padding-top: 1em; }
+
+.admin-quickbar-jumpicons a.aqb-icon-swift,
+.aqb-icon-swift {
+  color: #c73535;
+  cursor: pointer; }
+  .admin-quickbar-jumpicons a.aqb-icon-swift.is-in-cache,
+  .aqb-icon-swift.is-in-cache {
+    color: #01a252; }
+  .admin-quickbar-jumpicons a.aqb-icon-swift::before,
+  .aqb-icon-swift::before {
+    display: inline-block; }
+  .admin-quickbar-jumpicons a.aqb-icon-swift.loading::before,
+  .aqb-icon-swift.loading::before {
+    -webkit-animation: rotating 1.5s linear infinite;
+            animation: rotating 1.5s linear infinite; }
+
+body.swift-setup .admin-quickbar {
+  display: none !important; }
+
+@-webkit-keyframes rotating {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+@keyframes rotating {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+.aqb-css-list {
+  display: none;
+  position: absolute;
+  top: auto;
+  left: auto;
+  bottom: 100%;
+  margin-bottom: 10px;
+  right: -17px;
+  width: 240px;
+  z-index: 10; }
+  .aqb-css-list::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    height: 20px;
+    right: 0;
+    width: 100%; }
+
+.aqb-icon-css:hover .aqb-css-list {
+  display: block; }

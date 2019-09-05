@@ -1,6 +1,8 @@
 <?php namespace AdminQuickbar\Admin;
 
 use AdminQuickbar\Lib\Template;
+use Swift_Performance;
+use Swift_Performance_Lite;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -17,17 +19,21 @@ use AdminQuickbar\Lib\Template;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/admin
+ * @package    AdminQuickbar
  * @author     RTO GmbH
  */
 class AdminQuickbarAdmin {
 
     const PartialDir = AdminQuickbar_DIR . '/Admin/partials/';
-    public $filterPostTypes = [];
-    public $postTypes = [];
-    public $filteredPostTypes = [];
-    public $categoryList = [];
+    private $filterPostTypes = [];
+    private $postTypes = [];
+    private $filteredPostTypes = [];
+    private $categoryList = [];
+
+    private $cacheList = [];
+    private $hasSwift;
+
+    private $cssPosts = [];
 
     /**
      * The ID of this plugin.
@@ -60,17 +66,7 @@ class AdminQuickbarAdmin {
         $this->version = $version;
 
         $this->categoryList = get_categories();
-
-        add_action( 'admin_print_footer_scripts', [ $this, 'renderSidebar' ] );
-
-        add_action( 'admin_enqueue_scripts', [ $this, 'enqueueStyles' ] );
-        add_action( 'admin_enqueue_scripts', [ $this, 'enqueueScripts' ] );
-
-        add_action( 'elementor/editor/before_enqueue_styles', [ $this, 'enqueueStyles' ] );
-        add_action( 'elementor/editor/before_enqueue_scripts', [ $this, 'enqueueScripts' ], 99999 );
-
     }
-
 
     /**
      * Set post-types and filtered post-types
@@ -90,6 +86,20 @@ class AdminQuickbarAdmin {
     }
 
     /**
+     * Get cache list from swift and writes to $cacheList
+     */
+    public function initCacheList() {
+        $this->hasSwift = class_exists( 'Swift_Performance' ) || class_exists( 'Swift_Performance_Lite' );
+        if ( !$this->hasSwift ) {
+            return;
+        }
+
+        $this->cacheList = class_exists( 'Swift_Performance' )
+            ? Swift_Performance::cache_status()['files']
+            : Swift_Performance_Lite::cache_status()['files'];
+    }
+
+    /**
      * Adds the sidebar to footer
      *
      * @param string $data
@@ -97,9 +107,11 @@ class AdminQuickbarAdmin {
      * @throws \ImagickException
      */
     public function renderSidebar( $data ) {
+        $this->initCacheList();
         $this->setPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
         $currentPost = filter_input( INPUT_GET, 'post' );
+        $permalink = get_permalink( $currentPost );
 
         $addNewPosts = new Template( self::PartialDir . '/add-new-posts.php', [
             'filteredPostTypes' => $this->filteredPostTypes,
@@ -107,13 +119,29 @@ class AdminQuickbarAdmin {
 
         $template = new Template( self::PartialDir . '/admin-quickbar-admin-display.php', [
             'postTypeLoop' => $postTypeLoop,
+            'filteredPostTypes' => $this->filteredPostTypes,
             'currentPost' => $currentPost,
+            'permalink' => $permalink,
             'addNewPosts' => $addNewPosts->getRendered(),
+            'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
+            'hasSwift' => $this->hasSwift,
+            'inCache' => in_array( $permalink, $this->cacheList ),
+        ] );
+        $template->render();
+
+        $template = new Template( self::PartialDir . '/jump-icons.php', [
+            'currentPost' => $currentPost,
+            'permalink' => $permalink,
+            'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
+            'hasSwift' => $this->hasSwift,
+            'inCache' => in_array( $permalink, $this->cacheList ),
+            'cssPosts' => array_reverse( $this->cssPosts ),
         ] );
         $template->render();
 
         return $data;
     }
+
 
     /**
      * Gets rendered post-type loop
@@ -129,6 +157,7 @@ class AdminQuickbarAdmin {
             }
 
             $posts = $this->getPostsByPostType( $postType );
+
             $countPostType = $posts['count'];
             $categories = $posts['categories'];
 
@@ -164,6 +193,9 @@ class AdminQuickbarAdmin {
             if ( empty( $posts ) ) {
                 continue;
             }
+            if ( $postType->name === 'elebee-global-css' ) {
+                $this->cssPosts = $posts;
+            }
 
             $output[$categoryName] = $this->getLoopPosts( $postType, $posts );
         }
@@ -184,13 +216,20 @@ class AdminQuickbarAdmin {
         foreach ( $posts as $post ) {
             $style = $this->getMarginStyle( $post, $postType, $lastParent, $margin );
             $postTypeInfo = $this->getPostTypeInfo( $postType, $post );
+            $permalink = get_permalink( $post->ID );
+            $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
 
             $template = new Template( self::PartialDir . '/loop-posts.php', [
                 'post' => $post,
                 'postTypeInfo' => $postTypeInfo,
+                'contextMenuData' => json_encode( $this->getContextMenuData( $postType, $post, $postTypeInfo ) ),
                 'style' => $style,
                 'thumb' => $this->getThumb( $post ),
                 'postTitle' => $this->getPostTitle( $post ),
+                'inCache' => in_array( $permalink, $this->cacheList ),
+                'permalink' => $permalink,
+                'hasSwift' => $this->hasSwift,
+                'activeClass' => $activeClass,
             ] );
             $output .= $template->getRendered();
         }
@@ -251,10 +290,10 @@ class AdminQuickbarAdmin {
             return '';
         }
 
-        $template = new Template(self::PartialDir . '/thumbnail.php', [
+        $template = new Template( self::PartialDir . '/thumbnail.php', [
             'url' => $url,
             'class' => $class,
-        ]);
+        ] );
 
         return $template->getRendered();
     }
@@ -266,7 +305,6 @@ class AdminQuickbarAdmin {
      * @return string
      */
     public function getPostTitle( $post ) {
-        $output = '';
         if ( !empty( $post->post_title ) ) {
             $output = $post->post_title;
         } else if ( !empty( $post->post_name ) ) {
@@ -371,6 +409,7 @@ class AdminQuickbarAdmin {
 
         switch ( $postType->name ) {
             case 'wpcf7':
+            case 'wpcf7_contact_form':
                 $link = admin_url() . 'admin.php?page=wpcf7&post=' . $post->ID;
                 $noElementor = true;
                 break;
@@ -384,11 +423,14 @@ class AdminQuickbarAdmin {
             case 'elebee-global-css':
             case 'postgalleryslider':
             case 'acf-field-group':
-            case 'attachment':
                 $noElementor = true;
                 $noView = true;
                 break;
 
+        }
+
+        if ( !defined( 'ELEMENTOR_VERSION' ) ) {
+            $noElementor = true;
         }
 
         return [
@@ -396,6 +438,43 @@ class AdminQuickbarAdmin {
             'noElementor' => $noElementor,
             'noView' => $noView,
         ];
+    }
+
+
+    /**
+     * Returns data-attributes based on post-type
+     *
+     * @param \WP_Post_Type $postType
+     * @param \WP_Post $post
+     * @param array $postTypeInfo
+     * @return array
+     */
+    public function getContextMenuData( $postType, $post, $postTypeInfo ) {
+        $data = [
+            'favorite' => true,
+            'copy' => [
+                'id' => $post->ID,
+                'wordpress' => $postTypeInfo['link'] . '&action=edit',
+                'elementor' => empty( $postTypeInfo['noElementor'] ) ? $postTypeInfo['link'] . '&action=elementor' : '',
+                'website' => get_permalink( $post->ID ),
+            ],
+        ];
+
+        if ( $this->hasSwift ) {
+            $permalink = get_the_permalink( $post->ID );
+            $data['swift'] = [
+                'inCache' => in_array( $permalink, $this->cacheList ),
+                'permalink' => $permalink,
+            ];
+        }
+
+        switch ( $postType->name ) {
+            case 'elementor_library':
+                $data['copy']['shortcode'] = '[elementor-template id=' . $post->ID . ']';
+                break;
+        }
+
+        return $data;
     }
 
     /**
@@ -440,7 +519,7 @@ class AdminQuickbarAdmin {
          * class.
          */
 
-        wp_enqueue_script( $this->pluginName, AdminQuickbar_URL . '/Admin/js/admin-quickbar-admin.js', [ 'jquery' ], $this->version, false );
+        wp_enqueue_script( $this->pluginName, AdminQuickbar_URL . '/Admin/js/admin-quickbar-admin.js', [ 'jquery' ], $this->version, true );
 
     }
 

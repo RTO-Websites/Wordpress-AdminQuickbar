@@ -1,0 +1,33 @@
+
+.admin-quickbar-jumpicons a.aqb-icon-swift,
+.aqb-icon-swift {
+  color: #c73535;
+  cursor: pointer;
+
+  &.is-in-cache {
+    color: #01a252;
+  }
+
+  &::before {
+    display: inline-block;
+  }
+
+  &.loading::before {
+    animation: rotating 1.5s linear infinite;
+  }
+}
+
+body.swift-setup .admin-quickbar {
+  display: none !important;
+}
+
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

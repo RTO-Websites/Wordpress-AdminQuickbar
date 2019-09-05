@@ -25,12 +25,12 @@ use Swift_Performance_Lite;
 class AdminQuickbarAdmin {
 
     const PartialDir = AdminQuickbar_DIR . '/Admin/partials/';
-    public $filterPostTypes = [];
-    public $postTypes = [];
-    public $filteredPostTypes = [];
-    public $categoryList = [];
+    private $filterPostTypes = [];
+    private $postTypes = [];
+    private $filteredPostTypes = [];
+    private $categoryList = [];
 
-    public $cacheList = [];
+    private $cacheList = [];
     private $hasSwift;
 
     private $cssPosts = [];

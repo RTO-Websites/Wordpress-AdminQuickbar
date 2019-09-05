@@ -8,41 +8,69 @@
  * @link       https://www.rto.de
  * @since      1.0.0
  *
- * @package    AdminPostListSidebar
- * @subpackage AdminPostListSidebar/admin/partials
+ * @package    AdminQuickbar
  */
 ?>
-    <div class="admin-quickbar">
-        <div class="admin-quickbar-inner">
-            <label for="admin-quickbar-keepopen" class="admin-quickbar-keepopen">
+<div class="admin-quickbar" data-swift-nonce="<?php echo $swiftNonce; ?>">
+    <div class="admin-quickbar-inner">
+
+        <div class="aqb-tab-button-wrapper">
+            <div class="aqb-tab-button active" data-tab="quickbar">
+                Quickbar
+            </div>
+            <div class="aqb-tab-button" data-tab="options">
+                <?php echo __( 'Options' ); ?>
+            </div>
+        </div>
+
+        <div class="aqb-options aqb-tab aqb-tab-options">
+            <label class="admin-quickbar-keepopen">
                 <input type="checkbox" name="admin-quickbar-keepopen"/>
                 <?php _e( 'Keep open', 'admin-quickbar' ); ?>
             </label>
-            <label for="admin-quickbar-loadthumbs" class="admin-quickbar-loadthumbs">
+            <label class="admin-quickbar-loadthumbs">
                 <input type="checkbox" name="admin-quickbar-loadthumbs"/>
                 <?php _e( 'Show thumbs', 'admin-quickbar' ); ?>
             </label>
-            <label for="admin-quickbar-overlap" class="admin-quickbar-overlap">
+            <label class="admin-quickbar-overlap">
                 <input type="checkbox" name="admin-quickbar-overlap"/>
                 <?php _e( 'Overlap', 'admin-quickbar' ); ?>
             </label>
-            <?php echo $addNewPosts; ?>
-            <?php echo $postTypeLoop;  ?>
+            <label class="admin-quickbar-darkmode">
+                <input type="checkbox" name="admin-quickbar-darkmode"/>
+                <?php _e( 'Darkmode', 'admin-quickbar' ); ?>
+            </label>
+            <label class="admin-quickbar-hide-on-website">
+                <input type="checkbox" name="admin-quickbar-hide-on-website"/>
+                <?php _e( 'Hide on website', 'admin-quickbar' ); ?>
+            </label>
+
+
+            <label class="admin-quickbar-hide-posttypes">
+                <?php _e( 'Hide PostTypes', 'admin-quickbar' ); ?><br />
+                <select class="aqm-hide-posttypes" multiple>
+                    <option value="aqb-favorites"><?php echo __( 'Favorites' ); ?></option>
+                    <?php foreach ( $filteredPostTypes as $postType ): ?>
+                        <option value="<?php echo $postType->name; ?>"><?php echo $postType->label; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
         </div>
-        <div class="toggle-quickbar-button"></div>
-    </div>
 
-<?php if ( !empty( $currentPost ) ): ?>
-    <div class="admin-quickbar-jumpicons">
-        <a class="dashicons dashicons-visibility" href="<?php echo get_permalink( $currentPost ); ?>" title="Go to Page"></a>
-        <?php if ( defined( 'ELEMENTOR_VERSION' ) ): ?>
-            <a class="dashicons dashicons-edit"
-                    href="<?php echo admin_url() . 'post.php?post=' . $currentPost; ?>&action=edit"
-                    title="Go to WP-Editor"></a>
-            <a class="dashicons dashicons-elementor"
-                    href="<?php echo admin_url() . 'post.php?post=' . $currentPost; ?>&action=elementor"
-                    title="Go to Elementor"></a>
-        <?php endif; ?>
-    </div>
+        <div class="aqb-tab aqb-tab-quickbar active">
+            <?php echo $addNewPosts; ?>
 
-<?php endif; ?>
+            <div class="admin-quickbar-postlist aqb-favorites" data-post-type="aqb-favorites">
+                <div class="admin-quickbar-post-type"><?php echo __( 'Favorites' ); ?>
+                </div>
+                <div class="admin-quickbar-postlist-inner"></div>
+            </div>
+
+            <?php echo $postTypeLoop; ?>
+        </div>
+        <div class="admin-quickbar-contextmenu"></div>
+    </div>
+    <div class="toggle-quickbar-button"></div>
+</div>
+
+

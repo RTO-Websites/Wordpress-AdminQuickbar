@@ -1,0 +1,41 @@
+
+.aqb-tab {
+  display: none;
+  position: relative;
+  padding-bottom: 50px;
+
+  &.active {
+    display: block;
+  }
+}
+
+.aqb-tab-button {
+  flex-grow: 1;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  letter-spacing: 1.4px;
+
+  background-color: #fff;
+
+  border-bottom: 3px solid transparent;
+
+  cursor: pointer;
+
+  &.active {
+    border-color: #2f87b1;
+  }
+}
+
+.aqb-tab-button-wrapper {
+  display: flex;
+  margin-left: -8px;
+  margin-right: -8px;
+}
+
+.aqb-tab-options {
+  padding-top: 1em;
+}

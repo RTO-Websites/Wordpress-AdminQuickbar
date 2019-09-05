@@ -22,7 +22,7 @@ use AdminQuickbar\Lib\Deactivator;
  * Plugin Name:       AdminQuickbar
  * Plugin URI:        https://github.com/RTO-Websites/Wordpress-AdminQuickbar
  * Description:       Adds a quickbar in admin with fast access to all posts/pages
- * Version:           1.4.1
+ * Version:           1.5.0
  * Author:            RTO GmbH
  * Author URI:        https://www.rto.de
  * License:           GPL-2.0+
@@ -32,11 +32,11 @@ use AdminQuickbar\Lib\Deactivator;
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( !defined( 'WPINC' ) ) {
+    die;
 }
 
-define( 'AdminQuickbar_VERSION', '1.4.1' );
+define( 'AdminQuickbar_VERSION', '1.5.0' );
 
 define( 'AdminQuickbar_DIR', str_replace( '\\', '/', __DIR__ ) );
 define( 'AdminQuickbar_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
@@ -69,6 +69,4 @@ register_deactivation_hook( __FILE__, [ Deactivator::class, 'deactivate' ] );
  */
 
 
-if ( is_admin()) {
-    AdminQuickbar::run();
-}
+AdminQuickbar::run();

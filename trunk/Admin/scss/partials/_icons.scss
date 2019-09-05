@@ -1,0 +1,147 @@
+
+.aqb-icon {
+  display: inline-block;
+  position: relative;
+  font-family: Dashicons;
+  padding-left: 2px;
+  padding-right: 1px;
+  vertical-align: top;
+  text-decoration: none;
+
+  &::before {
+    vertical-align: top;
+  }
+}
+
+.aqb-icon-elementor {
+  top: 0;
+
+  &::before {
+    content: "\e812";
+    font-family: eicons;
+  }
+}
+
+.aqb-icon-edit {
+  &::before {
+    content: "\f464";
+  }
+}
+
+.aqb-icon-website {
+  top: 1px;
+
+  &::before {
+    content: "\f319";
+  }
+}
+
+.aqb-icon-wordpress {
+  &::before {
+    content: "\f324";
+  }
+}
+
+.aqb-icon-swift {
+  &::before {
+    content: "\f113";
+  }
+}
+
+.aqb-icon-favorite {
+  &::before {
+    font-size: 22px !important;
+    content: "\f154";
+  }
+}
+
+.aqb-icon-favorite-alt {
+  &::before {
+    font-size: 22px !important;
+    content: "\f155";
+  }
+}
+
+.aqb-icon-id {
+
+  &::before {
+    font-size: 24px !important;
+    content: "\f336";
+  }
+}
+
+.admin-quickbar-jumpicons {
+  position: fixed;
+  bottom: 10px;
+  right: 25px;
+  padding: 9px 9px 7px 9px;
+  line-height: 1;
+  background-color: #fff;
+  border-radius: 24px;
+  box-shadow: 0 1px 0 #0000003d;
+  border-top: 1px solid #0000000f;
+  z-index: 999999;
+
+  .aqb-icon {
+    font-size: 19px;
+  }
+
+  .aqb-icon-elementor {
+    top: 1px;
+    font-size: 15px;
+  }
+
+  .aqb-icon-wordpress {
+    font-size: 17px;
+  }
+
+  .aqb-icon-website {
+    top: -0.5px;
+  }
+
+  .aqb-icon-swift {
+    top: -2px;
+    font-size: 19px;
+  }
+
+  .aqb-icon-css {
+    cursor: pointer;
+
+    .icon-inner {
+      display: inline-block;
+      position: relative;
+      font-size: 11px;
+      letter-spacing: 1px;
+      font-weight: 400;
+      padding-top: 4px;
+      font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
+      vertical-align: top;
+      text-decoration: none;
+      z-index: 20;
+
+      // for bigger hitbox
+      &::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        bottom: -11px;
+        left: 0;
+        right: 0;
+      }
+    }
+  }
+}
+
+.admin-quickbar-post-options {
+  .aqb-icon {
+    font-size: 19px;
+  }
+
+  .aqb-icon-elementor {
+    font-size: 15px;
+  }
+
+  .aqb-icon-wordpress {
+    font-size: 17px;
+  }
+}

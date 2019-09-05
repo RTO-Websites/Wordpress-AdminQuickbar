@@ -5,7 +5,7 @@ Tags: post, post list, sidebar, elementor, rto, rto.de
 Requires at least: 3.0.1
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 1.4.1
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,12 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.5.0 =
+* Swift Performance integration
+* Contextmenu for favorites and quick-copy
+* Darkmode
+* New style
+
 = 1.4.0 =
 * Usability improvements
 

@@ -336,17 +336,20 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   border-top: 1px solid #0000000f;
   z-index: 999999; }
   .admin-quickbar-jumpicons .aqb-icon {
-    font-size: 19px; }
+    font-size: 16px; }
+    .admin-quickbar-jumpicons .aqb-icon::before {
+      opacity: 0.75; }
   .admin-quickbar-jumpicons .aqb-icon-elementor {
     top: 1px;
-    font-size: 15px; }
+    font-size: 12px; }
   .admin-quickbar-jumpicons .aqb-icon-wordpress {
-    font-size: 17px; }
+    font-size: 14px; }
   .admin-quickbar-jumpicons .aqb-icon-website {
-    top: -0.5px; }
+    font-size: 16px;
+    top: 0; }
   .admin-quickbar-jumpicons .aqb-icon-swift {
-    top: -2px;
-    font-size: 19px; }
+    top: -1px;
+    font-size: 16px; }
   .admin-quickbar-jumpicons .aqb-icon-css {
     cursor: pointer; }
     .admin-quickbar-jumpicons .aqb-icon-css .icon-inner {
@@ -355,10 +358,11 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
       font-size: 11px;
       letter-spacing: 1px;
       font-weight: 400;
-      padding-top: 4px;
+      padding-top: 2px;
       font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
       vertical-align: top;
       text-decoration: none;
+      opacity: 0.75;
       z-index: 20; }
       .admin-quickbar-jumpicons .aqb-icon-css .icon-inner::before {
         content: '';
@@ -446,7 +450,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     -webkit-transform: translateY(-50%);
         -ms-transform: translateY(-50%);
             transform: translateY(-50%);
-    font-size: 20px; }
+    font-size: 17px; }
   .aqb-css-list .subitem.aqb-icon-swift::before,
   .admin-quickbar-contextmenu .subitem.aqb-icon-swift::before {
     top: 5px;

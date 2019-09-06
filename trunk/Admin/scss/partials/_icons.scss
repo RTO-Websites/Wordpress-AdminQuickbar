@@ -83,25 +83,30 @@
   z-index: 999999;
 
   .aqb-icon {
-    font-size: 19px;
+    font-size: 16px;
+
+    &::before {
+      opacity: 0.75;
+    }
   }
 
   .aqb-icon-elementor {
     top: 1px;
-    font-size: 15px;
+    font-size: 12px;
   }
 
   .aqb-icon-wordpress {
-    font-size: 17px;
+    font-size: 14px;
   }
 
   .aqb-icon-website {
-    top: -0.5px;
+    font-size: 16px;
+    top: 0;
   }
 
   .aqb-icon-swift {
-    top: -2px;
-    font-size: 19px;
+    top: -1px;
+    font-size: 16px;
   }
 
   .aqb-icon-css {
@@ -113,10 +118,11 @@
       font-size: 11px;
       letter-spacing: 1px;
       font-weight: 400;
-      padding-top: 4px;
+      padding-top: 2px;
       font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
       vertical-align: top;
       text-decoration: none;
+      opacity: 0.75;
       z-index: 20;
 
       // for bigger hitbox

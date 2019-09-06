@@ -87,7 +87,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   float: right; }
 
 .admin-quickbar-post {
-  padding: 12px 15px;
+  padding: 12px 10px 12px 15px;
   background-color: #fff;
   margin-bottom: 3px; }
   .admin-quickbar-post .label {
@@ -369,13 +369,16 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
         right: 0; }
 
 .admin-quickbar-post-options .aqb-icon {
-  font-size: 19px; }
+  font-size: 16px;
+  padding-left: 4px;
+  padding-right: 1px;
+  opacity: 0.75; }
 
 .admin-quickbar-post-options .aqb-icon-elementor {
-  font-size: 15px; }
+  font-size: 12px; }
 
 .admin-quickbar-post-options .aqb-icon-wordpress {
-  font-size: 17px; }
+  font-size: 14px; }
 
 .aqb-css-list,
 .admin-quickbar-contextmenu {

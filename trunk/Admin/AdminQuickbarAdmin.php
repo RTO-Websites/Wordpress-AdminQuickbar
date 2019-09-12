@@ -35,8 +35,6 @@ class AdminQuickbarAdmin {
 
     private $cssPosts = [];
 
-    private $wpmlLanguages = [];
-
     /**
      * The ID of this plugin.
      *
@@ -109,11 +107,6 @@ class AdminQuickbarAdmin {
      * @throws \ImagickException
      */
     public function renderSidebar( $data ) {
-
-        if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
-            $this->wpmlLanguages = apply_filters( 'wpml_active_languages', null );
-        }
-
         $this->initCacheList();
         $this->setPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
@@ -226,15 +219,7 @@ class AdminQuickbarAdmin {
             $permalink = get_permalink( $post->ID );
             $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
 
-            $languageFlag = '';
-            if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
-                $wpmlLanguageInfo = apply_filters( 'wpml_post_language_details', null, $post->ID );
-                $languageCode = $wpmlLanguageInfo['language_code'];
-                if ( !empty( $this->wpmlLanguages[$languageCode] ) ) {
-                    $flagUrl = $this->wpmlLanguages[$languageCode]['country_flag_url'];
-                    $languageFlag = '<img style="height:0.8em;" src="' . $flagUrl . '" alt="' . $wpmlLanguageInfo['display_name'] . '" />';
-                }
-            }
+            $languageFlag = $this->getLanguageFlag( $post );
 
             $template = new Template( self::PartialDir . '/loop-posts.php', [
                 'post' => $post,
@@ -253,6 +238,23 @@ class AdminQuickbarAdmin {
         }
 
         return $output;
+    }
+
+    /**
+     * @param $post
+     * @return string
+     */
+    public function getLanguageFlag( $post ) {
+        if ( !defined( 'ICL_LANGUAGE_CODE' ) ) {
+            return '';
+        }
+
+        global $sitepress;
+        $wpmlLanguageInfo = apply_filters( 'wpml_post_language_details', null, $post->ID );
+        $languageCode = $wpmlLanguageInfo['language_code'];
+        $flagUrl = $sitepress->get_flag_url( $languageCode );
+
+        return '<img style="height:0.8em;" src="' . $flagUrl . '" alt="' . $wpmlLanguageInfo['display_name'] . '" />';
     }
 
     /**

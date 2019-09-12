@@ -35,6 +35,8 @@ class AdminQuickbarAdmin {
 
     private $cssPosts = [];
 
+    private $wpmlLanguages = [];
+
     /**
      * The ID of this plugin.
      *
@@ -107,6 +109,11 @@ class AdminQuickbarAdmin {
      * @throws \ImagickException
      */
     public function renderSidebar( $data ) {
+
+        if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+            $this->wpmlLanguages = apply_filters( 'wpml_active_languages', null );
+        }
+
         $this->initCacheList();
         $this->setPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
@@ -223,9 +230,10 @@ class AdminQuickbarAdmin {
             if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
                 $wpmlLanguageInfo = apply_filters( 'wpml_post_language_details', null, $post->ID );
                 $languageCode = $wpmlLanguageInfo['language_code'];
-                $languages = apply_filters( 'wpml_active_languages' );
-                $flagUrl = $languages[$languageCode]['country_flag_url'];
-                $languageFlag = '<img style="height:0.8em;" src="' . $flagUrl . '" alt="' . $wpmlLanguageInfo['display_name'] . '" />';
+                if ( !empty( $this->wpmlLanguages[$languageCode] ) ) {
+                    $flagUrl = $this->wpmlLanguages[$languageCode]['country_flag_url'];
+                    $languageFlag = '<img style="height:0.8em;" src="' . $flagUrl . '" alt="' . $wpmlLanguageInfo['display_name'] . '" />';
+                }
             }
 
             $template = new Template( self::PartialDir . '/loop-posts.php', [

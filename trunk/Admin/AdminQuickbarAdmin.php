@@ -219,6 +219,15 @@ class AdminQuickbarAdmin {
             $permalink = get_permalink( $post->ID );
             $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
 
+            $languageFlag = '';
+            if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+                $wpmlLanguageInfo = apply_filters( 'wpml_post_language_details', null, $post->ID );
+                $languageCode = $wpmlLanguageInfo['language_code'];
+                $languages = apply_filters( 'wpml_active_languages' );
+                $flagUrl = $languages[$languageCode]['country_flag_url'];
+                $languageFlag = '<img style="height:0.8em;" src="' . $flagUrl . '" alt="' . $wpmlLanguageInfo['display_name'] . '" />';
+            }
+
             $template = new Template( self::PartialDir . '/loop-posts.php', [
                 'post' => $post,
                 'postTypeInfo' => $postTypeInfo,
@@ -230,6 +239,7 @@ class AdminQuickbarAdmin {
                 'permalink' => $permalink,
                 'hasSwift' => $this->hasSwift,
                 'activeClass' => $activeClass,
+                'languageFlag' => $languageFlag,
             ] );
             $output .= $template->getRendered();
         }
@@ -352,6 +362,10 @@ class AdminQuickbarAdmin {
         $countPostType = 0;
         $categories = [];
 
+        if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+            global $sitepress;
+            $sitepress->switch_lang( 'all' );
+        }
         // get posts of current post-type
         $args = [
             'post_type' => $postType->name,

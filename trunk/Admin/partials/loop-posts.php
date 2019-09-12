@@ -2,7 +2,10 @@
     <?php
     echo $thumb;
     ?>
-    <span class="label"><?php echo $postTitle; ?></span>
+    <span class="label">
+        <?php echo $languageFlag; ?>
+        <?php echo $postTitle; ?>
+    </span>
     <div class="admin-quickbar-post-options">
         <a class="aqb-icon aqb-icon-wordpress dashicons-edit"
                 href="<?php echo $postTypeInfo['link']; ?>&action=edit"

@@ -597,7 +597,7 @@ let AdminQuickbar = function () {
 
   self.openWindow = function () {
     let url = $(this).next('.dashicons-edit').attr('href') + '&noaqb';
-    window.open(url, '_blank', 'width=700,height=500,left=200,top=100');
+    registerCssWindow(url);
   };
 
   init();
@@ -605,3 +605,17 @@ let AdminQuickbar = function () {
 
 
 window.adminQuickbarInstance = new AdminQuickbar();
+
+
+let globalCssWindow;
+registerCssWindow = function(url){
+
+  if (!globalCssWindow || globalCssWindow.closed) {
+    globalCssWindow = window.open(url,"rto_wp_adminQuickbar",'width=700,height=500,left=200,top=100');
+  } else {
+    if(globalCssWindow.location.href!==url){
+      globalCssWindow.location.assign(url);
+    }
+  }
+  globalCssWindow.focus();
+};

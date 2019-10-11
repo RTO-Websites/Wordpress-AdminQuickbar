@@ -2,6 +2,10 @@
 /**
  * @var string $flagUrl
  * @var string $alt
+ * @var string $languageCode
  */
 ?>
-<img style="height:0.8em;" src="<?php echo $flagUrl; ?>" alt="<?php echo $alt; ?>" />
+<img class="language-flag"
+        src="<?php echo $flagUrl; ?>"
+        alt="<?php echo $alt; ?>"
+        data-language-code="<?php echo $languageCode; ?>"/>

@@ -66,6 +66,8 @@ let AdminQuickbar = function () {
     $(doc).on('click', '.aqb-icon-swift', self.checkSwiftCache);
     $(doc).on('click', '.aqb-icon-external', self.openWindow);
 
+    $(doc).on('click', '.language-switch .language-flag, .language-switch .language-all', self.changeLanguageFilter);
+
     /**
      * Open default contextmenu on icons
      */
@@ -101,6 +103,9 @@ let AdminQuickbar = function () {
     }
     if (typeof (localStorage.adminQuickbarToggle) === 'undefined') {
       localStorage.adminQuickbarToggle = 'true';
+    }
+    if (typeof (localStorage.adminQuickbarLanguageFilter) === 'undefined') {
+      localStorage.adminQuickbarLanguageFilter = 'all';
     }
   };
 
@@ -149,6 +154,9 @@ let AdminQuickbar = function () {
 
     // init hidden post types
     self.initHiddenPostTypes();
+
+    self.setLanguageSwitchActiveClass();
+    self.hideByLanguage();
   };
 
   /**
@@ -182,6 +190,47 @@ let AdminQuickbar = function () {
     for (let index in hiddenTypes) {
       $('.admin-quickbar-postlist[data-post-type="' + hiddenTypes[index] + '"]').addClass('hidden');
     }
+  };
+
+  /**
+   *
+   * @param e
+   */
+  self.changeLanguageFilter = function (e) {
+    let target = $(e.currentTarget),
+      language = target.data('language-code');
+
+    localStorage.adminQuickbarLanguageFilter = language;
+    self.setLanguageSwitchActiveClass();
+    self.hideByLanguage();
+  };
+
+  /**
+   * Hides all post which dont match selected language
+   */
+  self.hideByLanguage = function () {
+    let language = localStorage.adminQuickbarLanguageFilter;
+
+    $('.admin-quickbar-post').removeClass('hidden-by-language');
+
+    if (language == 'all') {
+      return;
+    }
+
+    $('.admin-quickbar-post .language-flag').each(function (index, flagElement) {
+      flagElement = $(flagElement);
+      if (flagElement.data('language-code') !== language) {
+        flagElement.closest('.admin-quickbar-post').addClass('hidden-by-language');
+      }
+    });
+  };
+
+  self.setLanguageSwitchActiveClass = function () {
+    let language = localStorage.adminQuickbarLanguageFilter;
+    $('.admin-quickbar .language-switch .language-all,' +
+      '.admin-quickbar .language-switch .language-flag').removeClass('active');
+
+    $('.admin-quickbar .language-switch [data-language-code="' + language + '"]').addClass('active');
   };
 
   /**
@@ -608,12 +657,12 @@ window.adminQuickbarInstance = new AdminQuickbar();
 
 
 let globalCssWindow;
-registerCssWindow = function(url){
+registerCssWindow = function (url) {
 
   if (!globalCssWindow || globalCssWindow.closed) {
-    globalCssWindow = window.open(url,"rto_wp_adminQuickbar",'width=700,height=500,left=200,top=100');
+    globalCssWindow = window.open(url, "rto_wp_adminQuickbar", 'width=700,height=500,left=200,top=100');
   } else {
-    if(globalCssWindow.location.href!==url){
+    if (globalCssWindow.location.href !== url) {
       globalCssWindow.location.assign(url);
     }
   }

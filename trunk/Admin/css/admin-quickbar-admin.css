@@ -600,3 +600,26 @@ body.swift-setup .admin-quickbar {
 
 .aqb-icon-css:hover .aqb-css-list {
   display: block; }
+
+.admin-quickbar .language-flag {
+  display: inline-block;
+  position: relative;
+  margin-right: 5px;
+  height: 0.8em; }
+
+.admin-quickbar .language-switch {
+  position: relative;
+  margin-top: 1em;
+  padding-left: 8px; }
+  .admin-quickbar .language-switch .language-all,
+  .admin-quickbar .language-switch .language-flag {
+    cursor: pointer;
+    margin-right: 7px; }
+    .admin-quickbar .language-switch .language-all.active,
+    .admin-quickbar .language-switch .language-flag.active {
+      border: 1px solid #2f87b1; }
+  .admin-quickbar .language-switch .language-all {
+    padding: 2px 7px; }
+
+.admin-quickbar .admin-quickbar-post.hidden-by-language {
+  display: none; }

@@ -1,0 +1,33 @@
+
+.admin-quickbar {
+  .language-flag {
+    display: inline-block;
+    position: relative;
+    margin-right: 5px;
+    height: 0.8em;
+  }
+
+  .language-switch {
+    position: relative;
+    margin-top: 1em;
+    padding-left: 8px;
+
+    .language-all,
+    .language-flag {
+      cursor: pointer;
+      margin-right: 7px;
+
+      &.active {
+        border: 1px solid #2f87b1;
+      }
+    }
+
+    .language-all {
+      padding: 2px 7px;
+    }
+  }
+
+  .admin-quickbar-post.hidden-by-language {
+    display: none;
+  }
+}

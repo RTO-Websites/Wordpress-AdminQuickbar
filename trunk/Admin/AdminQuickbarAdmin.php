@@ -126,6 +126,7 @@ class AdminQuickbarAdmin {
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
             'hasSwift' => $this->hasSwift,
             'inCache' => in_array( $permalink, $this->cacheList ),
+            'languageFlags' => $this->renderAllLanguageFlags(),
         ] );
         $template->render();
 
@@ -141,7 +142,6 @@ class AdminQuickbarAdmin {
 
         return $data;
     }
-
 
     /**
      * Gets rendered post-type loop
@@ -257,10 +257,42 @@ class AdminQuickbarAdmin {
         $template = new Template( self::PartialDir . '/language-flag.php', [
             'flagUrl' => $flagUrl,
             'alt' => $wpmlLanguageInfo['display_name'],
+            'languageCode' => $languageCode,
         ] );
 
         return $template->getRendered();
     }
+
+    /**
+     * Renders all wpml language-flags
+     *
+     * @return string
+     */
+    public function renderAllLanguageFlags() {
+        $output = '';
+
+        if ( !defined( 'ICL_LANGUAGE_CODE' ) ) {
+            return '';
+        }
+
+        $wpmlLanguages = apply_filters( 'wpml_active_languages', null );
+
+        if (empty($wpmlLanguages)) {
+            return '';
+        }
+
+        foreach ( $wpmlLanguages as $language ) {
+            $template = new Template( self::PartialDir . '/language-flag.php', [
+                'flagUrl' => $language['country_flag_url'],
+                'alt' => $language['native_name'],
+                'languageCode' => $language['language_code'],
+            ] );
+            $output .= $template->getRendered();
+        }
+
+        return $output;
+    }
+
 
     /**
      * Returns post-thumb html

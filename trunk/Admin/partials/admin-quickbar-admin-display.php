@@ -15,6 +15,7 @@
  * @var string $swiftNonce
  * @var string $addNewPosts
  * @var string $postTypeLoop
+ * @var string $languageFlags
  * @var array $filteredPostTypes
  */
 ?>
@@ -54,7 +55,7 @@
 
 
             <label class="admin-quickbar-hide-posttypes">
-                <?php _e( 'Hide PostTypes', 'admin-quickbar' ); ?><br />
+                <?php _e( 'Hide PostTypes', 'admin-quickbar' ); ?><br/>
                 <select class="aqm-hide-posttypes" multiple>
                     <option value="aqb-favorites"><?php echo __( 'Favorites' ); ?></option>
                     <?php foreach ( $filteredPostTypes as $postType ): ?>
@@ -66,6 +67,13 @@
 
         <div class="aqb-tab aqb-tab-quickbar active">
             <?php echo $addNewPosts; ?>
+
+            <?php if ( !empty( $languageFlags ) ): ?>
+                <div class="language-switch">
+                    <span data-language-code="all" class="active language-all"><?php _e( 'All' ); ?></span>
+                    <?php echo $languageFlags; ?>
+                </div>
+            <?php endif; ?>
 
             <div class="admin-quickbar-postlist aqb-favorites" data-post-type="aqb-favorites">
                 <div class="admin-quickbar-post-type"><?php echo __( 'Favorites' ); ?>

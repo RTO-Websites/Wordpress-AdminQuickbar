@@ -1,3 +1,16 @@
+<?php
+/**
+ * @var string $activeClass
+ * @var object $post
+ * @var string $style
+ * @var string $contextMenuData
+ * @var string $thumb
+ * @var string $languageFlag
+ * @var string $postTitle
+ * @var array $postTypeInfo
+ * @var string $permalink
+ */
+?>
 <div class="admin-quickbar-post <?php echo $activeClass; ?>" data-postid="<?php echo $post->ID; ?>" <?php echo $style; ?> data-contextmenu='<?php echo $contextMenuData; ?>'>
     <?php
     echo $thumb;

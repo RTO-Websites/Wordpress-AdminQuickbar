@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var array $filteredPostTypes
+ */
+?>
 <br/>
 <select class="admin-quickbar-new-select">
     <?php foreach ( $filteredPostTypes as $postType ): ?>

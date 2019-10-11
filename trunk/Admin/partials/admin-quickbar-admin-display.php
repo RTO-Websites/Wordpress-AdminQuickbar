@@ -10,6 +10,13 @@
  *
  * @package    AdminQuickbar
  */
+
+/**
+ * @var string $swiftNonce
+ * @var string $addNewPosts
+ * @var string $postTypeLoop
+ * @var array $filteredPostTypes
+ */
 ?>
 <div class="admin-quickbar" data-swift-nonce="<?php echo $swiftNonce; ?>">
     <div class="admin-quickbar-inner">

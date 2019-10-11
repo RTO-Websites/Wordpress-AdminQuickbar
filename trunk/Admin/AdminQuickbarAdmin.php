@@ -254,7 +254,12 @@ class AdminQuickbarAdmin {
         $languageCode = $wpmlLanguageInfo['language_code'];
         $flagUrl = $sitepress->get_flag_url( $languageCode );
 
-        return '<img style="height:0.8em;" src="' . $flagUrl . '" alt="' . $wpmlLanguageInfo['display_name'] . '" />';
+        $template = new Template( self::PartialDir . '/language-flag.php', [
+            'flagUrl' => $flagUrl,
+            'alt' => $wpmlLanguageInfo['display_name'],
+        ] );
+
+        return $template->getRendered();
     }
 
     /**

@@ -277,7 +277,7 @@ class AdminQuickbarAdmin {
 
         $wpmlLanguages = apply_filters( 'wpml_active_languages', null );
 
-        if (empty($wpmlLanguages)) {
+        if ( empty( $wpmlLanguages ) ) {
             return '';
         }
 
@@ -330,12 +330,12 @@ class AdminQuickbarAdmin {
             $path = '/wp-content/' . array_pop( $path );
 
             $thumbInstance = new \Lib\Thumb();
-            $thumb = $thumbInstance->getThumb( array(
+            $thumb = $thumbInstance->getThumb( [
                 'path' => $path,
                 'width' => '150',
                 'height' => '150',
                 'scale' => '0',
-            ) );
+            ] );
 
             if ( !empty( $thumb['url'] ) ) {
                 $url = $thumb['url'];

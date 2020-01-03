@@ -271,13 +271,7 @@ class AdminQuickbarAdmin {
     public function renderAllLanguageFlags() {
         $output = '';
 
-        if ( !defined( 'ICL_LANGUAGE_CODE' ) ) {
-            return '';
-        }
-
-        $wpmlLanguages = apply_filters( 'wpml_active_languages', null );
-
-        if ( empty( $wpmlLanguages ) ) {
+        if ( !defined( 'ICL_LANGUAGE_CODE' ) || empty( $wpmlLanguages = apply_filters( 'wpml_active_languages', null ) ) ) {
             return '';
         }
 

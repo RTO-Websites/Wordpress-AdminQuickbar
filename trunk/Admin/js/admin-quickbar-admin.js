@@ -1,4 +1,4 @@
-let AdminQuickbar = function () {
+let AdminQuickbar = function() {
   let win = window,
     doc = win.document,
     self = this,
@@ -23,8 +23,8 @@ let AdminQuickbar = function () {
     var $ = jQuery;
   }
 
-  init = function () {
-    $(function ($) {
+  init = function() {
+    $(function($) {
       domReady();
     });
 
@@ -37,19 +37,19 @@ let AdminQuickbar = function () {
     /**
      * Keep open
      */
-    $(doc).on('change', '.admin-quickbar-keepopen input', function (e) {
+    $(doc).on('change', '.admin-quickbar-keepopen input', function(e) {
       localStorage.adminQuickbarKeepopen = $('.admin-quickbar-keepopen input').is(':checked');
     });
 
     /**
-     * Darkmode
+     * Theme
      */
-    $(doc).on('change', '.admin-quickbar-darkmode input', self.checkDarkmode);
+    $(doc).on('change', '.admin-quickbar-theme select', self.changeTheme);
 
     /**
      * Hide on website
      */
-    $(doc).on('change', '.admin-quickbar-hide-on-website input', function (e) {
+    $(doc).on('change', '.admin-quickbar-hide-on-website input', function(e) {
       localStorage.adminQuickbarHideOnWebsite = $('.admin-quickbar-hide-on-website input').is(':checked');
     });
 
@@ -66,10 +66,12 @@ let AdminQuickbar = function () {
     $(doc).on('click', '.aqb-icon-swift', self.checkSwiftCache);
     $(doc).on('click', '.aqb-icon-external', self.openWindow);
 
+    $(doc).on('click', '.language-switch .language-flag, .language-switch .language-all', self.changeLanguageFilter);
+
     /**
      * Open default contextmenu on icons
      */
-    $(doc).on('contextmenu', '.aqb-icon', function (e) {
+    $(doc).on('contextmenu', '.aqb-icon', function(e) {
       e.stopPropagation();
     });
 
@@ -78,7 +80,7 @@ let AdminQuickbar = function () {
     $(doc).on('click', closeContextMenu);
 
 
-    $(doc).on('change', '.aqm-hide-posttypes', function () {
+    $(doc).on('change', '.aqm-hide-posttypes', function() {
       self.updateHiddenPostTypes();
     });
 
@@ -87,32 +89,33 @@ let AdminQuickbar = function () {
       $('body').addClass('admin-quickbar-is-overlap');
     }
 
-    if (localStorage.adminQuickbarDarkmode === 'true') {
-      $('body').addClass('admin-quickbar-is-darkmode');
-    }
+    self.checkTheme();
   };
 
   /**
    * Inits default config-options
    */
-  initDefaultConfig = function () {
+  initDefaultConfig = function() {
     if (typeof (localStorage.adminQuickbarKeepopen) === 'undefined') {
       localStorage.adminQuickbarKeepopen = 'true';
     }
     if (typeof (localStorage.adminQuickbarToggle) === 'undefined') {
       localStorage.adminQuickbarToggle = 'true';
     }
+    if (typeof (localStorage.adminQuickbarLanguageFilter) === 'undefined') {
+      localStorage.adminQuickbarLanguageFilter = 'all';
+    }
   };
 
   /**
    * Open sidebar and postlists on dom-ready
    */
-  domReady = function () {
+  domReady = function() {
     let postLists = self.getPostListStorage();
     initFavorites();
 
     // open postlists
-    $('.admin-quickbar-postlist').each(function (index, element) {
+    $('.admin-quickbar-postlist').each(function(index, element) {
       if (postLists[$(element).data('post-type')]) {
         $(element).addClass('show-list');
       }
@@ -142,19 +145,51 @@ let AdminQuickbar = function () {
       $('body').addClass('admin-quickbar-is-overlap');
     }
 
-    if (localStorage.adminQuickbarDarkmode === 'true') {
-      $('.admin-quickbar-darkmode input').prop('checked', true);
-      $('body').addClass('admin-quickbar-is-darkmode');
-    }
+    self.checkTheme();
 
     // init hidden post types
     self.initHiddenPostTypes();
+
+    self.setLanguageSwitchActiveClass();
+    self.hideByLanguage();
+  };
+
+  self.checkTheme = function() {
+    switch (localStorage.adminQuickbarTheme) {
+      case 'light':
+        $('.admin-quickbar-theme select').val('light');
+        $('body').removeClass('admin-quickbar-is-darkmode');
+        break;
+      case 'dark':
+        $('.admin-quickbar-theme select').val('dark');
+        $('body').addClass('admin-quickbar-is-darkmode');
+        break;
+      case 'auto':
+      default:
+        $('.admin-quickbar-theme select').val('auto');
+        let isSystemDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches,
+          isSystemLightMode = window.matchMedia("(prefers-color-scheme: light)").matches,
+          isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches,
+          hasNoSupport = !isSystemDarkMode && !isSystemLightMode && !isNotSpecified;
+
+        if (isSystemDarkMode || hasNoSupport || isNotSpecified) {
+          $('body').addClass('admin-quickbar-is-darkmode');
+        } else {
+          $('body').removeClass('admin-quickbar-is-darkmode');
+        }
+        break;
+    }
+
+    // compatibility
+    if (!localStorage.adminQuickbarTheme && localStorage.adminQuickbarDarkmode === 'true') {
+      $('body').addClass('admin-quickbar-is-darkmode');
+    }
   };
 
   /**
    * Read from localstorage, set select-field and hide post-types
    */
-  self.initHiddenPostTypes = function () {
+  self.initHiddenPostTypes = function() {
     if (typeof (localStorage.adminQuickbarHiddenPostTypes) === 'undefined') {
       localStorage.adminQuickbarHiddenPostTypes = '[]';
     }
@@ -166,7 +201,7 @@ let AdminQuickbar = function () {
   /**
    * Update localstorage for hidden post-types and hide the post-types
    */
-  self.updateHiddenPostTypes = function () {
+  self.updateHiddenPostTypes = function() {
     localStorage.adminQuickbarHiddenPostTypes = JSON.stringify($('.aqm-hide-posttypes').val());
     self.hidePostTypes();
   };
@@ -174,7 +209,7 @@ let AdminQuickbar = function () {
   /**
    * Hides post-types
    */
-  self.hidePostTypes = function () {
+  self.hidePostTypes = function() {
     let hiddenTypes = JSON.parse(localStorage.adminQuickbarHiddenPostTypes);
 
     $('.admin-quickbar-postlist').removeClass('hidden');
@@ -188,7 +223,48 @@ let AdminQuickbar = function () {
    *
    * @param e
    */
-  self.changeTab = function (e) {
+  self.changeLanguageFilter = function(e) {
+    let target = $(e.currentTarget),
+      language = target.data('language-code');
+
+    localStorage.adminQuickbarLanguageFilter = language;
+    self.setLanguageSwitchActiveClass();
+    self.hideByLanguage();
+  };
+
+  /**
+   * Hides all post which dont match selected language
+   */
+  self.hideByLanguage = function() {
+    let language = localStorage.adminQuickbarLanguageFilter;
+
+    $('.admin-quickbar-post').removeClass('hidden-by-language');
+
+    if (language == 'all') {
+      return;
+    }
+
+    $('.admin-quickbar-post .language-flag').each(function(index, flagElement) {
+      flagElement = $(flagElement);
+      if (flagElement.data('language-code') !== language) {
+        flagElement.closest('.admin-quickbar-post').addClass('hidden-by-language');
+      }
+    });
+  };
+
+  self.setLanguageSwitchActiveClass = function() {
+    let language = localStorage.adminQuickbarLanguageFilter;
+    $('.admin-quickbar .language-switch .language-all,' +
+      '.admin-quickbar .language-switch .language-flag').removeClass('active');
+
+    $('.admin-quickbar .language-switch [data-language-code="' + language + '"]').addClass('active');
+  };
+
+  /**
+   *
+   * @param e
+   */
+  self.changeTab = function(e) {
     let target = $(e.currentTarget),
       tabSlug = target.data('tab');
 
@@ -202,7 +278,7 @@ let AdminQuickbar = function () {
    *
    * @param e
    */
-  openContextMenu = function (e) {
+  openContextMenu = function(e) {
     e.preventDefault();
 
     let target = $(e.currentTarget),
@@ -222,7 +298,7 @@ let AdminQuickbar = function () {
   /**
    * @param data
    */
-  buildContextMenu = function (data) {
+  buildContextMenu = function(data) {
     let contextMenu = $('.admin-quickbar-contextmenu');
 
     contextMenu.html('');
@@ -249,7 +325,7 @@ let AdminQuickbar = function () {
    *
    * @param data
    */
-  buildContextMenuSwift = function (data) {
+  buildContextMenuSwift = function(data) {
     let parent = $('<div class="item has-sub item-favorite" />'),
       contextMenu = $('.admin-quickbar-contextmenu'),
       item;
@@ -274,7 +350,7 @@ let AdminQuickbar = function () {
    *
    * @param data
    */
-  buildContextMenuFavorite = function (data) {
+  buildContextMenuFavorite = function(data) {
     let parent = $('<div class="item has-sub item-favorite" />'),
       contextMenu = $('.admin-quickbar-contextmenu'),
       postid = contextMenu.data('postid'),
@@ -288,13 +364,13 @@ let AdminQuickbar = function () {
     if (!listItem.hasClass('is-favorite')) {
       item.addClass('aqb-icon-favorite');
       item.prop('title', 'Add to favorites');
-      item.on('click', function (e) {
+      item.on('click', function(e) {
         addToFavorites(postid);
       });
     } else {
       item.addClass('aqb-icon-favorite-alt');
       item.prop('title', 'Remove from favorites');
-      item.on('click', function (e) {
+      item.on('click', function(e) {
         removeFromFavorites(postid);
       });
     }
@@ -306,9 +382,9 @@ let AdminQuickbar = function () {
   /**
    * Checks which posts are favorites and add them to local storage
    */
-  buildFavoriteStorage = function () {
+  buildFavoriteStorage = function() {
     let storage = [];
-    $('.admin-quickbar-post.is-favorite').each(function (index, element) {
+    $('.admin-quickbar-post.is-favorite').each(function(index, element) {
       if (storage.indexOf($(element).data('postid')) === -1) {
         storage.push($(element).data('postid'));
       }
@@ -319,7 +395,7 @@ let AdminQuickbar = function () {
   /**
    * Read local storage and moves all posts in it to favorites
    */
-  initFavorites = function () {
+  initFavorites = function() {
     let storage = [];
     if (typeof (localStorage.adminQuickbarFavorites) !== 'undefined') {
       storage = JSON.parse(localStorage.adminQuickbarFavorites);
@@ -338,7 +414,7 @@ let AdminQuickbar = function () {
    * Removes a post from favorites
    * @param postid
    */
-  removeFromFavorites = function (postid) {
+  removeFromFavorites = function(postid) {
     let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
       listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
 
@@ -351,7 +427,7 @@ let AdminQuickbar = function () {
    * Adds a post to favorites
    * @param postid
    */
-  addToFavorites = function (postid) {
+  addToFavorites = function(postid) {
     let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
       listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
 
@@ -371,7 +447,7 @@ let AdminQuickbar = function () {
    * @param data
    * @returns {*|jQuery.fn.init|jQuery|HTMLElement}
    */
-  buildContextMenuCopy = function (data) {
+  buildContextMenuCopy = function(data) {
     let parent = $('<div class="item has-sub item-copy" />'),
       input,
       item;
@@ -383,7 +459,7 @@ let AdminQuickbar = function () {
       }
 
       item = $('<div class="item subitem" />');
-      item.on('click', function (e) {
+      item.on('click', function(e) {
         e.stopPropagation();
         let input = $(e.currentTarget).find('input');
         input.focus();
@@ -402,12 +478,12 @@ let AdminQuickbar = function () {
     return parent;
   };
 
-  closeContextMenu = function () {
+  closeContextMenu = function() {
     let contextMenu = $('.admin-quickbar-contextmenu');
     contextMenu.removeClass('open');
   };
 
-  addTitleToElement = function (item, index) {
+  addTitleToElement = function(item, index) {
     let title;
 
     switch (index) {
@@ -437,7 +513,7 @@ let AdminQuickbar = function () {
    * Checks if overlapping is active
    * @param e
    */
-  self.checkOverlap = function (e) {
+  self.checkOverlap = function(e) {
     localStorage.adminQuickbarOverlap = $('.admin-quickbar-overlap input').is(':checked');
 
     if (localStorage.adminQuickbarOverlap === 'true') {
@@ -451,14 +527,10 @@ let AdminQuickbar = function () {
    * Checks if overlapping is active
    * @param e
    */
-  self.checkDarkmode = function (e) {
-    localStorage.adminQuickbarDarkmode = $('.admin-quickbar-darkmode input').is(':checked');
+  self.changeTheme = function(e) {
+    localStorage.adminQuickbarTheme = $('.admin-quickbar-theme select').val();
 
-    if (localStorage.adminQuickbarDarkmode === 'true') {
-      $('body').addClass('admin-quickbar-is-darkmode');
-    } else {
-      $('body').removeClass('admin-quickbar-is-darkmode');
-    }
+    self.checkTheme();
   };
 
   /**
@@ -466,7 +538,7 @@ let AdminQuickbar = function () {
    *
    * @param e
    */
-  self.checkThumbs = function (e) {
+  self.checkThumbs = function(e) {
     localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
 
     if (localStorage.adminQuickbarLoadthumbs === 'true') {
@@ -482,7 +554,7 @@ let AdminQuickbar = function () {
    *
    * @param e
    */
-  self.checkSwiftCache = function (e) {
+  self.checkSwiftCache = function(e) {
     e.preventDefault();
     e.stopPropagation();
     let target = $(e.currentTarget);
@@ -497,7 +569,7 @@ let AdminQuickbar = function () {
   /**
    * Open/Close Sidebar
    */
-  self.toggleSidebar = function (e) {
+  self.toggleSidebar = function(e) {
     $('.admin-quickbar').toggleClass('toggle');
     $('body').toggleClass('admin-quickbar-visible');
     localStorage.adminQuickbarToggle = $('.admin-quickbar').hasClass('toggle');
@@ -506,7 +578,7 @@ let AdminQuickbar = function () {
   /**
    * Click on headlines
    */
-  self.togglePostTypes = function (e) {
+  self.togglePostTypes = function(e) {
     let target = $(e.target),
       parent = target.parent();
 
@@ -520,7 +592,7 @@ let AdminQuickbar = function () {
    *
    * @param e
    */
-  self.refreshSwiftCache = function (e) {
+  self.refreshSwiftCache = function(e) {
     e.preventDefault();
     let target = $(e.currentTarget),
       url = target.data('url');
@@ -531,7 +603,7 @@ let AdminQuickbar = function () {
       action: 'swift_performance_single_clear_cache',
       '_wpnonce': target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
       'url': url,
-    }, function (response) {
+    }, function(response) {
       target.removeClass('is-in-cache');
       addPageToSwiftCache(e);
     });
@@ -542,7 +614,7 @@ let AdminQuickbar = function () {
    *
    * @param e
    */
-  addPageToSwiftCache = function (e) {
+  addPageToSwiftCache = function(e) {
     e.preventDefault();
     let target = $(e.currentTarget),
       url = target.data('url');
@@ -553,7 +625,7 @@ let AdminQuickbar = function () {
       action: 'swift_performance_single_prebuild',
       '_wpnonce': target.closest('.admin-quickbar').data('swift-nonce'),
       'url': url,
-    }, function (response) {
+    }, function(response) {
       response = (typeof response === 'string' ? JSON.parse(response) : response);
 
       if (response.status === 'success') {
@@ -566,9 +638,9 @@ let AdminQuickbar = function () {
   /**
    * Set localStorage
    */
-  refreshPostListStorage = function () {
+  refreshPostListStorage = function() {
     let postListStorage = {};
-    $('.admin-quickbar-postlist').each(function (index, element) {
+    $('.admin-quickbar-postlist').each(function(index, element) {
       postListStorage[$(element).data('post-type')] = $(element).hasClass('show-list');
     });
 
@@ -578,7 +650,7 @@ let AdminQuickbar = function () {
   /**
    * Get localStorage
    */
-  self.getPostListStorage = function () {
+  self.getPostListStorage = function() {
     if (!localStorage.postList || typeof (localStorage.postList) != 'string') {
       localStorage.postList = '{}';
     }
@@ -588,16 +660,16 @@ let AdminQuickbar = function () {
   /**
    * Replace img src with data-src and loads images
    */
-  self.loadThumbs = function () {
-    $('.admin-quickbar .wp-post-image').each(function (index, element) {
+  self.loadThumbs = function() {
+    $('.admin-quickbar .wp-post-image').each(function(index, element) {
       $(element).prop('src', $(element).data('src'));
     });
   };
 
 
-  self.openWindow = function () {
+  self.openWindow = function() {
     let url = $(this).next('.dashicons-edit').attr('href') + '&noaqb';
-    window.open(url, '_blank', 'width=700,height=500,left=200,top=100');
+    registerCssWindow(url);
   };
 
   init();
@@ -605,3 +677,17 @@ let AdminQuickbar = function () {
 
 
 window.adminQuickbarInstance = new AdminQuickbar();
+
+
+let globalCssWindow;
+registerCssWindow = function(url) {
+
+  if (!globalCssWindow || globalCssWindow.closed) {
+    globalCssWindow = window.open(url, "rto_wp_adminQuickbar", 'width=700,height=500,left=200,top=100');
+  } else {
+    if (globalCssWindow.location.href !== url) {
+      globalCssWindow.location.assign(url);
+    }
+  }
+  globalCssWindow.focus();
+};

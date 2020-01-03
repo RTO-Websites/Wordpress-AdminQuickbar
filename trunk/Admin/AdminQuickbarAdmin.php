@@ -24,7 +24,7 @@ use Swift_Performance_Lite;
  */
 class AdminQuickbarAdmin {
 
-    const PartialDir = AdminQuickbar_DIR . '/Admin/partials/';
+    const PARTIAL_DIR = AdminQuickbar_DIR . '/Admin/partials/';
     private $filterPostTypes = [];
     private $postTypes = [];
     private $filteredPostTypes = [];
@@ -113,11 +113,11 @@ class AdminQuickbarAdmin {
         $currentPost = filter_input( INPUT_GET, 'post' );
         $permalink = get_permalink( $currentPost );
 
-        $addNewPosts = new Template( self::PartialDir . '/add-new-posts.php', [
+        $addNewPosts = new Template( self::PARTIAL_DIR . '/add-new-posts.php', [
             'filteredPostTypes' => $this->filteredPostTypes,
         ] );
 
-        $template = new Template( self::PartialDir . '/admin-quickbar-admin-display.php', [
+        $template = new Template( self::PARTIAL_DIR . '/admin-quickbar-admin-display.php', [
             'postTypeLoop' => $postTypeLoop,
             'filteredPostTypes' => $this->filteredPostTypes,
             'currentPost' => $currentPost,
@@ -126,10 +126,11 @@ class AdminQuickbarAdmin {
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
             'hasSwift' => $this->hasSwift,
             'inCache' => in_array( $permalink, $this->cacheList ),
+            'languageFlags' => $this->renderAllLanguageFlags(),
         ] );
         $template->render();
 
-        $template = new Template( self::PartialDir . '/jump-icons.php', [
+        $template = new Template( self::PARTIAL_DIR . '/jump-icons.php', [
             'currentPost' => $currentPost,
             'permalink' => $permalink,
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
@@ -141,7 +142,6 @@ class AdminQuickbarAdmin {
 
         return $data;
     }
-
 
     /**
      * Gets rendered post-type loop
@@ -168,7 +168,7 @@ class AdminQuickbarAdmin {
 
             $postsByCategory = $this->getLoopCategories( $postType, $categories );
 
-            $template = new Template( self::PartialDir . '/loop-post-types.php', [
+            $template = new Template( self::PARTIAL_DIR . '/loop-post-types.php', [
                 'postType' => $postType,
                 'postsByCategory' => $postsByCategory,
             ] );
@@ -219,7 +219,9 @@ class AdminQuickbarAdmin {
             $permalink = get_permalink( $post->ID );
             $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
 
-            $template = new Template( self::PartialDir . '/loop-posts.php', [
+            $languageFlag = $this->getLanguageFlag( $post );
+
+            $template = new Template( self::PARTIAL_DIR . '/loop-posts.php', [
                 'post' => $post,
                 'postTypeInfo' => $postTypeInfo,
                 'contextMenuData' => json_encode( $this->getContextMenuData( $postType, $post, $postTypeInfo ) ),
@@ -230,6 +232,54 @@ class AdminQuickbarAdmin {
                 'permalink' => $permalink,
                 'hasSwift' => $this->hasSwift,
                 'activeClass' => $activeClass,
+                'languageFlag' => $languageFlag,
+            ] );
+            $output .= $template->getRendered();
+        }
+
+        return $output;
+    }
+
+    /**
+     * @param $post
+     * @return string
+     */
+    public function getLanguageFlag( $post ) {
+        if ( !defined( 'ICL_LANGUAGE_CODE' ) ) {
+            return '';
+        }
+
+        global $sitepress;
+        $wpmlLanguageInfo = apply_filters( 'wpml_post_language_details', null, $post->ID );
+        $languageCode = $wpmlLanguageInfo['language_code'];
+        $flagUrl = $sitepress->get_flag_url( $languageCode );
+
+        $template = new Template( self::PARTIAL_DIR . '/language-flag.php', [
+            'flagUrl' => $flagUrl,
+            'alt' => $wpmlLanguageInfo['display_name'],
+            'languageCode' => $languageCode,
+        ] );
+
+        return $template->getRendered();
+    }
+
+    /**
+     * Renders all wpml language-flags
+     *
+     * @return string
+     */
+    public function renderAllLanguageFlags() {
+        $output = '';
+
+        if ( !defined( 'ICL_LANGUAGE_CODE' ) || empty( $wpmlLanguages = apply_filters( 'wpml_active_languages', null ) ) ) {
+            return '';
+        }
+
+        foreach ( $wpmlLanguages as $language ) {
+            $template = new Template( self::PARTIAL_DIR . '/language-flag.php', [
+                'flagUrl' => $language['country_flag_url'],
+                'alt' => $language['native_name'],
+                'languageCode' => $language['language_code'],
             ] );
             $output .= $template->getRendered();
         }
@@ -273,12 +323,12 @@ class AdminQuickbarAdmin {
             $path = '/wp-content/' . array_pop( $path );
 
             $thumbInstance = new \Lib\Thumb();
-            $thumb = $thumbInstance->getThumb( array(
+            $thumb = $thumbInstance->getThumb( [
                 'path' => $path,
                 'width' => '150',
                 'height' => '150',
                 'scale' => '0',
-            ) );
+            ] );
 
             if ( !empty( $thumb['url'] ) ) {
                 $url = $thumb['url'];
@@ -290,7 +340,7 @@ class AdminQuickbarAdmin {
             return '';
         }
 
-        $template = new Template( self::PartialDir . '/thumbnail.php', [
+        $template = new Template( self::PARTIAL_DIR . '/thumbnail.php', [
             'url' => $url,
             'class' => $class,
         ] );
@@ -352,6 +402,10 @@ class AdminQuickbarAdmin {
         $countPostType = 0;
         $categories = [];
 
+        if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+            global $sitepress;
+            $sitepress->switch_lang( 'all' );
+        }
         // get posts of current post-type
         $args = [
             'post_type' => $postType->name,
@@ -440,7 +494,6 @@ class AdminQuickbarAdmin {
         ];
     }
 
-
     /**
      * Returns data-attributes based on post-type
      *
@@ -483,7 +536,6 @@ class AdminQuickbarAdmin {
      * @since    1.0.0
      */
     public function enqueueStyles() {
-
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -497,7 +549,6 @@ class AdminQuickbarAdmin {
          */
 
         wp_enqueue_style( $this->pluginName, AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], $this->version, 'all' );
-
     }
 
     /**
@@ -506,7 +557,6 @@ class AdminQuickbarAdmin {
      * @since    1.0.0
      */
     public function enqueueScripts() {
-
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -520,7 +570,6 @@ class AdminQuickbarAdmin {
          */
 
         wp_enqueue_script( $this->pluginName, AdminQuickbar_URL . '/Admin/js/admin-quickbar-admin.js', [ 'jquery' ], $this->version, true );
-
     }
 
 }

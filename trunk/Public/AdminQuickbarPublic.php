@@ -11,7 +11,7 @@ use AdminQuickbar\Lib\Template;
  * @package    AdminQuickbar
  */
 class AdminQuickbarPublic {
-    const PartialDir = AdminQuickbar_DIR . '/Admin/partials/';
+    const PARTIAL_DIR = AdminQuickbar_DIR . '/Admin/partials/';
 
     /**
      * The ID of this plugin.
@@ -61,7 +61,7 @@ class AdminQuickbarPublic {
             'order' => 'ASC',
         ] );
 
-        $template = new Template( self::PartialDir . '/jump-icons.php', [
+        $template = new Template( self::PARTIAL_DIR . '/jump-icons.php', [
             'currentPost' => $currentPost,
             'permalink' => $permalink,
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
@@ -71,7 +71,7 @@ class AdminQuickbarPublic {
         ] );
         $template->render();
 
-        $template = new Template( self::PartialDir . '/jump-icons-inline-script.php' );
+        $template = new Template( self::PARTIAL_DIR . '/jump-icons-inline-script.php' );
         $template->render();
     }
 

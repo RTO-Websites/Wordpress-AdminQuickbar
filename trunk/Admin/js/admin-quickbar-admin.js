@@ -168,8 +168,14 @@ let AdminQuickbar = function () {
       default:
         $('.admin-quickbar-theme select').val('auto');
         const isSystemDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        if (isSystemDarkMode) {
+        const isSystemLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+        const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+        const hasNoSupport = !isSystemDarkMode && !isSystemLightMode && !isNotSpecified;
+
+        if (isSystemDarkMode || hasNoSupport || isNotSpecified) {
           $('body').addClass('admin-quickbar-is-darkmode');
+        } else {
+          $('body').removeClass('admin-quickbar-is-darkmode');
         }
         break;
     }

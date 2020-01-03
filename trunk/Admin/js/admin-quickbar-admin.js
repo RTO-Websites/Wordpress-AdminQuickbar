@@ -44,7 +44,7 @@ let AdminQuickbar = function () {
     /**
      * Theme
      */
-    $(doc).on('change', '.admin-quickbar-theme select', self.checkTheme);
+    $(doc).on('change', '.admin-quickbar-theme select', self.changeTheme);
 
     /**
      * Hide on website
@@ -89,7 +89,7 @@ let AdminQuickbar = function () {
       $('body').addClass('admin-quickbar-is-overlap');
     }
 
-    self.checkDarkmode();
+    self.checkTheme();
   };
 
   /**
@@ -145,7 +145,7 @@ let AdminQuickbar = function () {
       $('body').addClass('admin-quickbar-is-overlap');
     }
 
-    self.checkDarkmode();
+    self.checkTheme();
 
     // init hidden post types
     self.initHiddenPostTypes();
@@ -154,7 +154,7 @@ let AdminQuickbar = function () {
     self.hideByLanguage();
   };
 
-  self.checkDarkmode = function() {
+  self.checkTheme = function() {
     switch (localStorage.adminQuickbarTheme) {
       case 'light':
         $('.admin-quickbar-theme select').val('light');
@@ -527,10 +527,10 @@ let AdminQuickbar = function () {
    * Checks if overlapping is active
    * @param e
    */
-  self.checkTheme = function (e) {
+  self.changeTheme = function (e) {
     localStorage.adminQuickbarTheme = $('.admin-quickbar-theme select').val();
 
-    self.checkDarkmode();
+    self.checkTheme();
   };
 
   /**

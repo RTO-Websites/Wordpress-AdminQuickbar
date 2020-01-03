@@ -24,7 +24,7 @@ use Swift_Performance_Lite;
  */
 class AdminQuickbarAdmin {
 
-    const PartialDir = AdminQuickbar_DIR . '/Admin/partials/';
+    const PARTIAL_DIR = AdminQuickbar_DIR . '/Admin/partials/';
     private $filterPostTypes = [];
     private $postTypes = [];
     private $filteredPostTypes = [];
@@ -113,11 +113,11 @@ class AdminQuickbarAdmin {
         $currentPost = filter_input( INPUT_GET, 'post' );
         $permalink = get_permalink( $currentPost );
 
-        $addNewPosts = new Template( self::PartialDir . '/add-new-posts.php', [
+        $addNewPosts = new Template( self::PARTIAL_DIR . '/add-new-posts.php', [
             'filteredPostTypes' => $this->filteredPostTypes,
         ] );
 
-        $template = new Template( self::PartialDir . '/admin-quickbar-admin-display.php', [
+        $template = new Template( self::PARTIAL_DIR . '/admin-quickbar-admin-display.php', [
             'postTypeLoop' => $postTypeLoop,
             'filteredPostTypes' => $this->filteredPostTypes,
             'currentPost' => $currentPost,
@@ -130,7 +130,7 @@ class AdminQuickbarAdmin {
         ] );
         $template->render();
 
-        $template = new Template( self::PartialDir . '/jump-icons.php', [
+        $template = new Template( self::PARTIAL_DIR . '/jump-icons.php', [
             'currentPost' => $currentPost,
             'permalink' => $permalink,
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
@@ -168,7 +168,7 @@ class AdminQuickbarAdmin {
 
             $postsByCategory = $this->getLoopCategories( $postType, $categories );
 
-            $template = new Template( self::PartialDir . '/loop-post-types.php', [
+            $template = new Template( self::PARTIAL_DIR . '/loop-post-types.php', [
                 'postType' => $postType,
                 'postsByCategory' => $postsByCategory,
             ] );
@@ -221,7 +221,7 @@ class AdminQuickbarAdmin {
 
             $languageFlag = $this->getLanguageFlag( $post );
 
-            $template = new Template( self::PartialDir . '/loop-posts.php', [
+            $template = new Template( self::PARTIAL_DIR . '/loop-posts.php', [
                 'post' => $post,
                 'postTypeInfo' => $postTypeInfo,
                 'contextMenuData' => json_encode( $this->getContextMenuData( $postType, $post, $postTypeInfo ) ),
@@ -254,7 +254,7 @@ class AdminQuickbarAdmin {
         $languageCode = $wpmlLanguageInfo['language_code'];
         $flagUrl = $sitepress->get_flag_url( $languageCode );
 
-        $template = new Template( self::PartialDir . '/language-flag.php', [
+        $template = new Template( self::PARTIAL_DIR . '/language-flag.php', [
             'flagUrl' => $flagUrl,
             'alt' => $wpmlLanguageInfo['display_name'],
             'languageCode' => $languageCode,
@@ -276,7 +276,7 @@ class AdminQuickbarAdmin {
         }
 
         foreach ( $wpmlLanguages as $language ) {
-            $template = new Template( self::PartialDir . '/language-flag.php', [
+            $template = new Template( self::PARTIAL_DIR . '/language-flag.php', [
                 'flagUrl' => $language['country_flag_url'],
                 'alt' => $language['native_name'],
                 'languageCode' => $language['language_code'],
@@ -340,7 +340,7 @@ class AdminQuickbarAdmin {
             return '';
         }
 
-        $template = new Template( self::PartialDir . '/thumbnail.php', [
+        $template = new Template( self::PARTIAL_DIR . '/thumbnail.php', [
             'url' => $url,
             'class' => $class,
         ] );

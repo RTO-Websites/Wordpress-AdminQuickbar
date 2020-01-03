@@ -42,9 +42,9 @@ let AdminQuickbar = function () {
     });
 
     /**
-     * Darkmode
+     * Theme
      */
-    $(doc).on('change', '.admin-quickbar-darkmode input', self.checkDarkmode);
+    $(doc).on('change', '.admin-quickbar-theme select', self.checkTheme);
 
     /**
      * Hide on website
@@ -89,9 +89,7 @@ let AdminQuickbar = function () {
       $('body').addClass('admin-quickbar-is-overlap');
     }
 
-    if (localStorage.adminQuickbarDarkmode === 'true') {
-      $('body').addClass('admin-quickbar-is-darkmode');
-    }
+    self.checkDarkmode();
   };
 
   /**
@@ -147,16 +145,39 @@ let AdminQuickbar = function () {
       $('body').addClass('admin-quickbar-is-overlap');
     }
 
-    if (localStorage.adminQuickbarDarkmode === 'true') {
-      $('.admin-quickbar-darkmode input').prop('checked', true);
-      $('body').addClass('admin-quickbar-is-darkmode');
-    }
+    self.checkDarkmode();
 
     // init hidden post types
     self.initHiddenPostTypes();
 
     self.setLanguageSwitchActiveClass();
     self.hideByLanguage();
+  };
+
+  self.checkDarkmode = function() {
+    switch (localStorage.adminQuickbarTheme) {
+      case 'light':
+        $('.admin-quickbar-theme select').val('light');
+        $('body').rempveClass('admin-quickbar-is-darkmode');
+        break;
+      case 'dark':
+        $('.admin-quickbar-theme select').val('dark');
+        $('body').addClass('admin-quickbar-is-darkmode');
+        break;
+      case 'auto':
+      default:
+        $('.admin-quickbar-theme select').val('auto');
+        const isSystemDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (isSystemDarkMode) {
+          $('body').addClass('admin-quickbar-is-darkmode');
+        }
+        break;
+    }
+
+    // compatibility
+    if (!localStorage.adminQuickbarTheme && localStorage.adminQuickbarDarkmode === 'true') {
+      $('body').addClass('admin-quickbar-is-darkmode');
+    }
   };
 
   /**
@@ -500,14 +521,10 @@ let AdminQuickbar = function () {
    * Checks if overlapping is active
    * @param e
    */
-  self.checkDarkmode = function (e) {
-    localStorage.adminQuickbarDarkmode = $('.admin-quickbar-darkmode input').is(':checked');
+  self.checkTheme = function (e) {
+    localStorage.adminQuickbarTheme = $('.admin-quickbar-theme select').val();
 
-    if (localStorage.adminQuickbarDarkmode === 'true') {
-      $('body').addClass('admin-quickbar-is-darkmode');
-    } else {
-      $('body').removeClass('admin-quickbar-is-darkmode');
-    }
+    self.checkDarkmode();
   };
 
   /**

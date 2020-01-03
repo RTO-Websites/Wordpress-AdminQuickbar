@@ -44,9 +44,13 @@
                 <input type="checkbox" name="admin-quickbar-overlap"/>
                 <?php _e( 'Overlap', 'admin-quickbar' ); ?>
             </label>
-            <label class="admin-quickbar-darkmode">
-                <input type="checkbox" name="admin-quickbar-darkmode"/>
-                <?php _e( 'Darkmode', 'admin-quickbar' ); ?>
+            <label class="admin-quickbar-theme">
+                <?php _e( 'Theme', 'admin-quickbar' ); ?>
+                <select name="admin-quickbar-theme">
+                    <option value="auto"><?php _e( 'Auto detect', 'admin-quickbar' ); ?></option>
+                    <option value="dark"><?php _e( 'Dark', 'admin-quickbar' ); ?></option>
+                    <option value="light"><?php _e( 'Light', 'admin-quickbar' ); ?></option>
+                </select>
             </label>
             <label class="admin-quickbar-hide-on-website">
                 <input type="checkbox" name="admin-quickbar-hide-on-website"/>

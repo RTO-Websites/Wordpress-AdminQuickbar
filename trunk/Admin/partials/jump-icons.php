@@ -1,3 +1,12 @@
+<?php
+/**
+ * @var bool $hasSwift
+ * @var string $swiftNonce
+ * @var string $permalink
+ * @var bool $inCache
+ * @var int $currentPost
+ */
+?>
 <div class="admin-quickbar-jumpicons" data-swift-nonce="<?php echo $swiftNonce; ?>">
     <?php if ( $hasSwift ): ?>
         <a title="Refresh swift cache"

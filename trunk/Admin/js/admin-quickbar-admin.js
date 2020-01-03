@@ -158,7 +158,7 @@ let AdminQuickbar = function () {
     switch (localStorage.adminQuickbarTheme) {
       case 'light':
         $('.admin-quickbar-theme select').val('light');
-        $('body').rempveClass('admin-quickbar-is-darkmode');
+        $('body').removeClass('admin-quickbar-is-darkmode');
         break;
       case 'dark':
         $('.admin-quickbar-theme select').val('dark');

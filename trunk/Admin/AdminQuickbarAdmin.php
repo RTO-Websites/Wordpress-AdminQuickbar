@@ -287,7 +287,6 @@ class AdminQuickbarAdmin {
         return $output;
     }
 
-
     /**
      * Returns post-thumb html
      *
@@ -495,7 +494,6 @@ class AdminQuickbarAdmin {
         ];
     }
 
-
     /**
      * Returns data-attributes based on post-type
      *
@@ -538,7 +536,6 @@ class AdminQuickbarAdmin {
      * @since    1.0.0
      */
     public function enqueueStyles() {
-
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -552,7 +549,6 @@ class AdminQuickbarAdmin {
          */
 
         wp_enqueue_style( $this->pluginName, AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], $this->version, 'all' );
-
     }
 
     /**
@@ -561,7 +557,6 @@ class AdminQuickbarAdmin {
      * @since    1.0.0
      */
     public function enqueueScripts() {
-
         /**
          * This function is provided for demonstration purposes only.
          *
@@ -575,7 +570,6 @@ class AdminQuickbarAdmin {
          */
 
         wp_enqueue_script( $this->pluginName, AdminQuickbar_URL . '/Admin/js/admin-quickbar-admin.js', [ 'jquery' ], $this->version, true );
-
     }
 
 }

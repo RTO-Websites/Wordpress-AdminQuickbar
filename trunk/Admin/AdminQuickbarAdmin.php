@@ -35,6 +35,8 @@ class AdminQuickbarAdmin {
 
     private $cssPosts = [];
 
+    private $hasWpml = false;
+
     /**
      * The ID of this plugin.
      *
@@ -65,7 +67,20 @@ class AdminQuickbarAdmin {
         $this->pluginName = $pluginName;
         $this->version = $version;
 
+        $this->hasWpml = $this->checkForWpml();
+
         $this->categoryList = get_categories();
+    }
+
+    /**
+     * Checks if wmpl plugin is active
+     */
+    private function checkForWpml() {
+        if ( defined( 'ICL_LANGUAGE_CODE' )
+            && !empty( $sitepress ) && method_exists( $sitepress, 'switch_lang' )
+        ) {
+            $this->hasWpml = true;
+        }
     }
 
     /**
@@ -245,7 +260,7 @@ class AdminQuickbarAdmin {
      * @return string
      */
     public function getLanguageFlag( $post ) {
-        if ( !defined( 'ICL_LANGUAGE_CODE' ) ) {
+        if ( !$this->hasWpml ) {
             return '';
         }
 
@@ -271,7 +286,7 @@ class AdminQuickbarAdmin {
     public function renderAllLanguageFlags() {
         $output = '';
 
-        if ( !defined( 'ICL_LANGUAGE_CODE' ) || empty( $wpmlLanguages = apply_filters( 'wpml_active_languages', null ) ) ) {
+        if ( !$this->hasWpml || empty( $wpmlLanguages = apply_filters( 'wpml_active_languages', null ) ) ) {
             return '';
         }
 
@@ -402,7 +417,7 @@ class AdminQuickbarAdmin {
         $countPostType = 0;
         $categories = [];
 
-        if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+        if ( $this->hasWpml ) {
             global $sitepress;
             $sitepress->switch_lang( 'all' );
         }

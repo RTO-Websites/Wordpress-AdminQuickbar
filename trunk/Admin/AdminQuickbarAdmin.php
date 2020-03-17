@@ -67,20 +67,24 @@ class AdminQuickbarAdmin {
         $this->pluginName = $pluginName;
         $this->version = $version;
 
-        $this->hasWpml = $this->checkForWpml();
-
         $this->categoryList = get_categories();
     }
 
     /**
      * Checks if wmpl plugin is active
+     *
+     * @return bool
      */
     private function checkForWpml() {
-        if ( defined( 'ICL_LANGUAGE_CODE' )
-            && !empty( $sitepress ) && method_exists( $sitepress, 'switch_lang' )
+        $currentLanguage = apply_filters( 'wpml_current_language', null );
+        $defaultLanguage = apply_filters( 'wpml_default_language', null );
+
+        if ( !empty( $currentLanguage ) && !empty( $defaultLanguage )
         ) {
             $this->hasWpml = true;
         }
+
+        return $this->hasWpml;
     }
 
     /**
@@ -122,6 +126,7 @@ class AdminQuickbarAdmin {
      * @throws \ImagickException
      */
     public function renderSidebar( $data ) {
+        $this->checkForWpml();
         $this->initCacheList();
         $this->setPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
@@ -268,6 +273,9 @@ class AdminQuickbarAdmin {
         $wpmlLanguageInfo = apply_filters( 'wpml_post_language_details', null, $post->ID );
         $languageCode = $wpmlLanguageInfo['language_code'];
         $flagUrl = $sitepress->get_flag_url( $languageCode );
+        $currentLanguage = apply_filters( 'wpml_current_language', null );
+        $defaultLanguage = apply_filters( 'wpml_default_language', null );
+        #do_action( 'wpml_switch_language', $defaultLanguage );
 
         $template = new Template( self::PARTIAL_DIR . '/language-flag.php', [
             'flagUrl' => $flagUrl,
@@ -418,8 +426,7 @@ class AdminQuickbarAdmin {
         $categories = [];
 
         if ( $this->hasWpml ) {
-            global $sitepress;
-            $sitepress->switch_lang( 'all' );
+            do_action( 'wpml_switch_language', 'all' );
         }
         // get posts of current post-type
         $args = [

@@ -59,6 +59,11 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     right: 320px;
   }
 
+  /* gutenberg wp >=5.4 */
+  &.auto-fold .block-editor-editor-skeleton {
+    right: 325px !important;
+  }
+
   #elementor-try-safe-mode {
     right: 325px;
   }

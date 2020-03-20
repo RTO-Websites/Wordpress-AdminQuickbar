@@ -60,7 +60,11 @@ let AdminQuickbar = function() {
      */
     $(doc).on('change', '.admin-quickbar-overlap input', self.checkOverlap);
 
+    /**
+     * Show/Hide trashed posts
+     */
     $(doc).on('change', '.admin-quickbar-show-trash-option input', self.checkTrash);
+
     /**
      * Load thumbs
      */
@@ -71,8 +75,6 @@ let AdminQuickbar = function() {
 
     $(doc).on('click', '.language-switch .language-flag, .language-switch .language-all', self.changeLanguageFilter);
 
-
-    $(doc).on('keypress', self.keyPress);
     /**
      * Open default contextmenu on icons
      */
@@ -639,14 +641,6 @@ let AdminQuickbar = function() {
     $('.admin-quickbar').toggleClass('toggle');
     $('body').toggleClass('admin-quickbar-visible');
     localStorage.adminQuickbarToggle = $('.admin-quickbar').hasClass('toggle');
-  };
-
-  /**
-   *
-   * @param e
-   */
-  self.keyPress = function(e) {
-
   };
 
   /**

@@ -297,9 +297,6 @@ class AdminQuickbarAdmin {
         $wpmlLanguageInfo = apply_filters( 'wpml_post_language_details', null, $post->ID );
         $languageCode = $wpmlLanguageInfo['language_code'];
         $flagUrl = $sitepress->get_flag_url( $languageCode );
-        $currentLanguage = apply_filters( 'wpml_current_language', null );
-        $defaultLanguage = apply_filters( 'wpml_default_language', null );
-        #do_action( 'wpml_switch_language', $defaultLanguage );
 
         $template = new Template( self::PARTIAL_DIR . '/language-flag.php', [
             'flagUrl' => $flagUrl,

@@ -205,6 +205,7 @@ class AdminQuickbarAdmin {
             $template = new Template( self::PARTIAL_DIR . '/loop-post-types.php', [
                 'postType' => $postType,
                 'postsByCategory' => $postsByCategory,
+                'createNewUrl' => $createNewUrl,
             ] );
             $output .= $template->getRendered();
         }

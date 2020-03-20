@@ -67,20 +67,24 @@ class AdminQuickbarAdmin {
         $this->pluginName = $pluginName;
         $this->version = $version;
 
-        $this->hasWpml = $this->checkForWpml();
-
         $this->categoryList = get_categories();
     }
 
     /**
      * Checks if wmpl plugin is active
+     *
+     * @return bool
      */
     private function checkForWpml() {
-        if ( defined( 'ICL_LANGUAGE_CODE' )
-            && !empty( $sitepress ) && method_exists( $sitepress, 'switch_lang' )
+        $currentLanguage = apply_filters( 'wpml_current_language', null );
+        $defaultLanguage = apply_filters( 'wpml_default_language', null );
+
+        if ( !empty( $currentLanguage ) && !empty( $defaultLanguage )
         ) {
             $this->hasWpml = true;
         }
+
+        return $this->hasWpml;
     }
 
     /**
@@ -122,11 +126,17 @@ class AdminQuickbarAdmin {
      * @throws \ImagickException
      */
     public function renderSidebar( $data ) {
+        $this->checkForWpml();
         $this->initCacheList();
         $this->setPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
         $currentPost = filter_input( INPUT_GET, 'post' );
-        $permalink = get_permalink( $currentPost );
+
+        if ( empty( $currentPost ) ) {
+            $permalink = get_bloginfo( 'wpurl' );
+        } else {
+            $permalink = get_permalink( $currentPost );
+        }
 
         $addNewPosts = new Template( self::PARTIAL_DIR . '/add-new-posts.php', [
             'filteredPostTypes' => $this->filteredPostTypes,
@@ -149,7 +159,7 @@ class AdminQuickbarAdmin {
             'currentPost' => $currentPost,
             'permalink' => $permalink,
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
-            'hasSwift' => $this->hasSwift,
+            'hasSwift' => $this->hasSwift && !empty( $currentPost ),
             'inCache' => in_array( $permalink, $this->cacheList ),
             'cssPosts' => array_reverse( $this->cssPosts ),
         ] );
@@ -173,6 +183,15 @@ class AdminQuickbarAdmin {
 
             $posts = $this->getPostsByPostType( $postType );
 
+            switch ( $postType->name ) {
+                case 'elementor_library':
+                    $createNewUrl = admin_url( 'edit.php' ) . '?post_type=elementor_library';
+                    break;
+                default:
+                    $createNewUrl = admin_url( 'post-new.php' ) . '?post_type=' . $postType->name;
+                    break;
+            }
+
             $countPostType = $posts['count'];
             $categories = $posts['categories'];
 
@@ -186,6 +205,7 @@ class AdminQuickbarAdmin {
             $template = new Template( self::PARTIAL_DIR . '/loop-post-types.php', [
                 'postType' => $postType,
                 'postsByCategory' => $postsByCategory,
+                'createNewUrl' => $createNewUrl,
             ] );
             $output .= $template->getRendered();
         }
@@ -208,7 +228,7 @@ class AdminQuickbarAdmin {
             if ( empty( $posts ) ) {
                 continue;
             }
-            if ( $postType->name === 'elebee-global-css' ) {
+            if ( $postType->name === 'custom-css' ) {
                 $this->cssPosts = $posts;
             }
 
@@ -233,7 +253,13 @@ class AdminQuickbarAdmin {
             $postTypeInfo = $this->getPostTypeInfo( $postType, $post );
             $permalink = get_permalink( $post->ID );
             $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
+            $trashUrl = admin_url() . wp_nonce_url( "post.php?action=trash&amp;post=$post->ID", 'trash-post_' . $post->ID );
+            $unTrasUrl = admin_url() . wp_nonce_url( "post.php?action=untrash&amp;post=$post->ID", 'untrash-post_' . $post->ID );
 
+            $postClasses = ' post-status-' . $post->post_status;
+            if ( !empty( $post->post_password ) ) {
+                $postClasses .= ' has-password';
+            }
             $languageFlag = $this->getLanguageFlag( $post );
 
             $template = new Template( self::PARTIAL_DIR . '/loop-posts.php', [
@@ -248,6 +274,9 @@ class AdminQuickbarAdmin {
                 'hasSwift' => $this->hasSwift,
                 'activeClass' => $activeClass,
                 'languageFlag' => $languageFlag,
+                'postClasses' => $postClasses,
+                'trashUrl' => $trashUrl,
+                'unTrashUrl' => $unTrasUrl,
             ] );
             $output .= $template->getRendered();
         }
@@ -418,14 +447,14 @@ class AdminQuickbarAdmin {
         $categories = [];
 
         if ( $this->hasWpml ) {
-            global $sitepress;
-            $sitepress->switch_lang( 'all' );
+            do_action( 'wpml_switch_language', 'all' );
         }
         // get posts of current post-type
         $args = [
             'post_type' => $postType->name,
             'posts_per_page' => -1,
             'suppress_filters' => false,
+            'post_status' => get_post_stati(),
             'orderby' => $postType->hierarchical ? [ 'parent' => 'ASC', 'menu_order' => 'ASC' ] : 'menu_order',
             'order' => 'ASC',
         ];
@@ -533,6 +562,12 @@ class AdminQuickbarAdmin {
             $data['swift'] = [
                 'inCache' => in_array( $permalink, $this->cacheList ),
                 'permalink' => $permalink,
+            ];
+        }
+
+        if ($postType->name !== 'attachment') {
+            $data['trash'] = [
+                'id' => $post->ID,
             ];
         }
 

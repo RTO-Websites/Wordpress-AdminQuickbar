@@ -33,7 +33,8 @@
 
 body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   /** elementor **/
-  /** gutenberg **/ }
+  /** gutenberg **/
+  /* gutenberg wp >=5.4 */ }
   body:not(.admin-quickbar-is-overlap).admin-quickbar-visible #wpcontent {
     margin-right: 330px; }
   body:not(.admin-quickbar-is-overlap).admin-quickbar-visible.elementor-navigator-docked #elementor-navigator {
@@ -44,6 +45,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   body:not(.admin-quickbar-is-overlap).admin-quickbar-visible .edit-post-header,
   body:not(.admin-quickbar-is-overlap).admin-quickbar-visible .edit-post-layout__content {
     right: 320px; }
+  body:not(.admin-quickbar-is-overlap).admin-quickbar-visible.auto-fold .block-editor-editor-skeleton {
+    right: 325px !important; }
   body:not(.admin-quickbar-is-overlap).admin-quickbar-visible #elementor-try-safe-mode {
     right: 325px; }
   body:not(.admin-quickbar-is-overlap).admin-quickbar-visible #query-monitor-main {
@@ -104,6 +107,27 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     color: #2f87b1; }
   .admin-quickbar-post.is-active .label {
     font-weight: 600; }
+  .admin-quickbar-post.post-status-publish.has-password .label::after, .admin-quickbar-post.post-status-draft .label::after, .admin-quickbar-post.post-status-trash .label::after, .admin-quickbar-post.post-status-private .label::after {
+    content: 'Private';
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 7px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-left: 10px;
+    margin-top: -2px; }
+  .admin-quickbar-post.post-status-draft .label::after {
+    content: 'Draft'; }
+  .admin-quickbar-post.post-status-trash .label::after {
+    content: 'Trash'; }
+  .admin-quickbar-post.post-status-publish.has-password .label::after {
+    content: 'Password'; }
+  .admin-quickbar-post.post-status-trash {
+    display: none; }
+
+.admin-quickbar-show-trash .admin-quickbar-post.post-status-trash {
+  display: block; }
 
 .admin-quickbar-post::after {
   content: '';
@@ -319,6 +343,11 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .aqb-icon-favorite-alt::before {
   font-size: 22px !important;
   content: "\f155"; }
+
+.aqb-icon-trash {
+  cursor: pointer; }
+  .aqb-icon-trash::before {
+    content: "\f182"; }
 
 .aqb-icon-id::before {
   font-size: 24px !important;

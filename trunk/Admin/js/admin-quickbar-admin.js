@@ -11,12 +11,14 @@ let AdminQuickbar = function() {
     buildContextMenuCopy,
     buildContextMenuSwift,
     buildContextMenuFavorite,
+    buildContextMenuTrash,
     buildFavoriteStorage,
     initFavorites,
     removeFromFavorites,
     addToFavorites,
     addPageToSwiftCache,
     initDefaultConfig,
+    trashPost,
     addTitleToElement;
 
   if (typeof ($) === 'undefined') {
@@ -57,6 +59,11 @@ let AdminQuickbar = function() {
      * Overlapping
      */
     $(doc).on('change', '.admin-quickbar-overlap input', self.checkOverlap);
+
+    /**
+     * Show/Hide trashed posts
+     */
+    $(doc).on('change', '.admin-quickbar-show-trash-option input', self.checkTrash);
 
     /**
      * Load thumbs
@@ -143,6 +150,11 @@ let AdminQuickbar = function() {
     if (localStorage.adminQuickbarOverlap === 'true') {
       $('.admin-quickbar-overlap input').prop('checked', true);
       $('body').addClass('admin-quickbar-is-overlap');
+    }
+
+    if (localStorage.adminQuickbarShowTrash === 'true') {
+      $('.admin-quickbar-show-trash input').prop('checked', true);
+      $('body').addClass('admin-quickbar-show-trash');
     }
 
     self.checkTheme();
@@ -316,6 +328,10 @@ let AdminQuickbar = function() {
         case 'swift':
           contextMenu.append(buildContextMenuSwift(data[index]));
           break;
+
+        case 'trash':
+          contextMenu.append(buildContextMenuTrash(data[index]));
+          break;
       }
     }
   };
@@ -340,6 +356,30 @@ let AdminQuickbar = function() {
 
     item.prop('title', 'Refresh swift cache');
     item.data('url', data.permalink);
+    parent.append(item);
+
+    return parent;
+  };
+
+  /**
+   * Build menu-item to delete item
+   *
+   * @param data
+   */
+  buildContextMenuTrash = function(data) {
+    let parent = $('<div class="item has-sub item-trash" />'),
+      contextMenu = $('.admin-quickbar-contextmenu'),
+      postid = contextMenu.data('postid'),
+      item;
+
+    parent.append('<span class="label">(Un)Trash</span>');
+
+    item = $('<div class="item subitem" />');
+    item.addClass('aqb-icon aqb-icon-trash');
+    item.prop('title', '(Un)Trash');
+    item.on('click', function(e) {
+      trashPost(e, postid);
+    });
     parent.append(item);
 
     return parent;
@@ -441,6 +481,20 @@ let AdminQuickbar = function() {
     }
   };
 
+  trashPost = function(e, postid) {
+    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      trashUrl = $listItem.data('trash-url'),
+      unTrashUrl = $listItem.data('untrash-url');
+
+    if ($listItem.hasClass('post-status-trash')) {
+      $.ajax(unTrashUrl);
+      $listItem.addClass('post-status-publish').removeClass('post-status-trash');
+    } else {
+      $.ajax(trashUrl);
+      $listItem.addClass('post-status-trash').removeClass('post-status-publish');
+    }
+  };
+
   /**
    * Build menu-item with icons to copy id, permalink, shortcode, etc
    *
@@ -520,6 +574,20 @@ let AdminQuickbar = function() {
       $('body').addClass('admin-quickbar-is-overlap');
     } else {
       $('body').removeClass('admin-quickbar-is-overlap');
+    }
+  };
+
+  /**
+   * Checks if show trashed is active
+   * @param e
+   */
+  self.checkTrash = function(e) {
+    localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash-option input').is(':checked');
+
+    if (localStorage.adminQuickbarShowTrash === 'true') {
+      $('body').addClass('admin-quickbar-show-trash');
+    } else {
+      $('body').removeClass('admin-quickbar-show-trash');
     }
   };
 

@@ -44,6 +44,10 @@
                 <input type="checkbox" name="admin-quickbar-overlap"/>
                 <?php _e( 'Overlap', 'admin-quickbar' ); ?>
             </label>
+            <label class="admin-quickbar-show-trash-option">
+                <input type="checkbox" name="admin-quickbar-show-trash"/>
+                <?php _e( 'Show trashed posts', 'admin-quickbar' ); ?>
+            </label>
             <label class="admin-quickbar-theme">
                 <?php _e( 'Theme', 'admin-quickbar' ); ?>
                 <select name="admin-quickbar-theme">

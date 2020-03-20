@@ -62,13 +62,21 @@
   }
 }
 
-.aqb-icon-id {
+.aqb-icon-trash {
+  cursor: pointer;
 
+  &::before {
+    content: "\f182";
+  }
+}
+
+.aqb-icon-id {
   &::before {
     font-size: 24px !important;
     content: "\f336";
   }
 }
+
 
 .admin-quickbar-jumpicons {
   position: fixed;

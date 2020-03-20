@@ -112,7 +112,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     position: relative;
     display: inline-block;
     vertical-align: top;
-    font-size: 7px !important;
+    font-size: 7px;
     letter-spacing: 1px;
     text-transform: uppercase;
     margin-left: 10px;
@@ -343,6 +343,11 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .aqb-icon-favorite-alt::before {
   font-size: 22px !important;
   content: "\f155"; }
+
+.aqb-icon-trash {
+  cursor: pointer; }
+  .aqb-icon-trash::before {
+    content: "\f182"; }
 
 .aqb-icon-id::before {
   font-size: 24px !important;

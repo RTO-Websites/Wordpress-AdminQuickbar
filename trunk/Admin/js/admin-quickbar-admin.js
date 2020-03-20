@@ -11,12 +11,14 @@ let AdminQuickbar = function() {
     buildContextMenuCopy,
     buildContextMenuSwift,
     buildContextMenuFavorite,
+    buildContextMenuDelete,
     buildFavoriteStorage,
     initFavorites,
     removeFromFavorites,
     addToFavorites,
     addPageToSwiftCache,
     initDefaultConfig,
+    deletePost,
     addTitleToElement;
 
   if (typeof ($) === 'undefined') {
@@ -71,7 +73,6 @@ let AdminQuickbar = function() {
 
 
     $(doc).on('keypress', self.keyPress);
-
     /**
      * Open default contextmenu on icons
      */
@@ -325,6 +326,10 @@ let AdminQuickbar = function() {
         case 'swift':
           contextMenu.append(buildContextMenuSwift(data[index]));
           break;
+
+        case 'delete':
+          contextMenu.append(buildContextMenuDelete(data[index]));
+          break;
       }
     }
   };
@@ -349,6 +354,31 @@ let AdminQuickbar = function() {
 
     item.prop('title', 'Refresh swift cache');
     item.data('url', data.permalink);
+    parent.append(item);
+
+    return parent;
+  };
+
+  /**
+   * Build menu-item to delete item
+   *
+   * @param data
+   */
+  buildContextMenuDelete = function(data) {
+    let parent = $('<div class="item has-sub item-trash" />'),
+      contextMenu = $('.admin-quickbar-contextmenu'),
+      postid = contextMenu.data('postid'),
+      listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      item;
+
+    parent.append('<span class="label">Delete</span>');
+
+    item = $('<div class="item subitem" />');
+    item.addClass('aqb-icon aqb-icon-trash');
+    item.prop('title', 'Delete');
+    item.on('click', function(e) {
+      deletePost(e, postid);
+    });
     parent.append(item);
 
     return parent;
@@ -447,6 +477,21 @@ let AdminQuickbar = function() {
       listItemFav = listItem.first().clone();
       listItemFav.css({marginLeft: ''});
       $('.aqb-favorites .admin-quickbar-postlist-inner').append(listItemFav);
+    }
+  };
+
+  deletePost = function(e, postid) {
+    let $target = $(e.target),
+      $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      deleteUrl = $listItem.data('delete-url'),
+      unDeleteUrl = $listItem.data('undelete-url');
+
+    if ($listItem.hasClass('post-status-trash')) {
+      $.ajax(unDeleteUrl);
+      $listItem.addClass('post-status-publish').removeClass('post-status-trash');
+    } else {
+      $.ajax(deleteUrl);
+      $listItem.addClass('post-status-trash').removeClass('post-status-publish');
     }
   };
 

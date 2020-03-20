@@ -567,9 +567,11 @@ class AdminQuickbarAdmin {
             ];
         }
 
-        $data['trash'] = [
-            'id' => $post->ID,
-        ];
+        if ($postType->name !== 'attachment') {
+            $data['trash'] = [
+                'id' => $post->ID,
+            ];
+        }
 
         switch ( $postType->name ) {
             case 'elementor_library':

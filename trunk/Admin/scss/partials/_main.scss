@@ -173,6 +173,14 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   &.post-status-publish.has-password .label::after {
     content: 'Password';
   }
+
+  &.post-status-trash {
+    display: none;
+  }
+}
+
+.admin-quickbar-show-trash .admin-quickbar-post.post-status-trash {
+  display: block;
 }
 
 .admin-quickbar-post::after {

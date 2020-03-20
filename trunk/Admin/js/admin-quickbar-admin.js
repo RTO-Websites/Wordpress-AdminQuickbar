@@ -58,6 +58,7 @@ let AdminQuickbar = function() {
      */
     $(doc).on('change', '.admin-quickbar-overlap input', self.checkOverlap);
 
+    $(doc).on('change', '.admin-quickbar-show-trash-option input', self.checkTrash);
     /**
      * Load thumbs
      */
@@ -67,6 +68,9 @@ let AdminQuickbar = function() {
     $(doc).on('click', '.aqb-icon-external', self.openWindow);
 
     $(doc).on('click', '.language-switch .language-flag, .language-switch .language-all', self.changeLanguageFilter);
+
+
+    $(doc).on('keypress', self.keyPress);
 
     /**
      * Open default contextmenu on icons
@@ -143,6 +147,11 @@ let AdminQuickbar = function() {
     if (localStorage.adminQuickbarOverlap === 'true') {
       $('.admin-quickbar-overlap input').prop('checked', true);
       $('body').addClass('admin-quickbar-is-overlap');
+    }
+
+    if (localStorage.adminQuickbarShowTrash === 'true') {
+      $('.admin-quickbar-show-trash input').prop('checked', true);
+      $('body').addClass('admin-quickbar-show-trash');
     }
 
     self.checkTheme();
@@ -524,6 +533,20 @@ let AdminQuickbar = function() {
   };
 
   /**
+   * Checks if show trashed is active
+   * @param e
+   */
+  self.checkTrash = function(e) {
+    localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash-option input').is(':checked');
+
+    if (localStorage.adminQuickbarShowTrash === 'true') {
+      $('body').addClass('admin-quickbar-show-trash');
+    } else {
+      $('body').removeClass('admin-quickbar-show-trash');
+    }
+  };
+
+  /**
    * Checks if overlapping is active
    * @param e
    */
@@ -573,6 +596,14 @@ let AdminQuickbar = function() {
     $('.admin-quickbar').toggleClass('toggle');
     $('body').toggleClass('admin-quickbar-visible');
     localStorage.adminQuickbarToggle = $('.admin-quickbar').hasClass('toggle');
+  };
+
+  /**
+   *
+   * @param e
+   */
+  self.keyPress = function(e) {
+
   };
 
   /**

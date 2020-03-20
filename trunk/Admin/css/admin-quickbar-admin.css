@@ -107,6 +107,22 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     color: #2f87b1; }
   .admin-quickbar-post.is-active .label {
     font-weight: 600; }
+  .admin-quickbar-post.post-status-publish.has-password .label::after, .admin-quickbar-post.post-status-draft .label::after, .admin-quickbar-post.post-status-trash .label::after, .admin-quickbar-post.post-status-private .label::after {
+    content: 'Private';
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 7px !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-left: 10px;
+    margin-top: -2px; }
+  .admin-quickbar-post.post-status-draft .label::after {
+    content: 'Draft'; }
+  .admin-quickbar-post.post-status-trash .label::after {
+    content: 'Trash'; }
+  .admin-quickbar-post.post-status-publish.has-password .label::after {
+    content: 'Password'; }
 
 .admin-quickbar-post::after {
   content: '';

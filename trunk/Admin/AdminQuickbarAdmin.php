@@ -254,6 +254,9 @@ class AdminQuickbarAdmin {
             $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
 
             $postClasses = ' post-status-' . $post->post_status;
+            if ( !empty( $post->post_password)) {
+                $postClasses .= ' has-password';
+            }
             $languageFlag = $this->getLanguageFlag( $post );
 
             $template = new Template( self::PARTIAL_DIR . '/loop-posts.php', [

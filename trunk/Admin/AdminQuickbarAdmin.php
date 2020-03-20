@@ -252,8 +252,8 @@ class AdminQuickbarAdmin {
             $postTypeInfo = $this->getPostTypeInfo( $postType, $post );
             $permalink = get_permalink( $post->ID );
             $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
-            $deleteUrl = admin_url() . wp_nonce_url( "post.php?action=trash&amp;post=$post->ID", 'trash-post_' . $post->ID );
-            $unDeleteUrl = admin_url() . wp_nonce_url( "post.php?action=untrash&amp;post=$post->ID", 'untrash-post_' . $post->ID );
+            $trashUrl = admin_url() . wp_nonce_url( "post.php?action=trash&amp;post=$post->ID", 'trash-post_' . $post->ID );
+            $unTrasUrl = admin_url() . wp_nonce_url( "post.php?action=untrash&amp;post=$post->ID", 'untrash-post_' . $post->ID );
 
             $postClasses = ' post-status-' . $post->post_status;
             if ( !empty( $post->post_password ) ) {
@@ -274,8 +274,8 @@ class AdminQuickbarAdmin {
                 'activeClass' => $activeClass,
                 'languageFlag' => $languageFlag,
                 'postClasses' => $postClasses,
-                'deleteUrl' => $deleteUrl,
-                'unDeleteUrl' => $unDeleteUrl,
+                'trashUrl' => $trashUrl,
+                'unTrashUrl' => $unTrasUrl,
             ] );
             $output .= $template->getRendered();
         }
@@ -567,7 +567,7 @@ class AdminQuickbarAdmin {
             ];
         }
 
-        $data['delete'] = [
+        $data['trash'] = [
             'id' => $post->ID,
         ];
 

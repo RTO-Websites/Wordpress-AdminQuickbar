@@ -10,15 +10,15 @@
  * @var array $postTypeInfo
  * @var string $postClasses
  * @var string $permalink
- * @var string $deleteUrl
- * @var string $unDeleteUrl
+ * @var string $trashUrl
+ * @var string $unTrashUrl
  */
 ?>
 <div class="admin-quickbar-post <?php echo $postClasses . ' ' . $activeClass; ?>"
         data-postid="<?php echo $post->ID; ?>" <?php echo $style; ?>
         data-contextmenu='<?php echo $contextMenuData; ?>'
-        data-delete-url="<?php echo $deleteUrl; ?>"
-        data-undelete-url="<?php echo $unDeleteUrl; ?>">
+        data-trash-url="<?php echo $trashUrl; ?>"
+        data-untrash-url="<?php echo $unTrashUrl; ?>">
     <?php
     echo $thumb;
     ?>

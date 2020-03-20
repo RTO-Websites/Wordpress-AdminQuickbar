@@ -11,14 +11,14 @@ let AdminQuickbar = function() {
     buildContextMenuCopy,
     buildContextMenuSwift,
     buildContextMenuFavorite,
-    buildContextMenuDelete,
+    buildContextMenuTrash,
     buildFavoriteStorage,
     initFavorites,
     removeFromFavorites,
     addToFavorites,
     addPageToSwiftCache,
     initDefaultConfig,
-    deletePost,
+    trashPost,
     addTitleToElement;
 
   if (typeof ($) === 'undefined') {
@@ -327,8 +327,8 @@ let AdminQuickbar = function() {
           contextMenu.append(buildContextMenuSwift(data[index]));
           break;
 
-        case 'delete':
-          contextMenu.append(buildContextMenuDelete(data[index]));
+        case 'trash':
+          contextMenu.append(buildContextMenuTrash(data[index]));
           break;
       }
     }
@@ -364,20 +364,19 @@ let AdminQuickbar = function() {
    *
    * @param data
    */
-  buildContextMenuDelete = function(data) {
+  buildContextMenuTrash = function(data) {
     let parent = $('<div class="item has-sub item-trash" />'),
       contextMenu = $('.admin-quickbar-contextmenu'),
       postid = contextMenu.data('postid'),
-      listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
       item;
 
-    parent.append('<span class="label">Delete</span>');
+    parent.append('<span class="label">(Un)Trash</span>');
 
     item = $('<div class="item subitem" />');
     item.addClass('aqb-icon aqb-icon-trash');
-    item.prop('title', 'Delete');
+    item.prop('title', '(Un)Trash');
     item.on('click', function(e) {
-      deletePost(e, postid);
+      trashPost(e, postid);
     });
     parent.append(item);
 
@@ -480,17 +479,16 @@ let AdminQuickbar = function() {
     }
   };
 
-  deletePost = function(e, postid) {
-    let $target = $(e.target),
-      $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
-      deleteUrl = $listItem.data('delete-url'),
-      unDeleteUrl = $listItem.data('undelete-url');
+  trashPost = function(e, postid) {
+    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      trashUrl = $listItem.data('trash-url'),
+      unTrashUrl = $listItem.data('untrash-url');
 
     if ($listItem.hasClass('post-status-trash')) {
-      $.ajax(unDeleteUrl);
+      $.ajax(unTrashUrl);
       $listItem.addClass('post-status-publish').removeClass('post-status-trash');
     } else {
-      $.ajax(deleteUrl);
+      $.ajax(trashUrl);
       $listItem.addClass('post-status-trash').removeClass('post-status-publish');
     }
   };

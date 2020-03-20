@@ -253,6 +253,7 @@ class AdminQuickbarAdmin {
             $permalink = get_permalink( $post->ID );
             $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
 
+            $postClasses = ' post-status-' . $post->post_status;
             $languageFlag = $this->getLanguageFlag( $post );
 
             $template = new Template( self::PARTIAL_DIR . '/loop-posts.php', [
@@ -267,6 +268,7 @@ class AdminQuickbarAdmin {
                 'hasSwift' => $this->hasSwift,
                 'activeClass' => $activeClass,
                 'languageFlag' => $languageFlag,
+                'postClasses' => $postClasses,
             ] );
             $output .= $template->getRendered();
         }
@@ -447,6 +449,7 @@ class AdminQuickbarAdmin {
             'post_type' => $postType->name,
             'posts_per_page' => -1,
             'suppress_filters' => false,
+            'post_status' => get_post_stati(),
             'orderby' => $postType->hierarchical ? [ 'parent' => 'ASC', 'menu_order' => 'ASC' ] : 'menu_order',
             'order' => 'ASC',
         ];

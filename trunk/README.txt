@@ -27,6 +27,12 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.7.0 =
+* Posts can now be deleted from contextmenu
+* Fix issues with wpml
+* Fix issues with gutenberg an Wordpress 5.4
+* Fix not listed private pages
+
 = 1.6.0 =
 * WPML Integration
 * Auto-Detect Darkmode

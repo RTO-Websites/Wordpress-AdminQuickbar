@@ -131,7 +131,12 @@ class AdminQuickbarAdmin {
         $this->setPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
         $currentPost = filter_input( INPUT_GET, 'post' );
-        $permalink = get_permalink( $currentPost );
+
+        if ( empty( $currentPost ) ) {
+            $permalink = get_bloginfo( 'wpurl' );
+        } else {
+            $permalink = get_permalink( $currentPost );
+        }
 
         $addNewPosts = new Template( self::PARTIAL_DIR . '/add-new-posts.php', [
             'filteredPostTypes' => $this->filteredPostTypes,
@@ -154,7 +159,7 @@ class AdminQuickbarAdmin {
             'currentPost' => $currentPost,
             'permalink' => $permalink,
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
-            'hasSwift' => $this->hasSwift,
+            'hasSwift' => $this->hasSwift && !empty( $currentPost ),
             'inCache' => in_array( $permalink, $this->cacheList ),
             'cssPosts' => array_reverse( $this->cssPosts ),
         ] );
@@ -177,6 +182,15 @@ class AdminQuickbarAdmin {
             }
 
             $posts = $this->getPostsByPostType( $postType );
+
+            switch ($postType->name) {
+                case 'elementor_library':
+                    $createNewUrl = admin_url( 'edit.php') . '?post_type=elementor_library';
+                    break;
+                default:
+                    $createNewUrl = admin_url( 'post-new.php' ) . '?post_type=' . $postType->name;
+                    break;
+            }
 
             $countPostType = $posts['count'];
             $categories = $posts['categories'];
@@ -213,7 +227,7 @@ class AdminQuickbarAdmin {
             if ( empty( $posts ) ) {
                 continue;
             }
-            if ( $postType->name === 'elebee-global-css' ) {
+            if ( $postType->name === 'custom-css' ) {
                 $this->cssPosts = $posts;
             }
 

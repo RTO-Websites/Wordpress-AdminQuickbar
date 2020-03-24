@@ -483,6 +483,8 @@ let AdminQuickbar = function() {
       let $postType = $(postType);
       if (!$postType.find('.admin-quickbar-post:not(.aqb-search-hidden)').length) {
         $postType.addClass('aqb-search-hidden');
+      } else {
+        $postType.addClass('show-list');
       }
     })
   };

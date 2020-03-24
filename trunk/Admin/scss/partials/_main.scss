@@ -327,8 +327,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   margin-top: 0;
 }
 
-.admin-quickbar-hide-posttypes select,
-.admin-quickbar-new-select {
+.admin-quickbar-hide-posttypes select {
   width: calc(100% - 43px);
   margin-left: 5px;
   padding: 2px 5px;

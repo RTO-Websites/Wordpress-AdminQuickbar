@@ -138,16 +138,11 @@ class AdminQuickbarAdmin {
             $permalink = get_permalink( $currentPost );
         }
 
-        $addNewPosts = new Template( self::PARTIAL_DIR . '/add-new-posts.php', [
-            'filteredPostTypes' => $this->filteredPostTypes,
-        ] );
-
         $template = new Template( self::PARTIAL_DIR . '/admin-quickbar-admin-display.php', [
             'postTypeLoop' => $postTypeLoop,
             'filteredPostTypes' => $this->filteredPostTypes,
             'currentPost' => $currentPost,
             'permalink' => $permalink,
-            'addNewPosts' => $addNewPosts->getRendered(),
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
             'hasSwift' => $this->hasSwift,
             'inCache' => in_array( $permalink, $this->cacheList ),

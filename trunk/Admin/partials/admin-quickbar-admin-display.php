@@ -74,8 +74,6 @@
         </div>
 
         <div class="aqb-tab aqb-tab-quickbar active">
-            <?php echo $addNewPosts; ?>
-
             <label class="aqb-search-wrapper">
                 <?php _e('Search'); ?><br />
                 <input type="search" placeholder="Ctrl + Shift + F" id="aqb-search" />

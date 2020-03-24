@@ -20,7 +20,7 @@ let AdminQuickbar = function() {
     initDefaultConfig,
     trashPost,
     searchPosts,
-    focusSearch,
+    keyEvent,
     hideEmptyPostTypes,
     restorePostlistState,
     addTitleToElement;
@@ -100,7 +100,7 @@ let AdminQuickbar = function() {
      */
     $(doc).on('keyup input change', '#aqb-search', searchPosts);
     $(doc).on('keydown', function(e) {
-      focusSearch(e);
+      keyEvent(e);
     });
 
     if (localStorage.adminQuickbarOverlap === 'true') {
@@ -173,7 +173,7 @@ let AdminQuickbar = function() {
     if ($previewIframe.length) {
       $previewIframe.on('load', function() {
         $($previewIframe.get(0).contentDocument).on('keydown', function(e) {
-          focusSearch(e);
+          keyEvent(e);
         });
       });
     }
@@ -508,16 +508,24 @@ let AdminQuickbar = function() {
     })
   };
 
-  focusSearch = function(e) {
-    if (!e.key || e.key.toLowerCase() !== 'f' || (!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
+  keyEvent = function(e) {
+    if (!e.key || (!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
       return;
     }
 
-    if (!$('body').hasClass('admin-quickbar-visible')) {
-      self.toggleSidebar();
-    }
+    switch (e.key.toLowerCase()) {
+      case 'f':
+        if (!$('body').hasClass('admin-quickbar-visible')) {
+          self.toggleSidebar();
+        }
+        $('#aqb-search').focus();
+        break;
 
-    $('#aqb-search').focus();
+      case '>':
+      case '<':
+        self.toggleSidebar();
+        break;
+    }
   };
 
   /**

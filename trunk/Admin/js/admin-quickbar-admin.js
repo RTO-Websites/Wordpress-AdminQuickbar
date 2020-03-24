@@ -454,7 +454,6 @@ let AdminQuickbar = function() {
       searchVal = $searchInput.val().toLowerCase(),
       $posts = $('.admin-quickbar-post');
 
-    console.info('search', e, searchVal);
     $posts.removeClass('aqb-search-hidden');
 
     $posts.each(function(index, post) {

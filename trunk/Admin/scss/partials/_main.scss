@@ -109,6 +109,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     vertical-align: bottom;
     padding-top: 3px;
     box-sizing: border-box;
+    z-index: 10;
   }
 }
 
@@ -248,6 +249,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   transition: all 0.3s ease;
   transform-origin: top left;
   width: auto !important;
+  z-index: 20;
 }
 
 .admin-quickbar .wp-post-image:hover {

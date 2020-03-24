@@ -82,7 +82,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     vertical-align: bottom;
     padding-top: 3px;
     -webkit-box-sizing: border-box;
-            box-sizing: border-box; }
+            box-sizing: border-box;
+    z-index: 10; }
 
 .show-list .admin-quickbar-post-type::before {
   content: "\f142"; }
@@ -192,7 +193,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   -webkit-transform-origin: top left;
       -ms-transform-origin: top left;
           transform-origin: top left;
-  width: auto !important; }
+  width: auto !important;
+  z-index: 20; }
 
 .admin-quickbar .wp-post-image:hover {
   -webkit-transform: scale(4.5);

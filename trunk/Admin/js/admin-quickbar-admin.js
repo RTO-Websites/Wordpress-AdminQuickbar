@@ -21,6 +21,7 @@ let AdminQuickbar = function() {
     trashPost,
     searchPosts,
     focusSearch,
+    hideEmptyPostTypes,
     addTitleToElement;
 
   if (typeof ($) === 'undefined') {
@@ -467,6 +468,23 @@ let AdminQuickbar = function() {
       }
       $post.addClass('aqb-search-hidden');
     });
+
+    hideEmptyPostTypes();
+  };
+
+  /**
+   * Hides posttypes without visible posts
+   */
+  hideEmptyPostTypes = function() {
+    let $postTypes = $('.admin-quickbar-postlist');
+    $postTypes.removeClass('aqb-search-hidden');
+
+    $postTypes.each(function(index, postType) {
+      let $postType = $(postType);
+      if (!$postType.find('.admin-quickbar-post:not(.aqb-search-hidden)').length) {
+        $postType.addClass('aqb-search-hidden');
+      }
+    })
   };
 
   focusSearch = function(e) {

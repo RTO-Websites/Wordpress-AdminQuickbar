@@ -654,6 +654,7 @@ body.swift-setup .admin-quickbar {
 .admin-quickbar .admin-quickbar-post.hidden-by-language {
   display: none; }
 
+.admin-quickbar .admin-quickbar-postlist.aqb-search-hidden,
 .admin-quickbar .admin-quickbar-post.aqb-search-hidden {
   display: none; }
 

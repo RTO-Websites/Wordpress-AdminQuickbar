@@ -509,11 +509,13 @@ let AdminQuickbar = function() {
   };
 
   keyEvent = function(e) {
-    if (!e.key || (!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
+    if ((!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
       return;
     }
 
-    switch (e.key.toLowerCase()) {
+    let key = e.key ? e.key.toLowerCase() : '';
+
+    switch (key) {
       case 'f':
         if (!$('body').hasClass('admin-quickbar-visible')) {
           self.toggleSidebar();

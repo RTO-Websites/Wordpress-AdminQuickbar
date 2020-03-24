@@ -258,8 +258,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-category:first-child {
   margin-top: 0; }
 
-.admin-quickbar-hide-posttypes select,
-.admin-quickbar-new-select {
+.admin-quickbar-hide-posttypes select {
   width: calc(100% - 43px);
   margin-left: 5px;
   padding: 2px 5px;
@@ -657,3 +656,16 @@ body.swift-setup .admin-quickbar {
 
 .admin-quickbar .admin-quickbar-post.aqb-search-hidden {
   display: none; }
+
+.aqb-search-wrapper {
+  display: block;
+  padding: 15px 5px 6px 2px; }
+  .aqb-search-wrapper .dashicons {
+    float: left;
+    display: block;
+    position: relative;
+    top: 3px;
+    margin-right: 5px; }
+  .aqb-search-wrapper input {
+    display: block;
+    width: calc(100% - 25px); }

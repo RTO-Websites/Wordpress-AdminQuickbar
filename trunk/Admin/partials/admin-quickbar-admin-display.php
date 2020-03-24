@@ -75,7 +75,7 @@
 
         <div class="aqb-tab aqb-tab-quickbar active">
             <label class="aqb-search-wrapper">
-                <?php _e('Search'); ?><br />
+                <span class="dashicons dashicons-search"></span>
                 <input type="search" placeholder="Ctrl + Shift + F" id="aqb-search" />
             </label>
 

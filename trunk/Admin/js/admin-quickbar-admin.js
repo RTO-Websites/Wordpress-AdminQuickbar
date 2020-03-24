@@ -22,6 +22,7 @@ let AdminQuickbar = function() {
     searchPosts,
     focusSearch,
     hideEmptyPostTypes,
+    restorePostlistState,
     addTitleToElement;
 
   if (typeof ($) === 'undefined') {
@@ -97,7 +98,7 @@ let AdminQuickbar = function() {
     /**
      * Search
      */
-    $(doc).on('keydown, keyup', '#aqb-search', searchPosts);
+    $(doc).on('keyup input change', '#aqb-search', searchPosts);
     $(doc).on('keydown', function(e) {
       focusSearch(e);
     });
@@ -128,15 +129,8 @@ let AdminQuickbar = function() {
    * Open sidebar and postlists on dom-ready
    */
   domReady = function() {
-    let postLists = self.getPostListStorage();
+    restorePostlistState();
     initFavorites();
-
-    // open postlists
-    $('.admin-quickbar-postlist').each(function(index, element) {
-      if (postLists[$(element).data('post-type')]) {
-        $(element).addClass('show-list');
-      }
-    });
 
     // open quickbar
     if (localStorage.adminQuickbarToggle === 'true' && localStorage.adminQuickbarKeepopen === 'true') {
@@ -175,6 +169,14 @@ let AdminQuickbar = function() {
     self.setLanguageSwitchActiveClass();
     self.hideByLanguage();
 
+    let $previewIframe = $('#elementor-preview-iframe');
+    if ($previewIframe.length) {
+      $previewIframe.on('load', function() {
+        $($previewIframe.get(0).contentDocument).on('keydown', function(e) {
+          focusSearch(e);
+        });
+      });
+    }
     searchPosts();
   };
 
@@ -447,11 +449,12 @@ let AdminQuickbar = function() {
   /**
    * Check search input and hide not found posts
    */
-  searchPosts = function() {
+  searchPosts = function(e) {
     let $searchInput = $('#aqb-search'),
       searchVal = $searchInput.val().toLowerCase(),
       $posts = $('.admin-quickbar-post');
 
+    console.info('search', e, searchVal);
     $posts.removeClass('aqb-search-hidden');
 
     $posts.each(function(index, post) {
@@ -470,6 +473,23 @@ let AdminQuickbar = function() {
     });
 
     hideEmptyPostTypes();
+
+    if (!searchVal.length) {
+      restorePostlistState();
+    }
+  };
+
+  restorePostlistState = function() {
+    let postLists = self.getPostListStorage(),
+      $postListElements = $('.admin-quickbar-postlist');
+
+    $postListElements.removeClass('show-list');
+    // open postlists
+    $postListElements.each(function(index, element) {
+      if (postLists[$(element).data('post-type')]) {
+        $(element).addClass('show-list');
+      }
+    });
   };
 
   /**
@@ -490,7 +510,7 @@ let AdminQuickbar = function() {
   };
 
   focusSearch = function(e) {
-    if (e.key.toLowerCase() !== 'f' || (!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
+    if (!e.key || e.key.toLowerCase() !== 'f' || (!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
       return;
     }
 

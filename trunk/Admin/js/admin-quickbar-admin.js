@@ -515,6 +515,19 @@ let AdminQuickbar = function() {
 
     let key = e.key ? e.key.toLowerCase() : '';
 
+    if (!key && e.keyCode) {
+      // fallback
+      switch (e.keyCode) {
+        case 60:
+        case 220:
+          key = '<';
+          break;
+        case 70:
+          key = 'f';
+          break;
+      }
+    }
+
     switch (key) {
       case 'f':
         if (!$('body').hasClass('admin-quickbar-visible')) {
@@ -525,6 +538,8 @@ let AdminQuickbar = function() {
 
       case '>':
       case '<':
+      case '|':
+        e.preventDefault();
         self.toggleSidebar();
         break;
     }

@@ -19,6 +19,8 @@ let AdminQuickbar = function() {
     addPageToSwiftCache,
     initDefaultConfig,
     trashPost,
+    searchPosts,
+    focusSearch,
     addTitleToElement;
 
   if (typeof ($) === 'undefined') {
@@ -91,6 +93,13 @@ let AdminQuickbar = function() {
       self.updateHiddenPostTypes();
     });
 
+    /**
+     * Search
+     */
+    $(doc).on('keydown, keyup', '#aqb-search', searchPosts);
+    $(doc).on('keydown', function(e) {
+      focusSearch(e);
+    });
 
     if (localStorage.adminQuickbarOverlap === 'true') {
       $('body').addClass('admin-quickbar-is-overlap');
@@ -164,6 +173,8 @@ let AdminQuickbar = function() {
 
     self.setLanguageSwitchActiveClass();
     self.hideByLanguage();
+
+    searchPosts();
   };
 
   self.checkTheme = function() {
@@ -433,6 +444,44 @@ let AdminQuickbar = function() {
   };
 
   /**
+   * Check search input and hide not found posts
+   */
+  searchPosts = function() {
+    let $searchInput = $('#aqb-search'),
+      searchVal = $searchInput.val().toLowerCase(),
+      $posts = $('.admin-quickbar-post');
+
+    $posts.removeClass('aqb-search-hidden');
+
+    $posts.each(function(index, post) {
+      let $post = $(post),
+        postName = $post.find('.label').text().toLowerCase(),
+        postId = $post.data('postid');
+
+      if (postName.indexOf(searchVal) !== -1) {
+        return;
+      }
+
+      if (postId === parseInt(searchVal)) {
+        return;
+      }
+      $post.addClass('aqb-search-hidden');
+    });
+  };
+
+  focusSearch = function(e) {
+    if (e.key.toLowerCase() !== 'f' || (!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
+      return;
+    }
+
+    if (!$('body').hasClass('admin-quickbar-visible')) {
+      self.toggleSidebar();
+    }
+
+    $('#aqb-search').focus();
+  };
+
+  /**
    * Read local storage and moves all posts in it to favorites
    */
   initFavorites = function() {
@@ -637,7 +686,7 @@ let AdminQuickbar = function() {
   /**
    * Open/Close Sidebar
    */
-  self.toggleSidebar = function(e) {
+  self.toggleSidebar = function() {
     $('.admin-quickbar').toggleClass('toggle');
     $('body').toggleClass('admin-quickbar-visible');
     localStorage.adminQuickbarToggle = $('.admin-quickbar').hasClass('toggle');

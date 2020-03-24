@@ -76,6 +76,11 @@
         <div class="aqb-tab aqb-tab-quickbar active">
             <?php echo $addNewPosts; ?>
 
+            <label class="aqb-search-wrapper">
+                <?php _e('Search'); ?><br />
+                <input type="search" placeholder="Ctrl + Shift + F" id="aqb-search" />
+            </label>
+
             <?php if ( !empty( $languageFlags ) ): ?>
                 <div class="language-switch">
                     <span data-language-code="all" class="active language-all"><?php _e( 'All' ); ?></span>

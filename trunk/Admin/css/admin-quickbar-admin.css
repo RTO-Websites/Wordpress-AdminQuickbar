@@ -215,6 +215,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     margin-left: 7px !important;
     border-color: #8888882e !important;
     -webkit-appearance: checkbox; }
+  .aqb-options label input[type=checkbox] {
+    margin-right: 5px; }
 
 .admin-quickbar-keepopen {
   padding-left: 0; }

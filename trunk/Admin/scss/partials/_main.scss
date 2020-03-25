@@ -274,6 +274,10 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     border-color: #8888882e !important;
     -webkit-appearance: checkbox;
   }
+
+  input[type=checkbox] {
+    margin-right: 5px;
+  }
 }
 
 .admin-quickbar-keepopen {

@@ -72,7 +72,6 @@ class AdminQuickbar {
         $this->version = AdminQuickbar_VERSION;
 
         $this->loadDependencies();
-        #$this->setLocale();
 
         if ( filter_has_var( INPUT_GET, 'noaqb' ) ) {
             return;
@@ -80,6 +79,7 @@ class AdminQuickbar {
 
         if ( is_admin() ) {
             $this->defineAdminHooks();
+            $this->setLocale();
         } else {
             $this->definePublicHooks();
         }

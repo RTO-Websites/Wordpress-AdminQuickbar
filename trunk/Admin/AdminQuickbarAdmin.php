@@ -576,6 +576,15 @@ class AdminQuickbarAdmin {
     }
 
     /**
+     * Fix wrong language in elementor
+     */
+    public function fixElementorLanguage() {
+        global $current_user;
+        $userLocale = get_user_meta( get_current_user_id(), 'locale', true );
+        $current_user->locale = $userLocale;
+    }
+
+    /**
      * Register the stylesheets for the admin area.
      *
      * @since    1.0.0

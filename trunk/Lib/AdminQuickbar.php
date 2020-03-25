@@ -142,6 +142,8 @@ class AdminQuickbar {
 
         $this->loader->addAction( 'elementor/editor/before_enqueue_styles', $pluginAdmin, 'enqueueStyles' );
         $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $pluginAdmin, 'enqueueScripts', 99999 );
+
+        $this->loader->addAction( 'set_current_user', $pluginAdmin, 'fixElementorLanguage', 11 );
     }
 
     /**

@@ -217,6 +217,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     -webkit-appearance: checkbox; }
   .aqb-options label input[type=checkbox] {
     margin-right: 5px; }
+  .aqb-options label.admin-quickbar-theme {
+    padding: 0 8px; }
 
 .admin-quickbar-keepopen {
   padding-left: 0; }
@@ -307,6 +309,20 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     width: 100%;
     padding: 4px 5px;
     resize: vertical; }
+
+h2.aqb-settings-headline:first-child {
+  margin-top: 0; }
+
+h2.aqb-settings-headline {
+  font-size: 12px;
+  padding: 9px 0;
+  margin-top: 30px;
+  margin-bottom: 13px;
+  text-align: center;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  background: #80808014;
+  font-weight: 400; }
 
 .aqb-icon {
   display: inline-block;

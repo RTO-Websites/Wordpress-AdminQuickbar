@@ -278,6 +278,10 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   input[type=checkbox] {
     margin-right: 5px;
   }
+
+  &.admin-quickbar-theme {
+    padding: 0 8px;
+  }
 }
 
 .admin-quickbar-keepopen {
@@ -376,4 +380,20 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     padding: 4px 5px;
     resize: vertical;
   }
+}
+
+h2.aqb-settings-headline:first-child {
+  margin-top: 0;
+}
+
+h2.aqb-settings-headline {
+  font-size: 12px;
+  padding: 9px 0;
+  margin-top: 30px;
+  margin-bottom: 13px;
+  text-align: center;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  background: #80808014;
+  font-weight: 400;
 }

@@ -201,17 +201,21 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
       -ms-transform: scale(4.5);
           transform: scale(4.5); }
 
+.aqb-search-wrapper,
 .aqb-options label {
   padding-left: 2px;
   margin-bottom: 1em;
   display: block;
   position: relative; }
+  .aqb-search-wrapper:first-child,
   .aqb-options label:first-child {
     margin-top: 0; }
+  .aqb-search-wrapper input,
   .aqb-options label input {
     display: inline-block;
     position: relative;
     top: 2px; }
+  .aqb-search-wrapper input[type=checkbox],
   .aqb-options label input[type=checkbox] {
     top: -1px;
     vertical-align: middle;
@@ -220,38 +224,55 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     margin-left: 7px;
     height: auto;
     width: auto; }
+  .aqb-search-wrapper input,
+  .aqb-search-wrapper select,
+  .aqb-search-wrapper textarea,
   .aqb-options label input,
   .aqb-options label select,
   .aqb-options label textarea {
     border-radius: 3px;
     font-size: 12px;
     background: none;
+    background-color: transparent;
     -webkit-box-shadow: none;
             box-shadow: none;
     color: #6d7882;
     border: 1px solid;
-    border-top-color: currentcolor;
-    border-right-color: currentcolor;
-    border-bottom-color: currentcolor;
-    border-left-color: currentcolor;
     padding: 5px;
-    outline: none; }
-    .aqb-options label input:not(:focus),
-    .aqb-options label select:not(:focus),
-    .aqb-options label textarea:not(:focus) {
-      border-color: #74777a47; }
+    outline: none;
+    border-color: #74777a47 !important; }
+    .aqb-search-wrapper input:focus,
+    .aqb-search-wrapper select:focus,
+    .aqb-search-wrapper textarea:focus,
+    .aqb-options label input:focus,
+    .aqb-options label select:focus,
+    .aqb-options label textarea:focus {
+      border-color: #74777a47;
+      -webkit-box-shadow: none;
+              box-shadow: none;
+      outline: none; }
+  .aqb-search-wrapper input[type=search],
+  .aqb-options label input[type=search] {
+    line-height: 1;
+    min-height: 1em; }
+  .aqb-search-wrapper.admin-quickbar-theme,
   .aqb-options label.admin-quickbar-theme {
     padding: 0 8px; }
+    .aqb-search-wrapper.admin-quickbar-theme select,
     .aqb-options label.admin-quickbar-theme select {
       height: 27px; }
+  .aqb-search-wrapper select,
   .aqb-options label select {
     width: 100%; }
+  .aqb-search-wrapper select option,
   .aqb-options label select option {
     padding: 3px; }
+  .aqb-search-wrapper .sublabel,
   .aqb-options label .sublabel {
     font-size: 8px;
     background: #80808014;
-    padding: 2px; }
+    padding: 3px;
+    border-radius: 4px; }
 
 .admin-quickbar-keepopen {
   padding-left: 0; }

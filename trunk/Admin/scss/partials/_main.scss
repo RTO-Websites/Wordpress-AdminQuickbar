@@ -256,6 +256,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   transform: scale(4.5);
 }
 
+.aqb-search-wrapper,
 .aqb-options label {
   padding-left: 2px;
   margin-bottom: 1em;
@@ -288,19 +289,24 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     border-radius: 3px;
     font-size: 12px;
     background: none;
+    background-color: transparent;
     box-shadow: none;
     color: #6d7882;
     border: 1px solid;
-    border-top-color: currentcolor;
-    border-right-color: currentcolor;
-    border-bottom-color: currentcolor;
-    border-left-color: currentcolor;
     padding: 5px;
     outline: none;
+    border-color: #74777a47 !important;
 
-    &:not(:focus) {
+    &:focus {
       border-color: #74777a47;
+      box-shadow: none;
+      outline: none;
     }
+  }
+
+  input[type=search] {
+    line-height: 1;
+    min-height: 1em;
   }
 
   &.admin-quickbar-theme {
@@ -322,7 +328,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   .sublabel {
     font-size: 8px;
     background: #80808014;
-    padding: 2px;
+    padding: 3px;
+    border-radius: 4px;
   }
 }
 

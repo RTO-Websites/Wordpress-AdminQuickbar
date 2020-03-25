@@ -44,5 +44,5 @@ msgstr "Dunkel"
 msgid "Light"
 msgstr "Hell"
 
-msgid "For multiple use Ctrl+Click"
-msgstr "Verwende Strg+Klick für Mehrfachauswahl"
+msgid "Ctrl+Click"
+msgstr "Strg+Klick"

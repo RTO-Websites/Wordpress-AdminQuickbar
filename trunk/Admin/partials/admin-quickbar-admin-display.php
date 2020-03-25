@@ -36,14 +36,18 @@
                 <?php _e( 'Visibility' ); ?>
             </h2>
             <label class="admin-quickbar-hide-posttypes">
-                <?php _e( 'Hide main container (PostTypes)', 'admin-quickbar' ); ?><br/>
-                <select class="aqm-hide-posttypes" multiple>
+                <?php _e( 'Hide main container (PostTypes)', 'admin-quickbar' ); ?>
+                <span class="sublabel">[<?php _e( 'Ctrl+Click', 'admin-quickbar' ); ?>]</span>
+                <br/>
+                <select class="aqm-hide-posttypes"
+                        multiple
+                        rows="<?php echo count( $filteredPostTypes ); ?>">
                     <option value="aqb-favorites"><?php echo __( 'Favorites' ); ?></option>
                     <?php foreach ( $filteredPostTypes as $postType ): ?>
                         <option value="<?php echo $postType->name; ?>"><?php echo $postType->label; ?></option>
                     <?php endforeach; ?>
                 </select>
-                <span class="description"><?php _e( 'For multiple use Ctrl+Click', 'admin-quickbar' ); ?></span>
+
             </label>
 
             <label class="admin-quickbar-loadthumbs">
@@ -81,7 +85,6 @@
                 <?php _e( 'Quickbar Color-Theme', 'admin-quickbar' ); ?>
             </h2>
             <label class="admin-quickbar-theme">
-                <?php _e( 'Theme', 'admin-quickbar' ); ?>
                 <select name="admin-quickbar-theme">
                     <option value="auto"><?php _e( 'Auto detect', 'admin-quickbar' ); ?></option>
                     <option value="dark"><?php _e( 'Dark', 'admin-quickbar' ); ?></option>

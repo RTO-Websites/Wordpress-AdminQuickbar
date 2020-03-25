@@ -270,17 +270,59 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     display: inline-block;
     position: relative;
     top: 2px;
-    margin-left: 7px !important;
-    border-color: #8888882e !important;
-    -webkit-appearance: checkbox;
   }
 
   input[type=checkbox] {
+    top: -1px;
+    vertical-align: middle;
     margin-right: 5px;
+    -webkit-appearance: checkbox;
+    margin-left: 7px;
+    height: auto;
+    width: auto;
+  }
+
+  input,
+  select,
+  textarea {
+    border-radius: 3px;
+    font-size: 12px;
+    background: none;
+    box-shadow: none;
+    color: #6d7882;
+    border: 1px solid;
+    border-top-color: currentcolor;
+    border-right-color: currentcolor;
+    border-bottom-color: currentcolor;
+    border-left-color: currentcolor;
+    padding: 5px;
+    outline: none;
+
+    &:not(:focus) {
+      border-color: #74777a47;
+    }
   }
 
   &.admin-quickbar-theme {
     padding: 0 8px;
+
+    select {
+      height: 27px;
+    }
+  }
+
+  select {
+    width: 100%;
+  }
+
+  select option {
+    padding: 3px;
+  }
+
+  .sublabel {
+    font-size: 8px;
+    background: #80808014;
+    padding: 2px;
   }
 }
 
@@ -395,5 +437,6 @@ h2.aqb-settings-headline {
   letter-spacing: 1.8px;
   text-transform: uppercase;
   background: #80808014;
+  color: #79838c;
   font-weight: 400;
 }

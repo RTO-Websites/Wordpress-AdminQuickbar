@@ -560,7 +560,7 @@ class AdminQuickbarAdmin {
             ];
         }
 
-        if ($postType->name !== 'attachment') {
+        if ( $postType->name !== 'attachment' ) {
             $data['trash'] = [
                 'id' => $post->ID,
             ];

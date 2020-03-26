@@ -447,3 +447,12 @@ h2.aqb-settings-headline {
   color: #79838c;
   font-weight: 400;
 }
+
+.aqb-post-title {
+  &.is-renaming {
+    display: inline-block;
+    padding: 3px 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: text;
+  }
+}

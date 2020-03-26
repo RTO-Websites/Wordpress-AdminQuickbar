@@ -379,6 +379,12 @@ h2.aqb-settings-headline {
   color: #79838c;
   font-weight: 400; }
 
+.aqb-post-title.is-renaming {
+  display: inline-block;
+  padding: 3px 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: text; }
+
 .aqb-icon {
   display: inline-block;
   position: relative;
@@ -423,9 +429,24 @@ h2.aqb-settings-headline {
   .aqb-icon-trash::before {
     content: "\f182"; }
 
+.aqb-icon-rename {
+  cursor: pointer; }
+  .aqb-icon-rename::before {
+    content: "\f464"; }
+
 .aqb-icon-id::before {
   font-size: 24px !important;
   content: "\f336"; }
+
+.save-rename::before {
+  content: "\f12a";
+  display: inline-block;
+  position: relative;
+  top: 3px;
+  font-size: 16px;
+  font-family: Dashicons;
+  padding: 2px 5px;
+  cursor: pointer; }
 
 .admin-quickbar-jumpicons {
   position: fixed;
@@ -512,10 +533,30 @@ h2.aqb-settings-headline {
     height: 30px;
     margin: 7px 0;
     cursor: default; }
+  .aqb-css-list .item.item-trash:hover .item,
+  .aqb-css-list .item.item-favorite:hover .item,
+  .aqb-css-list .item.item-rename:hover .item,
   .aqb-css-list .item:not(.has-sub):hover,
+  .admin-quickbar-contextmenu .item.item-trash:hover .item,
+  .admin-quickbar-contextmenu .item.item-favorite:hover .item,
+  .admin-quickbar-contextmenu .item.item-rename:hover .item,
   .admin-quickbar-contextmenu .item:not(.has-sub):hover {
     color: #c1c1c1;
     background-color: transparent; }
+  .aqb-css-list .item.item-trash:hover .label,
+  .aqb-css-list .item.item-favorite:hover .label,
+  .aqb-css-list .item.item-rename:hover .label,
+  .admin-quickbar-contextmenu .item.item-trash:hover .label,
+  .admin-quickbar-contextmenu .item.item-favorite:hover .label,
+  .admin-quickbar-contextmenu .item.item-rename:hover .label {
+    font-weight: 500; }
+  .aqb-css-list .item.item-trash,
+  .aqb-css-list .item.item-favorite,
+  .aqb-css-list .item.item-rename,
+  .admin-quickbar-contextmenu .item.item-trash,
+  .admin-quickbar-contextmenu .item.item-favorite,
+  .admin-quickbar-contextmenu .item.item-rename {
+    cursor: pointer; }
   .aqb-css-list .item.has-sub,
   .admin-quickbar-contextmenu .item.has-sub {
     text-align: right; }

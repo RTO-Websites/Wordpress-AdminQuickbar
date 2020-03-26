@@ -12,6 +12,7 @@ let AdminQuickbar = function() {
     buildContextMenuSwift,
     buildContextMenuFavorite,
     buildContextMenuTrash,
+    buildContextMenuRename,
     buildFavoriteStorage,
     initFavorites,
     removeFromFavorites,
@@ -19,6 +20,8 @@ let AdminQuickbar = function() {
     addPageToSwiftCache,
     initDefaultConfig,
     trashPost,
+    saveRenamePost,
+    startRenamePost,
     searchPosts,
     keyEvent,
     hideEmptyPostTypes,
@@ -346,6 +349,10 @@ let AdminQuickbar = function() {
         case 'trash':
           contextMenu.append(buildContextMenuTrash(data[index]));
           break;
+
+        case 'rename':
+          contextMenu.append(buildContextMenuRename(data[index]));
+          break;
       }
     }
   };
@@ -356,7 +363,7 @@ let AdminQuickbar = function() {
    * @param data
    */
   buildContextMenuSwift = function(data) {
-    let parent = $('<div class="item has-sub item-favorite" />'),
+    let parent = $('<div class="item has-sub item-swift" />'),
       contextMenu = $('.admin-quickbar-contextmenu'),
       item;
 
@@ -391,8 +398,32 @@ let AdminQuickbar = function() {
     item = $('<div class="item subitem" />');
     item.addClass('aqb-icon aqb-icon-trash');
     item.prop('title', '(Un)Trash');
-    item.on('click', function(e) {
+    parent.on('click', function(e) {
       trashPost(e, postid);
+    });
+    parent.append(item);
+
+    return parent;
+  };
+
+  /**
+   * Build menu-item to rename item
+   *
+   * @param data
+   */
+  buildContextMenuRename = function(data) {
+    let parent = $('<div class="item has-sub item-rename" />'),
+      contextMenu = $('.admin-quickbar-contextmenu'),
+      postid = contextMenu.data('postid'),
+      item;
+
+    parent.append('<span class="label">Rename</span>');
+
+    item = $('<div class="item subitem" />');
+    item.addClass('aqb-icon aqb-icon-rename');
+    item.prop('title', 'Rename');
+    parent.on('click', function(e) {
+      startRenamePost(e, postid);
     });
     parent.append(item);
 
@@ -418,13 +449,13 @@ let AdminQuickbar = function() {
     if (!listItem.hasClass('is-favorite')) {
       item.addClass('aqb-icon-favorite');
       item.prop('title', 'Add to favorites');
-      item.on('click', function(e) {
+      parent.on('click', function(e) {
         addToFavorites(postid);
       });
     } else {
       item.addClass('aqb-icon-favorite-alt');
       item.prop('title', 'Remove from favorites');
-      item.on('click', function(e) {
+      parent.on('click', function(e) {
         removeFromFavorites(postid);
       });
     }
@@ -606,6 +637,35 @@ let AdminQuickbar = function() {
       $.ajax(trashUrl);
       $listItem.addClass('post-status-trash').removeClass('post-status-publish');
     }
+  };
+
+  startRenamePost = function(e, postid) {
+    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      $titleItem = $listItem.find('.aqb-post-title'),
+      $saveButton = $('<span class="save-rename" />');
+
+    $saveButton.on('click', function(e) {
+      saveRenamePost(postid, $titleItem.text());
+    });
+    $titleItem.addClass('is-renaming');
+    $titleItem.prop('contenteditable', true);
+    $titleItem.parent().find('.save-rename').remove();
+    $titleItem.after($saveButton);
+
+  };
+
+  saveRenamePost = function(postid, title) {
+    $.post({
+      url: ajaxurl,
+      data: {
+        action: 'aqbRenamePost',
+        postid: postid,
+        title: title,
+      }
+    });
+    $('.save-rename').remove();
+    $('.aqb-post-title').prop('contenteditable', false);
+    $('.aqb-post-title').removeClass('is-renaming');
   };
 
   /**

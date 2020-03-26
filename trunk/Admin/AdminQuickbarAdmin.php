@@ -564,6 +564,9 @@ class AdminQuickbarAdmin {
             $data['trash'] = [
                 'id' => $post->ID,
             ];
+            $data['rename'] = [
+                'id' => $post->ID,
+            ];
         }
 
         switch ( $postType->name ) {
@@ -573,6 +576,27 @@ class AdminQuickbarAdmin {
         }
 
         return $data;
+    }
+
+    /**
+     * Rename a post
+     *  Typically called via admin-ajax
+     */
+    public function renamePost() {
+        $postid = filter_input(INPUT_POST, 'postid');
+        $title = filter_input(INPUT_POST, 'title');
+
+        if ( empty($postid) || empty( $title)) {
+            var_dump( $postid );
+            var_dump( $title );
+            wp_die();
+        }
+
+        wp_update_post([
+            'ID' => $postid,
+            'post_title' => $title
+        ]);
+        wp_die();
     }
 
     /**

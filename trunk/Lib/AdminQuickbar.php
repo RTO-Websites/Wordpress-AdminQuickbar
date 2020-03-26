@@ -144,6 +144,8 @@ class AdminQuickbar {
         $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $pluginAdmin, 'enqueueScripts', 99999 );
 
         $this->loader->addAction( 'set_current_user', $pluginAdmin, 'fixElementorLanguage', 11 );
+
+        $this->loader->addAction( 'wp_ajax_aqbRenamePost', $pluginAdmin, 'renamePost');
     }
 
     /**

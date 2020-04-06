@@ -404,7 +404,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-post-type .add-new,
 .admin-quickbar-post-options a,
 .admin-quickbar-jumpicons .aqb-icon-css,
-.admin-quickbar-jumpicons a {
+.admin-quickbar-jumpicons .aqb-icon a,
+.admin-quickbar-jumpicons a.aqb-icon {
   color: #2f87b1;
 
   &:hover {

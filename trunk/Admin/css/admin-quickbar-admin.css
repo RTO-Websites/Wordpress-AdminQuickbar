@@ -336,19 +336,22 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-post-type .add-new,
 .admin-quickbar-post-options a,
 .admin-quickbar-jumpicons .aqb-icon-css,
-.admin-quickbar-jumpicons a {
+.admin-quickbar-jumpicons .aqb-icon a,
+.admin-quickbar-jumpicons a.aqb-icon {
   color: #2f87b1; }
   .add-post-button:hover,
   .admin-quickbar-post-type .add-new:hover,
   .admin-quickbar-post-options a:hover,
   .admin-quickbar-jumpicons .aqb-icon-css:hover,
-  .admin-quickbar-jumpicons a:hover {
+  .admin-quickbar-jumpicons .aqb-icon a:hover,
+  .admin-quickbar-jumpicons a.aqb-icon:hover {
     color: #0aa4ef; }
   .add-post-button:focus,
   .admin-quickbar-post-type .add-new:focus,
   .admin-quickbar-post-options a:focus,
   .admin-quickbar-jumpicons .aqb-icon-css:focus,
-  .admin-quickbar-jumpicons a:focus {
+  .admin-quickbar-jumpicons .aqb-icon a:focus,
+  .admin-quickbar-jumpicons a.aqb-icon:focus {
     -webkit-box-shadow: none;
             box-shadow: none; }
 

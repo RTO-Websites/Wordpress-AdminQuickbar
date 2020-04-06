@@ -244,6 +244,9 @@ class AdminQuickbarAdmin {
     public function getLoopPosts( $postType, $posts ) {
         $output = '';
         foreach ( $posts as $post ) {
+            if ( $post->post_name === 'default-kit' ) {
+                continue;
+            }
             $style = $this->getMarginStyle( $post, $postType, $lastParent, $margin );
             $postTypeInfo = $this->getPostTypeInfo( $postType, $post );
             $permalink = get_permalink( $post->ID );
@@ -583,19 +586,19 @@ class AdminQuickbarAdmin {
      *  Typically called via admin-ajax
      */
     public function renamePost() {
-        $postid = filter_input(INPUT_POST, 'postid');
-        $title = filter_input(INPUT_POST, 'title');
+        $postid = filter_input( INPUT_POST, 'postid' );
+        $title = filter_input( INPUT_POST, 'title' );
 
-        if ( empty($postid) || empty( $title)) {
+        if ( empty( $postid ) || empty( $title ) ) {
             var_dump( $postid );
             var_dump( $title );
             wp_die();
         }
 
-        wp_update_post([
+        wp_update_post( [
             'ID' => $postid,
-            'post_title' => $title
-        ]);
+            'post_title' => $title,
+        ] );
         wp_die();
     }
 

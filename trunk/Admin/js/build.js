@@ -1,36 +1,187 @@
+let AdminQuickbarActions = {
+
+  /**
+   * Adds a page to swift-cache
+   *
+   * @param e
+   */
+  addPageToSwiftCache: function(e) {
+    e.preventDefault();
+    let target = $(e.currentTarget),
+      url = target.data('url');
+
+    target.addClass('loading');
+
+    jQuery.post(ajaxurl, {
+      action: 'swift_performance_single_prebuild',
+      '_wpnonce': target.closest('.admin-quickbar').data('swift-nonce'),
+      'url': url,
+    }, function(response) {
+      response = (typeof response === 'string' ? JSON.parse(response) : response);
+
+      if (response.status === 'success') {
+        target.addClass('is-in-cache');
+      }
+      target.removeClass('loading');
+    });
+  },
+
+
+  /**
+   * Removes a page from swift-cache
+   *
+   * @param e
+   */
+  refreshSwiftCache: function(e) {
+    e.preventDefault();
+    let target = $(e.currentTarget),
+      url = target.data('url');
+
+    target.addClass('loading');
+
+    jQuery.post(ajaxurl, {
+      action: 'swift_performance_single_clear_cache',
+      '_wpnonce': target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
+      'url': url,
+    }, function(response) {
+      target.removeClass('is-in-cache');
+      AdminQuickbarActions.addPageToSwiftCache(e);
+    });
+  },
+
+  /**
+   * Checks if page is cached and clear/add or only add it
+   *
+   * @param e
+   */
+  checkSwiftCache: function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    let target = $(e.currentTarget);
+
+    if (target.hasClass('is-in-cache')) {
+      AdminQuickbarActions.refreshSwiftCache(e);
+    } else {
+      AdminQuickbarActions.addPageToSwiftCache(e);
+    }
+  },
+
+  /**
+   * Adds a post to favorites
+   * @param postid
+   */
+  addToFavorites: function(postid) {
+    let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
+
+    listItem.addClass('is-favorite');
+    AdminQuickbarActions.buildFavoriteStorage();
+
+    if (!listItemFav.length) {
+      listItemFav = listItem.first().clone();
+      listItemFav.css({marginLeft: ''});
+      $('.aqb-favorites .admin-quickbar-postlist-inner').append(listItemFav);
+    }
+  },
+  /**
+   * Removes a post from favorites
+   * @param postid
+   */
+  removeFromFavorites: function(postid) {
+    let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
+
+    listItem.removeClass('is-favorite');
+    AdminQuickbarActions.buildFavoriteStorage();
+    listItemFav.remove();
+  },
+
+  /**
+   * Checks which posts are favorites and add them to local storage
+   */
+  buildFavoriteStorage: function() {
+    let storage = [];
+    $('.admin-quickbar-post.is-favorite').each(function(index, element) {
+      if (storage.indexOf($(element).data('postid')) === -1) {
+        storage.push($(element).data('postid'));
+      }
+    });
+    localStorage.adminQuickbarFavorites = JSON.stringify(storage);
+  },
+
+  trashPost: function(e, postid) {
+    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      trashUrl = $listItem.data('trash-url'),
+      unTrashUrl = $listItem.data('untrash-url');
+
+    if ($listItem.hasClass('post-status-trash')) {
+      $.ajax(unTrashUrl);
+      $listItem.addClass('post-status-publish').removeClass('post-status-trash');
+    } else {
+      $.ajax(trashUrl);
+      $listItem.addClass('post-status-trash').removeClass('post-status-publish');
+    }
+  },
+
+  startRenamePost: function(e, postid) {
+    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      $titleItem = $listItem.find('.aqb-post-title'),
+      $saveButton = $('<span class="save-rename" />');
+
+    $saveButton.on('click', function(e) {
+      AdminQuickbarActions.saveRenamePost(postid, $titleItem.text());
+    });
+    $titleItem.addClass('is-renaming');
+    $titleItem.prop('contenteditable', true);
+    $titleItem.parent().find('.save-rename').remove();
+    $titleItem.after($saveButton);
+
+  },
+
+  saveRenamePost: function(postid, title) {
+    $.post({
+      url: ajaxurl,
+      data: {
+        action: 'aqbRenamePost',
+        postid: postid,
+        title: title,
+      }
+    });
+    $('.save-rename').remove();
+    $('.aqb-post-title').prop('contenteditable', false);
+    $('.aqb-post-title').removeClass('is-renaming');
+  },
+
+
+  openWindow: function() {
+    let url = $(this).next('.dashicons-edit').attr('href') + '&noaqb';
+    AdminQuickbarActions.registerCssWindow(url);
+  },
+
+  registerCssWindow: function(url) {
+
+    if (!globalCssWindow || globalCssWindow.closed) {
+      globalCssWindow = window.open(url, "rto_wp_adminQuickbar", 'width=700,height=500,left=200,top=100');
+    } else {
+      if (globalCssWindow.location.href !== url) {
+        globalCssWindow.location.assign(url);
+      }
+    }
+    globalCssWindow.focus();
+  },
+};
 let AdminQuickbar = function() {
   let win = window,
     doc = win.document,
     self = this,
     init,
     domReady,
+    contextMenu,
     refreshPostListStorage,
-    closeContextMenu,
-    openContextMenu,
-    buildContextMenu,
-    buildContextMenuCopy,
-    buildContextMenuSwift,
-    buildContextMenuFavorite,
-    buildContextMenuTrash,
-    buildContextMenuRename,
-    buildFavoriteStorage,
     initFavorites,
-    removeFromFavorites,
-    addToFavorites,
-    addPageToSwiftCache,
     initDefaultConfig,
-    trashPost,
-    saveRenamePost,
-    startRenamePost,
-    searchPosts,
-    keyEvent,
-    hideEmptyPostTypes,
-    restorePostlistState,
-    addTitleToElement;
-
-  if (typeof ($) === 'undefined') {
-    var $ = jQuery;
-  }
+    search,
+    keyEvent;
 
   init = function() {
     $(function($) {
@@ -77,31 +228,12 @@ let AdminQuickbar = function() {
      */
     $(doc).on('change', '.admin-quickbar-loadthumbs input', self.checkThumbs);
 
-    $(doc).on('click', '.aqb-icon-swift', self.checkSwiftCache);
-    $(doc).on('click', '.aqb-icon-external', self.openWindow);
-
     $(doc).on('click', '.language-switch .language-flag, .language-switch .language-all', self.changeLanguageFilter);
-
-    /**
-     * Open default contextmenu on icons
-     */
-    $(doc).on('contextmenu', '.aqb-icon', function(e) {
-      e.stopPropagation();
-    });
-
-    // contextmenu
-    $(doc).on('contextmenu', '.admin-quickbar-post', openContextMenu);
-    $(doc).on('click', closeContextMenu);
-
 
     $(doc).on('change', '.aqm-hide-posttypes', function() {
       self.updateHiddenPostTypes();
     });
 
-    /**
-     * Search
-     */
-    $(doc).on('keyup input change', '#aqb-search', searchPosts);
     $(doc).on('keydown', function(e) {
       keyEvent(e);
     });
@@ -111,6 +243,9 @@ let AdminQuickbar = function() {
     }
 
     self.checkTheme();
+
+    contextMenu = new AdminQuickbarContextMenu();
+    search = new AdminQuickbarSearch();
   };
 
   /**
@@ -132,7 +267,6 @@ let AdminQuickbar = function() {
    * Open sidebar and postlists on dom-ready
    */
   domReady = function() {
-    restorePostlistState();
     initFavorites();
 
     // open quickbar
@@ -180,7 +314,6 @@ let AdminQuickbar = function() {
         });
       });
     }
-    searchPosts();
   };
 
   self.checkTheme = function() {
@@ -303,6 +436,208 @@ let AdminQuickbar = function() {
     $('.aqb-tab-' + tabSlug).addClass('active');
   };
 
+  keyEvent = function(e) {
+    if ((!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
+      return;
+    }
+
+    let key = e.key ? e.key.toLowerCase() : '';
+
+    if (!key && e.keyCode) {
+      // fallback
+      switch (e.keyCode) {
+        case 60:
+        case 220:
+          key = '<';
+          break;
+        case 70:
+          key = 'f';
+          break;
+      }
+    }
+
+    switch (key) {
+      case 'f':
+        if (!$('body').hasClass('admin-quickbar-visible')) {
+          self.toggleSidebar();
+        }
+        $('#aqb-search').focus();
+        break;
+
+      case '>':
+      case '<':
+      case '|':
+        e.preventDefault();
+        self.toggleSidebar();
+        break;
+    }
+  };
+
+  /**
+   * Read local storage and moves all posts in it to favorites
+   */
+  initFavorites = function() {
+    let storage = [];
+    if (typeof (localStorage.adminQuickbarFavorites) !== 'undefined') {
+      storage = JSON.parse(localStorage.adminQuickbarFavorites);
+    }
+
+    for (let i in storage) {
+      let listItem = $('.admin-quickbar-post[data-postid=' + storage[i] + ']');
+      listItem.addClass('is-favorite');
+      let listItemFav = listItem.first().clone();
+      listItemFav.css({marginLeft: ''});
+      $('.aqb-favorites .admin-quickbar-postlist-inner').append(listItemFav);
+    }
+  };
+
+  /**
+   * Checks if overlapping is active
+   * @param e
+   */
+  self.checkOverlap = function(e) {
+    localStorage.adminQuickbarOverlap = $('.admin-quickbar-overlap input').is(':checked');
+
+    if (localStorage.adminQuickbarOverlap === 'true') {
+      $('body').addClass('admin-quickbar-is-overlap');
+    } else {
+      $('body').removeClass('admin-quickbar-is-overlap');
+    }
+  };
+
+  /**
+   * Checks if show trashed is active
+   * @param e
+   */
+  self.checkTrash = function(e) {
+    localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash-option input').is(':checked');
+
+    if (localStorage.adminQuickbarShowTrash === 'true') {
+      $('body').addClass('admin-quickbar-show-trash');
+    } else {
+      $('body').removeClass('admin-quickbar-show-trash');
+    }
+  };
+
+  /**
+   * Checks if overlapping is active
+   * @param e
+   */
+  self.changeTheme = function(e) {
+    localStorage.adminQuickbarTheme = $('.admin-quickbar-theme select').val();
+
+    self.checkTheme();
+  };
+
+  /**
+   * Check if load-thumbs is active
+   *
+   * @param e
+   */
+  self.checkThumbs = function(e) {
+    localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
+
+    if (localStorage.adminQuickbarLoadthumbs === 'true') {
+      $('.admin-quickbar-loadthumbs input').prop('checked', true);
+      self.loadThumbs();
+    } else {
+      $('.admin-quickbar .wp-post-image').prop('src', '');
+    }
+  };
+
+  /**
+   * Open/Close Sidebar
+   */
+  self.toggleSidebar = function() {
+    $('.admin-quickbar').toggleClass('toggle');
+    $('body').toggleClass('admin-quickbar-visible');
+    localStorage.adminQuickbarToggle = $('.admin-quickbar').hasClass('toggle');
+  };
+
+  /**
+   * Click on headlines
+   */
+  self.togglePostTypes = function(e) {
+    let target = $(e.target),
+      parent = target.parent();
+
+    parent.toggleClass('show-list');
+
+    refreshPostListStorage();
+  };
+
+
+  /**
+   * Set localStorage
+   */
+  refreshPostListStorage = function() {
+    let postListStorage = {};
+    $('.admin-quickbar-postlist').each(function(index, element) {
+      postListStorage[$(element).data('post-type')] = $(element).hasClass('show-list');
+    });
+
+    localStorage.postList = JSON.stringify(postListStorage);
+  };
+
+
+  /**
+   * Get localStorage
+   */
+  self.getPostListStorage = function() {
+    if (!localStorage.postList || typeof (localStorage.postList) != 'string') {
+      localStorage.postList = '{}';
+    }
+    return JSON.parse(localStorage.postList);
+  };
+
+  /**
+   * Replace img src with data-src and loads images
+   */
+  self.loadThumbs = function() {
+    $('.admin-quickbar .wp-post-image').each(function(index, element) {
+      $(element).prop('src', $(element).data('src'));
+    });
+  };
+
+  init();
+};
+
+
+
+let AdminQuickbarContextMenu = function() {
+  let win = window,
+    doc = win.document,
+    self = this,
+    closeContextMenu,
+    openContextMenu,
+    buildContextMenu,
+    buildContextMenuCopy,
+    buildContextMenuSwift,
+    buildContextMenuFavorite,
+    buildContextMenuTrash,
+    buildContextMenuRename,
+    addTitleToElement,
+    init;
+
+  init = function() {
+    /**
+     * Open default contextmenu on icons
+     */
+    $(doc).on('contextmenu', '.aqb-icon', function(e) {
+      e.stopPropagation();
+    });
+
+    // contextmenu
+    $(doc).on('contextmenu', '.admin-quickbar-post', openContextMenu);
+    $(doc).on('click', closeContextMenu);
+
+
+    $(doc).on('click', '.aqb-icon-swift', AdminQuickbarActions.checkSwiftCache);
+    $(doc).on('click', '.aqb-icon-external', AdminQuickbarActions.openWindow);
+
+  };
+
+
   /**
    *
    * @param e
@@ -399,7 +734,7 @@ let AdminQuickbar = function() {
     item.addClass('aqb-icon aqb-icon-trash');
     item.prop('title', '(Un)Trash');
     parent.on('click', function(e) {
-      trashPost(e, postid);
+      AdminQuickbarActions.trashPost(e, postid);
     });
     parent.append(item);
 
@@ -423,7 +758,7 @@ let AdminQuickbar = function() {
     item.addClass('aqb-icon aqb-icon-rename');
     item.prop('title', 'Rename');
     parent.on('click', function(e) {
-      startRenamePost(e, postid);
+      AdminQuickbarActions.startRenamePost(e, postid);
     });
     parent.append(item);
 
@@ -450,222 +785,18 @@ let AdminQuickbar = function() {
       item.addClass('aqb-icon-favorite');
       item.prop('title', 'Add to favorites');
       parent.on('click', function(e) {
-        addToFavorites(postid);
+        AdminQuickbarActions.addToFavorites(postid);
       });
     } else {
       item.addClass('aqb-icon-favorite-alt');
       item.prop('title', 'Remove from favorites');
       parent.on('click', function(e) {
-        removeFromFavorites(postid);
+        AdminQuickbarActions.removeFromFavorites(postid);
       });
     }
     parent.append(item);
 
     return parent;
-  };
-
-  /**
-   * Checks which posts are favorites and add them to local storage
-   */
-  buildFavoriteStorage = function() {
-    let storage = [];
-    $('.admin-quickbar-post.is-favorite').each(function(index, element) {
-      if (storage.indexOf($(element).data('postid')) === -1) {
-        storage.push($(element).data('postid'));
-      }
-    });
-    localStorage.adminQuickbarFavorites = JSON.stringify(storage);
-  };
-
-  /**
-   * Check search input and hide not found posts
-   */
-  searchPosts = function(e) {
-    let $searchInput = $('#aqb-search'),
-      searchVal = $searchInput.val().toLowerCase(),
-      $posts = $('.admin-quickbar-post');
-
-    $posts.removeClass('aqb-search-hidden');
-
-    $posts.each(function(index, post) {
-      let $post = $(post),
-        postName = $post.find('.label').text().toLowerCase(),
-        postId = $post.data('postid');
-
-      if (postName.indexOf(searchVal) !== -1) {
-        return;
-      }
-
-      if (postId === parseInt(searchVal)) {
-        return;
-      }
-      $post.addClass('aqb-search-hidden');
-    });
-
-    hideEmptyPostTypes();
-
-    if (!searchVal.length) {
-      restorePostlistState();
-    }
-  };
-
-  restorePostlistState = function() {
-    let postLists = self.getPostListStorage(),
-      $postListElements = $('.admin-quickbar-postlist');
-
-    $postListElements.removeClass('show-list');
-    // open postlists
-    $postListElements.each(function(index, element) {
-      if (postLists[$(element).data('post-type')]) {
-        $(element).addClass('show-list');
-      }
-    });
-  };
-
-  /**
-   * Hides posttypes without visible posts
-   */
-  hideEmptyPostTypes = function() {
-    let $postTypes = $('.admin-quickbar-postlist');
-    $postTypes.removeClass('aqb-search-hidden');
-
-    $postTypes.each(function(index, postType) {
-      let $postType = $(postType);
-      if (!$postType.find('.admin-quickbar-post:not(.aqb-search-hidden)').length) {
-        $postType.addClass('aqb-search-hidden');
-      } else {
-        $postType.addClass('show-list');
-      }
-    })
-  };
-
-  keyEvent = function(e) {
-    if ((!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
-      return;
-    }
-
-    let key = e.key ? e.key.toLowerCase() : '';
-
-    if (!key && e.keyCode) {
-      // fallback
-      switch (e.keyCode) {
-        case 60:
-        case 220:
-          key = '<';
-          break;
-        case 70:
-          key = 'f';
-          break;
-      }
-    }
-
-    switch (key) {
-      case 'f':
-        if (!$('body').hasClass('admin-quickbar-visible')) {
-          self.toggleSidebar();
-        }
-        $('#aqb-search').focus();
-        break;
-
-      case '>':
-      case '<':
-      case '|':
-        e.preventDefault();
-        self.toggleSidebar();
-        break;
-    }
-  };
-
-  /**
-   * Read local storage and moves all posts in it to favorites
-   */
-  initFavorites = function() {
-    let storage = [];
-    if (typeof (localStorage.adminQuickbarFavorites) !== 'undefined') {
-      storage = JSON.parse(localStorage.adminQuickbarFavorites);
-    }
-
-    for (let i in storage) {
-      let listItem = $('.admin-quickbar-post[data-postid=' + storage[i] + ']');
-      listItem.addClass('is-favorite');
-      let listItemFav = listItem.first().clone();
-      listItemFav.css({marginLeft: ''});
-      $('.aqb-favorites .admin-quickbar-postlist-inner').append(listItemFav);
-    }
-  };
-
-  /**
-   * Removes a post from favorites
-   * @param postid
-   */
-  removeFromFavorites = function(postid) {
-    let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
-      listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
-
-    listItem.removeClass('is-favorite');
-    buildFavoriteStorage();
-    listItemFav.remove();
-  };
-
-  /**
-   * Adds a post to favorites
-   * @param postid
-   */
-  addToFavorites = function(postid) {
-    let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
-      listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
-
-    listItem.addClass('is-favorite');
-    buildFavoriteStorage();
-
-    if (!listItemFav.length) {
-      listItemFav = listItem.first().clone();
-      listItemFav.css({marginLeft: ''});
-      $('.aqb-favorites .admin-quickbar-postlist-inner').append(listItemFav);
-    }
-  };
-
-  trashPost = function(e, postid) {
-    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
-      trashUrl = $listItem.data('trash-url'),
-      unTrashUrl = $listItem.data('untrash-url');
-
-    if ($listItem.hasClass('post-status-trash')) {
-      $.ajax(unTrashUrl);
-      $listItem.addClass('post-status-publish').removeClass('post-status-trash');
-    } else {
-      $.ajax(trashUrl);
-      $listItem.addClass('post-status-trash').removeClass('post-status-publish');
-    }
-  };
-
-  startRenamePost = function(e, postid) {
-    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
-      $titleItem = $listItem.find('.aqb-post-title'),
-      $saveButton = $('<span class="save-rename" />');
-
-    $saveButton.on('click', function(e) {
-      saveRenamePost(postid, $titleItem.text());
-    });
-    $titleItem.addClass('is-renaming');
-    $titleItem.prop('contenteditable', true);
-    $titleItem.parent().find('.save-rename').remove();
-    $titleItem.after($saveButton);
-
-  };
-
-  saveRenamePost = function(postid, title) {
-    $.post({
-      url: ajaxurl,
-      data: {
-        action: 'aqbRenamePost',
-        postid: postid,
-        title: title,
-      }
-    });
-    $('.save-rename').remove();
-    $('.aqb-post-title').prop('contenteditable', false);
-    $('.aqb-post-title').removeClass('is-renaming');
   };
 
   /**
@@ -710,6 +841,7 @@ let AdminQuickbar = function() {
     contextMenu.removeClass('open');
   };
 
+
   addTitleToElement = function(item, index) {
     let title;
 
@@ -736,199 +868,105 @@ let AdminQuickbar = function() {
     item.prop('title', title);
   };
 
-  /**
-   * Checks if overlapping is active
-   * @param e
-   */
-  self.checkOverlap = function(e) {
-    localStorage.adminQuickbarOverlap = $('.admin-quickbar-overlap input').is(':checked');
+  init();
+};
 
-    if (localStorage.adminQuickbarOverlap === 'true') {
-      $('body').addClass('admin-quickbar-is-overlap');
-    } else {
-      $('body').removeClass('admin-quickbar-is-overlap');
-    }
-  };
+let AdminQuickbarSearch = function() {
+  let win = window,
+    doc = win.document,
+    self = this,
+    searchPosts,
+    hideEmptyPostTypes,
+    restorePostlistState,
+    domReady,
+    init;
 
-  /**
-   * Checks if show trashed is active
-   * @param e
-   */
-  self.checkTrash = function(e) {
-    localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash-option input').is(':checked');
-
-    if (localStorage.adminQuickbarShowTrash === 'true') {
-      $('body').addClass('admin-quickbar-show-trash');
-    } else {
-      $('body').removeClass('admin-quickbar-show-trash');
-    }
-  };
-
-  /**
-   * Checks if overlapping is active
-   * @param e
-   */
-  self.changeTheme = function(e) {
-    localStorage.adminQuickbarTheme = $('.admin-quickbar-theme select').val();
-
-    self.checkTheme();
-  };
-
-  /**
-   * Check if load-thumbs is active
-   *
-   * @param e
-   */
-  self.checkThumbs = function(e) {
-    localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
-
-    if (localStorage.adminQuickbarLoadthumbs === 'true') {
-      $('.admin-quickbar-loadthumbs input').prop('checked', true);
-      self.loadThumbs();
-    } else {
-      $('.admin-quickbar .wp-post-image').prop('src', '');
-    }
-  };
-
-  /**
-   * Checks if page is cached and clear/add or only add it
-   *
-   * @param e
-   */
-  self.checkSwiftCache = function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    let target = $(e.currentTarget);
-
-    if (target.hasClass('is-in-cache')) {
-      self.refreshSwiftCache(e);
-    } else {
-      addPageToSwiftCache(e);
-    }
-  };
-
-  /**
-   * Open/Close Sidebar
-   */
-  self.toggleSidebar = function() {
-    $('.admin-quickbar').toggleClass('toggle');
-    $('body').toggleClass('admin-quickbar-visible');
-    localStorage.adminQuickbarToggle = $('.admin-quickbar').hasClass('toggle');
-  };
-
-  /**
-   * Click on headlines
-   */
-  self.togglePostTypes = function(e) {
-    let target = $(e.target),
-      parent = target.parent();
-
-    parent.toggleClass('show-list');
-
-    refreshPostListStorage();
-  };
-
-  /**
-   * Removes a page from swift-cache
-   *
-   * @param e
-   */
-  self.refreshSwiftCache = function(e) {
-    e.preventDefault();
-    let target = $(e.currentTarget),
-      url = target.data('url');
-
-    target.addClass('loading');
-
-    jQuery.post(ajaxurl, {
-      action: 'swift_performance_single_clear_cache',
-      '_wpnonce': target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
-      'url': url,
-    }, function(response) {
-      target.removeClass('is-in-cache');
-      addPageToSwiftCache(e);
+  init = function() {
+    $(function($) {
+      domReady();
     });
+
+    $(doc).on('keyup input change', '#aqb-search', searchPosts);
+  };
+
+  domReady = function() {
+    restorePostlistState();
+    searchPosts();
   };
 
   /**
-   * Adds a page to swift-cache
-   *
-   * @param e
+   * Check search input and hide not found posts
    */
-  addPageToSwiftCache = function(e) {
-    e.preventDefault();
-    let target = $(e.currentTarget),
-      url = target.data('url');
+  searchPosts = function(e) {
+    let $searchInput = $('#aqb-search'),
+      searchVal = $searchInput.val().toLowerCase(),
+      $posts = $('.admin-quickbar-post');
 
-    target.addClass('loading');
+    $posts.removeClass('aqb-search-hidden');
 
-    jQuery.post(ajaxurl, {
-      action: 'swift_performance_single_prebuild',
-      '_wpnonce': target.closest('.admin-quickbar').data('swift-nonce'),
-      'url': url,
-    }, function(response) {
-      response = (typeof response === 'string' ? JSON.parse(response) : response);
+    $posts.each(function(index, post) {
+      let $post = $(post),
+        postName = $post.find('.label').text().toLowerCase(),
+        postId = $post.data('postid');
 
-      if (response.status === 'success') {
-        target.addClass('is-in-cache');
+      if (postName.indexOf(searchVal) !== -1) {
+        return;
       }
-      target.removeClass('loading');
-    });
-  };
 
-  /**
-   * Set localStorage
-   */
-  refreshPostListStorage = function() {
-    let postListStorage = {};
-    $('.admin-quickbar-postlist').each(function(index, element) {
-      postListStorage[$(element).data('post-type')] = $(element).hasClass('show-list');
+      if (postId === parseInt(searchVal)) {
+        return;
+      }
+      $post.addClass('aqb-search-hidden');
     });
 
-    localStorage.postList = JSON.stringify(postListStorage);
-  };
+    hideEmptyPostTypes();
 
-  /**
-   * Get localStorage
-   */
-  self.getPostListStorage = function() {
-    if (!localStorage.postList || typeof (localStorage.postList) != 'string') {
-      localStorage.postList = '{}';
+    if (!searchVal.length) {
+      restorePostlistState();
     }
-    return JSON.parse(localStorage.postList);
+  };
+
+
+  /**
+   * Hides posttypes without visible posts
+   */
+  hideEmptyPostTypes = function() {
+    let $postTypes = $('.admin-quickbar-postlist');
+    $postTypes.removeClass('aqb-search-hidden');
+
+    $postTypes.each(function(index, postType) {
+      let $postType = $(postType);
+      if (!$postType.find('.admin-quickbar-post:not(.aqb-search-hidden)').length) {
+        $postType.addClass('aqb-search-hidden');
+      } else {
+        $postType.addClass('show-list');
+      }
+    })
   };
 
   /**
-   * Replace img src with data-src and loads images
+   * Restore opened/closed postlists to state before search was startet.
    */
-  self.loadThumbs = function() {
-    $('.admin-quickbar .wp-post-image').each(function(index, element) {
-      $(element).prop('src', $(element).data('src'));
+  restorePostlistState = function() {
+    let postLists = win.adminQuickbarInstance.getPostListStorage(),
+      $postListElements = $('.admin-quickbar-postlist');
+
+    $postListElements.removeClass('show-list');
+    // open postlists
+    $postListElements.each(function(index, element) {
+      if (postLists[$(element).data('post-type')]) {
+        $(element).addClass('show-list');
+      }
     });
-  };
-
-
-  self.openWindow = function() {
-    let url = $(this).next('.dashicons-edit').attr('href') + '&noaqb';
-    registerCssWindow(url);
   };
 
   init();
 };
 
-
-window.adminQuickbarInstance = new AdminQuickbar();
-
-
-let globalCssWindow;
-registerCssWindow = function(url) {
-
-  if (!globalCssWindow || globalCssWindow.closed) {
-    globalCssWindow = window.open(url, "rto_wp_adminQuickbar", 'width=700,height=500,left=200,top=100');
-  } else {
-    if (globalCssWindow.location.href !== url) {
-      globalCssWindow.location.assign(url);
-    }
+(function () {
+  if (typeof ($) === 'undefined') {
+    window.$ = jQuery;
   }
-  globalCssWindow.focus();
-};
+
+  window.adminQuickbarInstance = new AdminQuickbar();
+})();

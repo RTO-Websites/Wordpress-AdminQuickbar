@@ -10,7 +10,7 @@ var gulp = require('gulp'),
 gulp.task('default', function() {
   // Admin
   var sassAdminFiles = ['Admin/scss/*.*'],
-    jsFiles = 'Admin/js/src/**/*.js',
+    jsFiles = ['Admin/js/src/partials/**/*.js', 'Admin/js/src/main.js'],
     jsDest = 'Admin/js';
 
   gulp.src(sassAdminFiles)

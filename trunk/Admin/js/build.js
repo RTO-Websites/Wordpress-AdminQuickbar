@@ -128,6 +128,9 @@ let AdminQuickbarActions = {
       $titleItem = $listItem.find('.aqb-post-title'),
       $saveButton = $('<span class="save-rename" />');
 
+    $('.admin-quickbar .save-rename').remove();
+    $('.admin-quickbar .aqb-post-title').removeClass('is-renaming').prop('contenteditable', false);
+
     $saveButton.on('click', function(e) {
       AdminQuickbarActions.saveRenamePost(postid, $titleItem.text());
     });
@@ -135,7 +138,7 @@ let AdminQuickbarActions = {
     $titleItem.prop('contenteditable', true);
     $titleItem.parent().find('.save-rename').remove();
     $titleItem.after($saveButton);
-
+    $titleItem.focus();
   },
 
   saveRenamePost: function(postid, title) {
@@ -153,11 +156,17 @@ let AdminQuickbarActions = {
   },
 
 
+  /**
+   * Opens a connected css-window
+   */
   openWindow: function() {
     let url = $(this).next('.dashicons-edit').attr('href') + '&noaqb';
     AdminQuickbarActions.registerCssWindow(url);
   },
 
+  /**
+   * Registers a connected css-window
+   */
   registerCssWindow: function(url) {
 
     if (!globalCssWindow || globalCssWindow.closed) {
@@ -294,7 +303,7 @@ let AdminQuickbar = function() {
     }
 
     if (localStorage.adminQuickbarShowTrash === 'true') {
-      $('.admin-quickbar-show-trash input').prop('checked', true);
+      $('.admin-quickbar-show-trash-option input').prop('checked', true);
       $('body').addClass('admin-quickbar-show-trash');
     }
 

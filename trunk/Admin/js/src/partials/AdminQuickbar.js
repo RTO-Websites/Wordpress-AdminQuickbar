@@ -122,7 +122,7 @@ let AdminQuickbar = function() {
     }
 
     if (localStorage.adminQuickbarShowTrash === 'true') {
-      $('.admin-quickbar-show-trash input').prop('checked', true);
+      $('.admin-quickbar-show-trash-option input').prop('checked', true);
       $('body').addClass('admin-quickbar-show-trash');
     }
 

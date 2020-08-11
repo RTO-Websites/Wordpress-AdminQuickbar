@@ -132,6 +132,9 @@ class AdminQuickbar {
      * @access   private
      */
     private function defineAdminHooks() {
+        /*if ( !current_user_can( 'administrator' ) ) {
+            return;
+        }*/
         $pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
 
         $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
@@ -176,6 +179,18 @@ class AdminQuickbar {
         // can´t use loader->addAction here, cause it is nested in plugins_loaded
         add_action( 'wp_footer', [ $pluginPublic, 'renderJumpIcons' ] );
         add_action( 'wp_enqueue_scripts', [ $pluginPublic, 'enqueueStyles' ] );
+
+
+
+        // TODO: Move sidebar to own class
+        $pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
+        add_action( 'wp_enqueue_scripts', [$pluginAdmin, 'enqueueStyles'] );
+        add_action( 'wp_enqueue_scripts', [$pluginAdmin, 'enqueueScripts'] );
+
+        // admin_footer
+        add_action( 'wp_footer', [$pluginAdmin, 'renderSidebar'] );
+        add_action( 'set_current_user', [$pluginAdmin, 'fixElementorLanguage'], 11 );
+        add_action( 'wp_ajax_aqbRenamePost', [$pluginAdmin, 'renamePost']);
     }
 
     /**

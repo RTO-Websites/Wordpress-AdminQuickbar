@@ -78,6 +78,7 @@ class AdminQuickbar {
         if ( filter_has_var( INPUT_GET, 'noaqb' ) ) {
             return;
         }
+        $this->addCapatibilites();
         $this->setLocale();
 
         if ( is_admin() ) {
@@ -154,7 +155,7 @@ class AdminQuickbar {
      * Checks if user is logged in and register actions for public-jumpicons
      */
     public function registerSidebar() {
-        if ( !current_user_can( 'administrator' ) ) {
+        if ( !current_user_can( 'use_admin_quickbar' ) ) {
             return;
         }
 
@@ -163,6 +164,16 @@ class AdminQuickbar {
         }
 
         $this->sidebar = new Sidebar( $this->getAdminQuickbar(), $this->getVersion() );
+    }
+
+
+
+    /**
+     * Gives admin the use_admin_quickbar capatibility
+     */
+    private function addCapatibilites() {
+        $administratorRole = get_role( 'administrator' );
+        $administratorRole->add_cap( 'use_admin_quickbar' );
     }
 
     /**

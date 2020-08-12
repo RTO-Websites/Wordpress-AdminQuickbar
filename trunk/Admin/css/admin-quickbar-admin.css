@@ -51,6 +51,10 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     right: 325px; }
   body:not(.admin-quickbar-is-overlap).admin-quickbar-visible #query-monitor-main {
     width: calc(100% - 322px) !important; }
+  body:not(.admin-quickbar-is-overlap).admin-quickbar-visible .interface-interface-skeleton {
+    right: 320px; }
+  body:not(.admin-quickbar-is-overlap).admin-quickbar-visible .edit-post-layout .editor-post-publish-panel {
+    right: 320px; }
 
 .admin-quickbar.toggle .admin-quickbar-inner {
   display: block; }
@@ -387,6 +391,9 @@ h2.aqb-settings-headline {
   padding: 3px 5px;
   background-color: rgba(255, 255, 255, 0.1);
   cursor: text; }
+
+.wp-block {
+  max-width: 1200px; }
 
 .aqb-icon {
   display: inline-block;

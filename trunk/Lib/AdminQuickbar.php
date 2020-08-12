@@ -57,6 +57,8 @@ class AdminQuickbar {
      */
     protected $version;
 
+    protected $sidebar;
+
     /**
      * Define the core functionality of the plugin.
      *
@@ -160,32 +162,7 @@ class AdminQuickbar {
             return;
         }
 
-        $sidebar = new Sidebar( $this->getAdminQuickbar(), $this->getVersion() );
-
-        add_action( 'wp_enqueue_scripts', [ $sidebar, 'enqueueStyles' ] );
-        add_action( 'wp_enqueue_scripts', [ $sidebar, 'enqueueScripts' ] );
-        add_action( 'admin_enqueue_scripts', [ $sidebar, 'enqueueStyles' ] );
-        add_action( 'admin_enqueue_scripts', [ $sidebar, 'enqueueScripts' ] );
-        add_action( 'elementor/editor/before_enqueue_styles', [ $sidebar, 'enqueueStyles' ] );
-        add_action( 'elementor/editor/before_enqueue_scripts', [ $sidebar, 'enqueueScripts' ], 99999 );
-
-        // embed to footer
-        if ( is_admin() ) {
-            add_action( 'admin_print_footer_scripts', [ $sidebar, 'renderSidebar' ] );
-        } else {
-            add_action( 'wp_footer', [ $sidebar, 'renderSidebar' ] );
-        }
-        add_action( 'set_current_user', [ $this, 'fixElementorLanguage' ], 11 );
-        add_action( 'wp_ajax_aqbRenamePost', [ $sidebar, 'renamePost' ] );
-    }
-
-    /**
-     * Fix wrong language in elementor
-     */
-    public function fixElementorLanguage() {
-        global $current_user;
-        $userLocale = get_user_meta( get_current_user_id(), 'locale', true );
-        $current_user->locale = $userLocale;
+        $this->sidebar = new Sidebar( $this->getAdminQuickbar(), $this->getVersion() );
     }
 
     /**

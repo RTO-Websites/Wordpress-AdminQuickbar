@@ -4,6 +4,16 @@ namespace AdminQuickbar\Lib;
 
 class Sidebar {
 
+    /**
+     * The loader that's responsible for maintaining and registering all hooks that power
+     * the plugin.
+     *
+     * @since    1.0.0
+     * @access   protected
+     * @var      Loader $loader Maintains and registers all hooks for the plugin.
+     */
+    protected $loader;
+
     const PARTIAL_DIR = AdminQuickbar_DIR . '/Lib/partials/';
     private $filterPostTypes = [];
     private $postTypes = [];
@@ -47,7 +57,35 @@ class Sidebar {
         $this->pluginName = $pluginName;
         $this->version = $version;
 
+        $this->loader = new Loader();
+
+        $this->defineHooks();
+
+        $this->loader->run();
+
         $this->categoryList = get_categories();
+    }
+
+    /**
+     * Register all of the hooks related to the sidebar functionality
+     */
+    private function defineHooks() {
+        $this->loader->addAction( 'wp_enqueue_scripts',  $this, 'enqueueStyles'  );
+        $this->loader->addAction( 'wp_enqueue_scripts',  $this, 'enqueueScripts'  );
+        $this->loader->addAction( 'admin_enqueue_scripts',  $this, 'enqueueStyles'  );
+        $this->loader->addAction( 'admin_enqueue_scripts',  $this, 'enqueueScripts'  );
+        $this->loader->addAction( 'elementor/editor/before_enqueue_styles',  $this, 'enqueueStyles'  );
+        $this->loader->addAction( 'elementor/editor/before_enqueue_scripts',  $this, 'enqueueScripts' , 99999 );
+
+        // embed to footer
+        if ( is_admin() ) {
+            $this->loader->addAction( 'admin_print_footer_scripts',  $this, 'renderSidebar'  );
+        } else {
+            $this->loader->addAction( 'wp_footer',  $this, 'renderSidebar'  );
+        }
+        $this->loader->addAction( 'set_current_user', $this, 'fixElementorLanguage' , 11 );
+        $this->loader->addAction( 'wp_ajax_aqbRenamePost', $this, 'renamePost');
+
     }
 
     /**
@@ -584,6 +622,16 @@ class Sidebar {
             'post_title' => $title,
         ] );
         wp_die();
+    }
+
+
+    /**
+     * Fix wrong language in elementor
+     */
+    public function fixElementorLanguage() {
+        global $current_user;
+        $userLocale = get_user_meta( get_current_user_id(), 'locale', true );
+        $current_user->locale = $userLocale;
     }
 
     /**

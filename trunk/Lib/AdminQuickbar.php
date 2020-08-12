@@ -155,7 +155,7 @@ class AdminQuickbar {
      * Checks if user is logged in and register actions for public-jumpicons
      */
     public function registerSidebar() {
-        if ( !current_user_can( 'use_admin_quickbar' ) ) {
+        if ( !current_user_can( 'view_admin_quickbar' ) ) {
             return;
         }
 
@@ -173,7 +173,7 @@ class AdminQuickbar {
      */
     private function addCapatibilites() {
         $administratorRole = get_role( 'administrator' );
-        $administratorRole->add_cap( 'use_admin_quickbar' );
+        $administratorRole->add_cap( 'view_admin_quickbar' );
     }
 
     /**

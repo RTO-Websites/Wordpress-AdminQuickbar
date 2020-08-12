@@ -132,24 +132,8 @@ class AdminQuickbar {
      * @access   private
      */
     private function defineAdminHooks() {
-        /*if ( !current_user_can( 'administrator' ) ) {
-            return;
-        }*/
         $pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
         $this->loader->addAction( 'plugins_loaded', $this, 'registerSidebar' );
-
-        /*$this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
-        $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueScripts' );
-
-        // admin_footer
-        $this->loader->addAction( 'admin_print_footer_scripts', $pluginAdmin, 'renderSidebar' );
-
-        $this->loader->addAction( 'elementor/editor/before_enqueue_styles', $pluginAdmin, 'enqueueStyles' );
-        $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $pluginAdmin, 'enqueueScripts', 99999 );
-
-        $this->loader->addAction( 'set_current_user', $pluginAdmin, 'fixElementorLanguage', 11 );
-        $this->loader->addAction( 'wp_ajax_aqbRenamePost', $pluginAdmin, 'renamePost');
-        */
     }
 
     /**
@@ -185,7 +169,7 @@ class AdminQuickbar {
         add_action( 'elementor/editor/before_enqueue_styles', [ $sidebar, 'enqueueStyles' ] );
         add_action( 'elementor/editor/before_enqueue_scripts', [ $sidebar, 'enqueueScripts' ], 99999 );
 
-        // admin_footer
+        // embed to footer
         if ( is_admin() ) {
             add_action( 'admin_print_footer_scripts', [ $sidebar, 'renderSidebar' ] );
         } else {

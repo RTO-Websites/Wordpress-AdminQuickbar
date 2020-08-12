@@ -74,8 +74,6 @@ class AdminQuickbarAdmin {
          * between the defined hooks and the functions defined in this
          * class.
          */
-
-        wp_enqueue_style( $this->pluginName, AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], $this->version, 'all' );
     }
 
     /**
@@ -95,8 +93,6 @@ class AdminQuickbarAdmin {
          * between the defined hooks and the functions defined in this
          * class.
          */
-
-        wp_enqueue_script( $this->pluginName, AdminQuickbar_URL . '/Admin/js/build.min.js', [ 'jquery' ], $this->version, true );
     }
 
 }

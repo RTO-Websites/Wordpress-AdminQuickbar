@@ -605,6 +605,9 @@ class Sidebar {
          */
 
         wp_enqueue_style( $this->pluginName, AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], $this->version, 'all' );
+        if ( !is_admin() ) {
+            wp_enqueue_style( 'dashicons' );
+        }
     }
 
     /**

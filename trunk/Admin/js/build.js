@@ -168,15 +168,14 @@ let AdminQuickbarActions = {
    * Registers a connected css-window
    */
   registerCssWindow: function(url) {
-
-    if (!globalCssWindow || globalCssWindow.closed) {
-      globalCssWindow = window.open(url, "rto_wp_adminQuickbar", 'width=700,height=500,left=200,top=100');
+    if (!window.globalCssWindow || window.globalCssWindow.closed) {
+      window.globalCssWindow = window.open(url, "rto_wp_adminQuickbar", 'width=700,height=500,left=200,top=100');
     } else {
-      if (globalCssWindow.location.href !== url) {
-        globalCssWindow.location.assign(url);
+      if (window.globalCssWindow.location.href !== url) {
+        window.globalCssWindow.location.assign(url);
       }
     }
-    globalCssWindow.focus();
+    window.globalCssWindow.focus();
   },
 };
 let AdminQuickbar = function() {

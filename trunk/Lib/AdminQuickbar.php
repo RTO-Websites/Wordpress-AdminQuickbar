@@ -76,10 +76,10 @@ class AdminQuickbar {
         if ( filter_has_var( INPUT_GET, 'noaqb' ) ) {
             return;
         }
+        $this->setLocale();
 
         if ( is_admin() ) {
             $this->defineAdminHooks();
-            $this->setLocale();
         } else {
             $this->definePublicHooks();
         }
@@ -136,8 +136,9 @@ class AdminQuickbar {
             return;
         }*/
         $pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
+        $this->loader->addAction( 'plugins_loaded', $this, 'registerSidebar' );
 
-        $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
+        /*$this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
         $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueScripts' );
 
         // admin_footer
@@ -147,8 +148,8 @@ class AdminQuickbar {
         $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $pluginAdmin, 'enqueueScripts', 99999 );
 
         $this->loader->addAction( 'set_current_user', $pluginAdmin, 'fixElementorLanguage', 11 );
-
         $this->loader->addAction( 'wp_ajax_aqbRenamePost', $pluginAdmin, 'renamePost');
+        */
     }
 
     /**
@@ -159,13 +160,14 @@ class AdminQuickbar {
      * @access   private
      */
     private function definePublicHooks() {
-        $this->loader->addAction( 'plugins_loaded', $this, 'checkLoginOnWebsite' );
+        $pluginPublic = new AdminQuickbarPublic( $this->getAdminQuickbar(), $this->getVersion() );
+        $this->loader->addAction( 'plugins_loaded', $this, 'registerSidebar' );
     }
 
     /**
      * Checks if user is logged in and register actions for public-jumpicons
      */
-    public function checkLoginOnWebsite() {
+    public function registerSidebar() {
         if ( !current_user_can( 'administrator' ) ) {
             return;
         }
@@ -174,23 +176,32 @@ class AdminQuickbar {
             return;
         }
 
-        $pluginPublic = new AdminQuickbarPublic( $this->getAdminQuickbar(), $this->getVersion() );
+        $sidebar = new Sidebar( $this->getAdminQuickbar(), $this->getVersion() );
 
-        // can´t use loader->addAction here, cause it is nested in plugins_loaded
-        add_action( 'wp_footer', [ $pluginPublic, 'renderJumpIcons' ] );
-        add_action( 'wp_enqueue_scripts', [ $pluginPublic, 'enqueueStyles' ] );
-
-
-
-        // TODO: Move sidebar to own class
-        $pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
-        add_action( 'wp_enqueue_scripts', [$pluginAdmin, 'enqueueStyles'] );
-        add_action( 'wp_enqueue_scripts', [$pluginAdmin, 'enqueueScripts'] );
+        add_action( 'wp_enqueue_scripts', [ $sidebar, 'enqueueStyles' ] );
+        add_action( 'wp_enqueue_scripts', [ $sidebar, 'enqueueScripts' ] );
+        add_action( 'admin_enqueue_scripts', [ $sidebar, 'enqueueStyles' ] );
+        add_action( 'admin_enqueue_scripts', [ $sidebar, 'enqueueScripts' ] );
+        add_action( 'elementor/editor/before_enqueue_styles', [ $sidebar, 'enqueueStyles' ] );
+        add_action( 'elementor/editor/before_enqueue_scripts', [ $sidebar, 'enqueueScripts' ], 99999 );
 
         // admin_footer
-        add_action( 'wp_footer', [$pluginAdmin, 'renderSidebar'] );
-        add_action( 'set_current_user', [$pluginAdmin, 'fixElementorLanguage'], 11 );
-        add_action( 'wp_ajax_aqbRenamePost', [$pluginAdmin, 'renamePost']);
+        if ( is_admin() ) {
+            add_action( 'admin_print_footer_scripts', [ $sidebar, 'renderSidebar' ] );
+        } else {
+            add_action( 'wp_footer', [ $sidebar, 'renderSidebar' ] );
+        }
+        add_action( 'set_current_user', [ $this, 'fixElementorLanguage' ], 11 );
+        add_action( 'wp_ajax_aqbRenamePost', [ $sidebar, 'renamePost' ] );
+    }
+
+    /**
+     * Fix wrong language in elementor
+     */
+    public function fixElementorLanguage() {
+        global $current_user;
+        $userLocale = get_user_meta( get_current_user_id(), 'locale', true );
+        $current_user->locale = $userLocale;
     }
 
     /**

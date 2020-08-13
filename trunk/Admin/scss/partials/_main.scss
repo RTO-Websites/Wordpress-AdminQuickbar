@@ -470,7 +470,7 @@ h2.aqb-settings-headline {
   max-width: 1200px;
 }
 
-body.aqb-hide-on-website:not(.is-admin) {
+body.aqb-hide-on-website:not(.wp-admin) {
   .admin-quickbar,
   .admin-quickbar-jumpicons {
     display: none;

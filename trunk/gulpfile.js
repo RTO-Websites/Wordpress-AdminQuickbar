@@ -29,14 +29,3 @@ gulp.task('default', function() {
     .pipe(gulp.dest(jsDest));
 
 });
-
-
-//var gulpRunner = require('@rto-websites/npm-gulp-runner'),
-//config = require('./default.json');
-
-gulp.task('rto', function() {
-  var config = require('./default.json'),
-    gulpRunner = require('@rto-websites/npm-gulp-runner').GulpRunner(gulp, config, 0);
-
-  exports.build = gulpRunner.Build();
-});

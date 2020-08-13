@@ -82,8 +82,9 @@ let AdminQuickbarSearch = function() {
     $postListElements.removeClass('show-list');
     // open postlists
     $postListElements.each(function(index, element) {
-      if (postLists[$(element).data('post-type')]) {
-        $(element).addClass('show-list');
+      let $element = $(element);
+      if (postLists[$element.data('post-type')]) {
+        $element.addClass('show-list');
       }
     });
   };

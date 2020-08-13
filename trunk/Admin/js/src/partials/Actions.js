@@ -7,22 +7,22 @@ let AdminQuickbarActions = {
    */
   addPageToSwiftCache: function(e) {
     e.preventDefault();
-    let target = $(e.currentTarget),
-      url = target.data('url');
+    let $target = $(e.currentTarget),
+      url = $target.data('url');
 
-    target.addClass('loading');
+    $target.addClass('loading');
 
     jQuery.post(ajaxurl, {
       action: 'swift_performance_single_prebuild',
-      '_wpnonce': target.closest('.admin-quickbar').data('swift-nonce'),
+      '_wpnonce': $target.closest('.admin-quickbar').data('swift-nonce'),
       'url': url,
     }, function(response) {
       response = (typeof response === 'string' ? JSON.parse(response) : response);
 
       if (response.status === 'success') {
-        target.addClass('is-in-cache');
+        $target.addClass('is-in-cache');
       }
-      target.removeClass('loading');
+      $target.removeClass('loading');
     });
   },
 
@@ -34,17 +34,17 @@ let AdminQuickbarActions = {
    */
   refreshSwiftCache: function(e) {
     e.preventDefault();
-    let target = $(e.currentTarget),
-      url = target.data('url');
+    let $target = $(e.currentTarget),
+      url = $target.data('url');
 
-    target.addClass('loading');
+    $target.addClass('loading');
 
     jQuery.post(ajaxurl, {
       action: 'swift_performance_single_clear_cache',
-      '_wpnonce': target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
+      '_wpnonce': $target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
       'url': url,
     }, function(response) {
-      target.removeClass('is-in-cache');
+      $target.removeClass('is-in-cache');
       AdminQuickbarActions.addPageToSwiftCache(e);
     });
   },
@@ -57,9 +57,9 @@ let AdminQuickbarActions = {
   checkSwiftCache: function(e) {
     e.preventDefault();
     e.stopPropagation();
-    let target = $(e.currentTarget);
+    let $target = $(e.currentTarget);
 
-    if (target.hasClass('is-in-cache')) {
+    if ($target.hasClass('is-in-cache')) {
       AdminQuickbarActions.refreshSwiftCache(e);
     } else {
       AdminQuickbarActions.addPageToSwiftCache(e);
@@ -71,16 +71,16 @@ let AdminQuickbarActions = {
    * @param postid
    */
   addToFavorites: function(postid) {
-    let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
-      listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
+    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      $listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
 
-    listItem.addClass('is-favorite');
+    $listItem.addClass('is-favorite');
     AdminQuickbarActions.buildFavoriteStorage();
 
-    if (!listItemFav.length) {
-      listItemFav = listItem.first().clone();
-      listItemFav.css({marginLeft: ''});
-      $('.aqb-favorites .admin-quickbar-postlist-inner').append(listItemFav);
+    if (!$listItemFav.length) {
+      $listItemFav = $listItem.first().clone();
+      $listItemFav.css({marginLeft: ''});
+      $('.aqb-favorites .admin-quickbar-postlist-inner').append($listItemFav);
     }
   },
   /**
@@ -88,12 +88,12 @@ let AdminQuickbarActions = {
    * @param postid
    */
   removeFromFavorites: function(postid) {
-    let listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
-      listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
+    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+      $listItemFav = $('.aqb-favorites .admin-quickbar-post[data-postid=' + postid + ']');
 
-    listItem.removeClass('is-favorite');
+    $listItem.removeClass('is-favorite');
     AdminQuickbarActions.buildFavoriteStorage();
-    listItemFav.remove();
+    $listItemFav.remove();
   },
 
   /**
@@ -142,6 +142,7 @@ let AdminQuickbarActions = {
   },
 
   saveRenamePost: function(postid, title) {
+    let $postTitle = $('.aqb-post-title');
     $.post({
       url: ajaxurl,
       data: {
@@ -151,8 +152,8 @@ let AdminQuickbarActions = {
       }
     });
     $('.save-rename').remove();
-    $('.aqb-post-title').prop('contenteditable', false);
-    $('.aqb-post-title').removeClass('is-renaming');
+    $postTitle.prop('contenteditable', false);
+    $postTitle.removeClass('is-renaming');
   },
 
 

@@ -469,3 +469,10 @@ h2.aqb-settings-headline {
 .wp-block {
   max-width: 1200px;
 }
+
+body.aqb-hide-on-website:not(.is-admin) {
+  .admin-quickbar,
+  .admin-quickbar-jumpicons {
+    display: none;
+  }
+}

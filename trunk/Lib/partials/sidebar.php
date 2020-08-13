@@ -62,7 +62,7 @@
 
             <label class="admin-quickbar-hide-on-website">
                 <input type="checkbox" name="admin-quickbar-hide-on-website"/>
-                <?php _e( 'Hide Jump-Links on website', 'admin-quickbar' ); ?>
+                <?php _e( 'Hide quickbar on website', 'admin-quickbar' ); ?>
             </label>
 
 

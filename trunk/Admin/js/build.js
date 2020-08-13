@@ -218,7 +218,14 @@ let AdminQuickbar = function() {
      * Hide on website
      */
     $(doc).on('change', '.admin-quickbar-hide-on-website input', function(e) {
+      let $body = $('body');
       localStorage.adminQuickbarHideOnWebsite = $('.admin-quickbar-hide-on-website input').is(':checked');
+
+      if (localStorage.adminQuickbarHideOnWebsite === 'true') {
+        $body.addClass('aqb-hide-on-website');
+      } else {
+        $body.removeClass('aqb-hide-on-website');
+      }
     });
 
     /**
@@ -264,7 +271,7 @@ let AdminQuickbar = function() {
       localStorage.adminQuickbarKeepopen = 'true';
     }
     if (typeof (localStorage.adminQuickbarToggle) === 'undefined') {
-      localStorage.adminQuickbarToggle = 'true';
+      localStorage.adminQuickbarToggle = 'false';
     }
     if (typeof (localStorage.adminQuickbarLanguageFilter) === 'undefined') {
       localStorage.adminQuickbarLanguageFilter = 'all';
@@ -275,12 +282,13 @@ let AdminQuickbar = function() {
    * Open sidebar and postlists on dom-ready
    */
   domReady = function() {
+    let $body = $('body');
     initFavorites();
 
     // open quickbar
     if (localStorage.adminQuickbarToggle === 'true' && localStorage.adminQuickbarKeepopen === 'true') {
       $('.admin-quickbar').addClass('toggle');
-      $('body').addClass('admin-quickbar-visible');
+      $body.addClass('admin-quickbar-visible');
     }
 
     if (localStorage.adminQuickbarKeepopen === 'true') {
@@ -289,6 +297,7 @@ let AdminQuickbar = function() {
 
     if (localStorage.adminQuickbarHideOnWebsite === 'true') {
       $('.admin-quickbar-hide-on-website input').prop('checked', true);
+      $body.addClass('aqb-hide-on-website');
     }
 
     if (localStorage.adminQuickbarLoadthumbs === 'true') {
@@ -298,12 +307,12 @@ let AdminQuickbar = function() {
 
     if (localStorage.adminQuickbarOverlap === 'true') {
       $('.admin-quickbar-overlap input').prop('checked', true);
-      $('body').addClass('admin-quickbar-is-overlap');
+      $body.addClass('admin-quickbar-is-overlap');
     }
 
     if (localStorage.adminQuickbarShowTrash === 'true') {
       $('.admin-quickbar-show-trash-option input').prop('checked', true);
-      $('body').addClass('admin-quickbar-show-trash');
+      $body.addClass('admin-quickbar-show-trash');
     }
 
     self.checkTheme();

@@ -395,6 +395,10 @@ h2.aqb-settings-headline {
 .wp-block {
   max-width: 1200px; }
 
+body.aqb-hide-on-website:not(.is-admin) .admin-quickbar,
+body.aqb-hide-on-website:not(.is-admin) .admin-quickbar-jumpicons {
+  display: none; }
+
 .aqb-icon {
   display: inline-block;
   position: relative;

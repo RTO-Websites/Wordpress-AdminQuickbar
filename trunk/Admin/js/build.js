@@ -631,7 +631,6 @@ let AdminQuickbar = function() {
 };
 
 
-
 let AdminQuickbarContextMenu = function() {
   let win = window,
     doc = win.document,
@@ -848,9 +847,9 @@ let AdminQuickbarContextMenu = function() {
       $item = $('<div class="item subitem" />');
       $item.on('click', function(e) {
         e.stopPropagation();
-        let input = $(e.currentTarget).find('input');
-        input.focus();
-        input.select();
+        let $input = $(e.currentTarget).find('input');
+        $input.focus();
+        $input.select();
         document.execCommand('copy');
       });
       $item.addClass('item-' + index);
@@ -858,7 +857,7 @@ let AdminQuickbarContextMenu = function() {
       addTitleToElement($item, index);
       $input = $('<input type="text" class="hidden-copy-input" />');
       $input.val(data[index]);
-      $item.append(input);
+      $item.append($input);
       $parent.append($item);
     }
 

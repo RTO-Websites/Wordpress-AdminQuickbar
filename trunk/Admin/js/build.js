@@ -12,7 +12,7 @@ let AdminQuickbarActions = {
 
     $target.addClass('loading');
 
-    jQuery.post(ajaxurl, {
+    jQuery.post(aqbLocalize.ajaxUrl, {
       action: 'swift_performance_single_prebuild',
       '_wpnonce': $target.closest('.admin-quickbar').data('swift-nonce'),
       'url': url,
@@ -39,7 +39,7 @@ let AdminQuickbarActions = {
 
     $target.addClass('loading');
 
-    jQuery.post(ajaxurl, {
+    jQuery.post(aqbLocalize.ajaxUrl, {
       action: 'swift_performance_single_clear_cache',
       '_wpnonce': $target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
       'url': url,
@@ -144,7 +144,7 @@ let AdminQuickbarActions = {
   saveRenamePost: function(postid, title) {
     let $postTitle = $('.aqb-post-title');
     $.post({
-      url: ajaxurl,
+      url: aqbLocalize.ajaxUrl,
       data: {
         action: 'aqbRenamePost',
         postid: postid,

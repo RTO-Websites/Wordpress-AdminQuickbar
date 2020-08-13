@@ -70,21 +70,21 @@ class Sidebar {
      * Register all of the hooks related to the sidebar functionality
      */
     private function defineHooks() {
-        $this->loader->addAction( 'wp_enqueue_scripts',  $this, 'enqueueStyles'  );
-        $this->loader->addAction( 'wp_enqueue_scripts',  $this, 'enqueueScripts'  );
-        $this->loader->addAction( 'admin_enqueue_scripts',  $this, 'enqueueStyles'  );
-        $this->loader->addAction( 'admin_enqueue_scripts',  $this, 'enqueueScripts'  );
-        $this->loader->addAction( 'elementor/editor/before_enqueue_styles',  $this, 'enqueueStyles'  );
-        $this->loader->addAction( 'elementor/editor/before_enqueue_scripts',  $this, 'enqueueScripts' , 99999 );
+        $this->loader->addAction( 'wp_enqueue_scripts', $this, 'enqueueStyles' );
+        $this->loader->addAction( 'wp_enqueue_scripts', $this, 'enqueueScripts' );
+        $this->loader->addAction( 'admin_enqueue_scripts', $this, 'enqueueStyles' );
+        $this->loader->addAction( 'admin_enqueue_scripts', $this, 'enqueueScripts' );
+        $this->loader->addAction( 'elementor/editor/before_enqueue_styles', $this, 'enqueueStyles' );
+        $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $this, 'enqueueScripts', 99999 );
 
         // embed to footer
         if ( is_admin() ) {
-            $this->loader->addAction( 'admin_print_footer_scripts',  $this, 'renderSidebar'  );
+            $this->loader->addAction( 'admin_print_footer_scripts', $this, 'renderSidebar' );
         } else {
-            $this->loader->addAction( 'wp_footer',  $this, 'renderSidebar'  );
+            $this->loader->addAction( 'wp_footer', $this, 'renderSidebar' );
         }
-        $this->loader->addAction( 'set_current_user', $this, 'fixElementorLanguage' , 11 );
-        $this->loader->addAction( 'wp_ajax_aqbRenamePost', $this, 'renamePost');
+        $this->loader->addAction( 'set_current_user', $this, 'fixElementorLanguage', 11 );
+        $this->loader->addAction( 'wp_ajax_aqbRenamePost', $this, 'renamePost' );
 
     }
 
@@ -677,5 +677,8 @@ class Sidebar {
          */
 
         wp_enqueue_script( $this->pluginName, AdminQuickbar_URL . '/Admin/js/build.min.js', [ 'jquery' ], $this->version, true );
+
+        wp_localize_script( $this->pluginName, 'aqbLocalize',
+            [ 'ajaxUrl' => admin_url( 'admin-ajax.php' ) ] );
     }
 }

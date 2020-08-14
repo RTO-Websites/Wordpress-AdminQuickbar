@@ -15,7 +15,8 @@ class Sidebar {
     protected $loader;
 
     const PARTIAL_DIR = AdminQuickbar_DIR . '/Lib/partials/';
-    private $filterPostTypes = [];
+
+
     private $postTypes = [];
     private $filteredPostTypes = [];
     private $categoryList = [];
@@ -24,8 +25,27 @@ class Sidebar {
 
     private $cssPosts = [];
 
-    private $filteredPosts = [
+    /**
+     * List of post-names that should not be displayed and filtered out
+     *
+     * @var string[]
+     */
+    private $filterPosts = [
         'default-kit', // used from elementor for theme-style
+    ];
+
+    /**
+     * List of post-types that should not be displayed and filtered out
+     * @var string[]
+     */
+    private $filterPostTypes = [
+        'nav_menu_item',
+        'revision',
+        'custom_css',
+        'customize_changeset',
+        'oembed_cache',
+        'ocean_modal_window',
+        'nxs_qp',
     ];
 
     /**
@@ -110,16 +130,6 @@ class Sidebar {
      * Set filtered post-types
      */
     public function setFilteredPostTypes() {
-        $this->filterPostTypes = [
-            'nav_menu_item',
-            'revision',
-            'custom_css',
-            'customize_changeset',
-            'oembed_cache',
-            'ocean_modal_window',
-            'nxs_qp',
-        ];
-
         foreach ( $this->postTypes as $postType ) {
             if ( in_array( $postType->name, $this->filterPostTypes ) ) {
                 continue;
@@ -273,7 +283,7 @@ class Sidebar {
     public function getRenderedPostsList( $postType, $posts ) {
         $output = '';
         foreach ( $posts as $post ) {
-            if ( in_array( $post->post_name, $this->filteredPosts ) ) {
+            if ( in_array( $post->post_name, $this->filterPosts ) ) {
                 continue;
             }
             $style = $this->getMarginStyle( $post, $postType, $lastParent, $margin );

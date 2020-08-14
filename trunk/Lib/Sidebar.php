@@ -77,12 +77,12 @@ class Sidebar {
         $this->loader->addAction( 'elementor/editor/before_enqueue_styles', $this, 'enqueueStyles' );
         $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $this, 'enqueueScripts', 99999 );
 
-        // embed to footer
-        if ( is_admin() ) {
-            $this->loader->addAction( 'admin_print_footer_scripts', $this, 'renderSidebar' );
-        } else {
-            $this->loader->addAction( 'wp_footer', $this, 'renderSidebar' );
-        }
+        // embed to footer on admin
+        $this->loader->addAction( 'admin_print_footer_scripts', $this, 'renderSidebar' );
+
+        // embed to footer on website
+        $this->loader->addAction( 'wp_footer', $this, 'renderSidebar' );
+
         $this->loader->addAction( 'set_current_user', $this, 'fixElementorLanguage', 11 );
         $this->loader->addAction( 'wp_ajax_aqbRenamePost', $this, 'renamePost' );
 

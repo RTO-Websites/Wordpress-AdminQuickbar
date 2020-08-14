@@ -102,8 +102,15 @@ class Sidebar {
     public function setPostTypes() {
         $this->postTypes = get_post_types( [], 'object' );
 
-        $this->filterPostTypes = explode( ',', 'nav_menu_item,revision,custom_css,customize_changeset,'
-            . 'oembed_cache,ocean_modal_window,nxs_qp' );
+        $this->filterPostTypes = [
+            'nav_menu_item',
+            'revision',
+            'custom_css',
+            'customize_changeset',
+            'oembed_cache',
+            'ocean_modal_window',
+            'nxs_qp'
+        ];
 
         foreach ( $this->postTypes as $postType ) {
             if ( in_array( $postType->name, $this->filterPostTypes ) ) {

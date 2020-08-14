@@ -154,17 +154,14 @@ class Sidebar {
         $this->setPostTypes();
         $this->setFilteredPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
-        if ( is_admin() ) {
-            $currentPost = filter_input( INPUT_GET, 'post' );
-        } else {
-            $currentPost = get_the_ID();
-        }
 
-        if ( empty( $currentPost ) ) {
-            $permalink = get_bloginfo( 'wpurl' );
-        } else {
-            $permalink = get_permalink( $currentPost );
-        }
+        $currentPost = is_admin()
+            ? filter_input( INPUT_GET, 'post' )
+            : get_the_ID();
+
+        $permalink = empty( $currentPost )
+            ? get_bloginfo( 'wpurl' )
+            : get_permalink( $currentPost );
 
         $template = new Template( self::PARTIAL_DIR . '/sidebar.php', [
             'postTypeLoop' => $postTypeLoop,

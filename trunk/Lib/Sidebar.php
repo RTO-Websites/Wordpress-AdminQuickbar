@@ -492,9 +492,6 @@ class Sidebar {
             $count = 0;
             $args = $args + [
                     'post_status' => 'any',
-                    // workaround for elementor
-                    'meta_key' => 'blub54315321',
-                    'meta_compare' => 'NOT EXISTS',
                 ];
 
             foreach ( $this->categoryList as $category ) {

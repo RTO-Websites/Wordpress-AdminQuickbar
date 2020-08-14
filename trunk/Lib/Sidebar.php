@@ -472,7 +472,7 @@ class Sidebar {
         if ( $this->isWpmlActive() ) {
             do_action( 'wpml_switch_language', 'all' );
         }
-        // get posts of current post-type
+
         $args = [
             'post_type' => $postType->name,
             'posts_per_page' => -1,
@@ -481,6 +481,7 @@ class Sidebar {
             'orderby' => $postType->hierarchical ? [ 'parent' => 'ASC', 'menu_order' => 'ASC' ] : 'menu_order',
             'order' => 'ASC',
         ];
+
         if ( $postType->hierarchical ) {
             $posts = get_pages( $args );
             $categories = [

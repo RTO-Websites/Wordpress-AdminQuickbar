@@ -25,8 +25,6 @@ class Sidebar {
 
     private $cssPosts = [];
 
-    private $hasWpml = false;
-
     /**
      * The ID of this plugin.
      *
@@ -93,17 +91,10 @@ class Sidebar {
      *
      * @return bool
      */
-    private function checkForWpml() {
-        $currentLanguage = apply_filters( 'wpml_current_language', null );
-        $defaultLanguage = apply_filters( 'wpml_default_language', null );
-
-        if ( !empty( $currentLanguage ) && !empty( $defaultLanguage )
-        ) {
-            $this->hasWpml = true;
-        }
-
-        return $this->hasWpml;
+    private function isWpmlActive() {
+        return is_plugin_active( 'the_wplm_plugin_slug' );
     }
+
 
     /**
      * Set post-types and filtered post-types
@@ -144,7 +135,7 @@ class Sidebar {
      * @throws \ImagickException
      */
     public function renderSidebar( $data ) {
-        $this->checkForWpml();
+        $this->isWpmlActive();
         $this->initCacheList();
         $this->setPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
@@ -309,7 +300,7 @@ class Sidebar {
      * @return string
      */
     public function getLanguageFlag( $post ) {
-        if ( !$this->hasWpml ) {
+        if ( !$this->isWpmlActive() ) {
             return '';
         }
 
@@ -335,7 +326,7 @@ class Sidebar {
     public function renderAllLanguageFlags() {
         $output = '';
 
-        if ( !$this->hasWpml || empty( $wpmlLanguages = apply_filters( 'wpml_active_languages', null ) ) ) {
+        if ( !$this->isWpmlActive()|| empty( $wpmlLanguages = apply_filters( 'wpml_active_languages', null ) ) ) {
             return '';
         }
 
@@ -466,7 +457,7 @@ class Sidebar {
         $countPostType = 0;
         $categories = [];
 
-        if ( $this->hasWpml ) {
+        if ( $this->isWpmlActive() ) {
             do_action( 'wpml_switch_language', 'all' );
         }
         // get posts of current post-type

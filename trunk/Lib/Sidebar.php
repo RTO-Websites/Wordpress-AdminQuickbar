@@ -24,6 +24,10 @@ class Sidebar {
 
     private $cssPosts = [];
 
+    private $filteredPosts = [
+        'default-kit', // used from elementor for theme-style
+    ];
+
     /**
      * The ID of this plugin.
      *
@@ -113,7 +117,7 @@ class Sidebar {
             'customize_changeset',
             'oembed_cache',
             'ocean_modal_window',
-            'nxs_qp'
+            'nxs_qp',
         ];
 
         foreach ( $this->postTypes as $postType ) {
@@ -269,7 +273,7 @@ class Sidebar {
     public function getRenderedPostsList( $postType, $posts ) {
         $output = '';
         foreach ( $posts as $post ) {
-            if ( $post->post_name === 'default-kit' ) {
+            if ( in_array( $post->post_name, $this->filteredPosts ) ) {
                 continue;
             }
             $style = $this->getMarginStyle( $post, $postType, $lastParent, $margin );
@@ -338,7 +342,7 @@ class Sidebar {
     public function renderAllLanguageFlags() {
         $output = '';
 
-        if ( !$this->isWpmlActive()|| empty( $wpmlLanguages = apply_filters( 'wpml_active_languages', null ) ) ) {
+        if ( !$this->isWpmlActive() || empty( $wpmlLanguages = apply_filters( 'wpml_active_languages', null ) ) ) {
             return '';
         }
 

@@ -21,7 +21,6 @@ class Sidebar {
     private $categoryList = [];
 
     private $cacheList = [];
-    private $hasSwift;
 
     private $cssPosts = [];
 
@@ -124,14 +123,17 @@ class Sidebar {
      * Get cache list from swift and writes to $cacheList
      */
     public function initCacheList() {
-        $this->hasSwift = class_exists( 'Swift_Performance' ) || class_exists( 'Swift_Performance_Lite' );
-        if ( !$this->hasSwift ) {
+        if ( !$this->hasSwift() ) {
             return;
         }
 
         $this->cacheList = class_exists( 'Swift_Performance' )
             ? Swift_Performance::cache_status()['files']
             : Swift_Performance_Lite::cache_status()['files'];
+    }
+
+    private function hasSwift() {
+        return class_exists( 'Swift_Performance' ) || class_exists( 'Swift_Performance_Lite' );
     }
 
     /**
@@ -164,7 +166,7 @@ class Sidebar {
             'currentPost' => $currentPost,
             'permalink' => $permalink,
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
-            'hasSwift' => $this->hasSwift,
+            'hasSwift' => $this->hasSwift(),
             'inCache' => in_array( $permalink, $this->cacheList ),
             'languageFlags' => $this->renderAllLanguageFlags(),
         ] );
@@ -174,7 +176,7 @@ class Sidebar {
             'currentPost' => $currentPost,
             'permalink' => $permalink,
             'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
-            'hasSwift' => $this->hasSwift && !empty( $currentPost ),
+            'hasSwift' => $this->hasSwift() && !empty( $currentPost ),
             'inCache' => in_array( $permalink, $this->cacheList ),
             'cssPosts' => array_reverse( $this->cssPosts ),
         ] );
@@ -289,7 +291,7 @@ class Sidebar {
                 'postTitle' => $this->getPostTitle( $post ),
                 'inCache' => in_array( $permalink, $this->cacheList ),
                 'permalink' => $permalink,
-                'hasSwift' => $this->hasSwift,
+                'hasSwift' => $this->hasSwift(),
                 'activeClass' => $activeClass,
                 'languageFlag' => $languageFlag,
                 'postClasses' => $postClasses,
@@ -575,7 +577,7 @@ class Sidebar {
             ],
         ];
 
-        if ( $this->hasSwift ) {
+        if ( $this->hasSwift() ) {
             $permalink = get_the_permalink( $post->ID );
             $data['swift'] = [
                 'inCache' => in_array( $permalink, $this->cacheList ),

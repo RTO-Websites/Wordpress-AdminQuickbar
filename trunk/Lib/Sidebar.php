@@ -287,7 +287,7 @@ class Sidebar {
             if ( !empty( $post->post_password ) ) {
                 $postClasses .= ' has-password';
             }
-            $languageFlag = $this->getLanguageFlag( $post );
+            $languageFlag = $this->getRenderedLanguageFlag( $post );
 
             $template = new Template( self::PARTIAL_DIR . '/loop-posts.php', [
                 'post' => $post,
@@ -315,7 +315,7 @@ class Sidebar {
      * @param $post
      * @return string
      */
-    public function getLanguageFlag( $post ) {
+    public function getRenderedLanguageFlag( $post ) {
         if ( !$this->isWpmlActive() ) {
             return '';
         }

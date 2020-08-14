@@ -130,6 +130,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     content: 'Password'; }
   .admin-quickbar-post.post-status-trash {
     display: none; }
+    .admin-quickbar-post.post-status-trash .admin-quickbar-post-options {
+      display: none; }
 
 .admin-quickbar-show-trash .admin-quickbar-post.post-status-trash {
   display: block; }

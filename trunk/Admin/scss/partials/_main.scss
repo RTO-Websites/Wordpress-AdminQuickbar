@@ -185,6 +185,10 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 
   &.post-status-trash {
     display: none;
+
+    .admin-quickbar-post-options {
+      display: none;
+    }
   }
 }
 

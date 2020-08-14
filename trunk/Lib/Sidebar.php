@@ -294,7 +294,7 @@ class Sidebar {
                 'postTypeInfo' => $postTypeInfo,
                 'contextMenuData' => json_encode( $this->getContextMenuData( $postType, $post, $postTypeInfo ) ),
                 'style' => $style,
-                'thumb' => $this->getThumb( $post ),
+                'thumb' => $this->getRenderedPostThumbnail( $post ),
                 'postTitle' => $this->getPostTitle( $post ),
                 'inCache' => in_array( $permalink, $this->cacheList ),
                 'permalink' => $permalink,
@@ -365,7 +365,7 @@ class Sidebar {
      * @return string
      * @throws \ImagickException
      */
-    public function getThumb( $post ) {
+    public function getRenderedPostThumbnail( $post ) {
         $class = '';
         if ( has_post_thumbnail( $post ) ) {
             // from post-thumbnail

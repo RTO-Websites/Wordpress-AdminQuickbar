@@ -444,12 +444,10 @@ class Sidebar {
      */
     public function getMarginStyle( $post, $postType, &$lastParent, &$margin = 0 ) {
         $style = '';
+
         if ( empty( $post->post_parent ) ) {
             $margin = 0;
-        } else if ( $post->post_parent === $lastParent ) {
-            // do nothing
-        } else {
-            // has parent, not same as before
+        } else if ( $post->post_parent !== $lastParent ) {
             $margin += 10;
             $lastParent = $post->post_parent;
         }

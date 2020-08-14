@@ -153,7 +153,7 @@ class Sidebar {
         $this->initCacheList();
         $this->setPostTypes();
         $this->setFilteredPostTypes();
-        $postTypeLoop = $this->getLoopPostTypes();
+        $postTypeLoop = $this->getRenderedPostTypeList();
 
         $currentPost = is_admin()
             ? filter_input( INPUT_GET, 'post' )
@@ -189,12 +189,12 @@ class Sidebar {
     }
 
     /**
-     * Gets rendered post-type loop
+     * Gets rendered post-type list
      *
      * @return string
      * @throws \ImagickException
      */
-    public function getLoopPostTypes() {
+    public function getRenderedPostTypeList() {
         $output = '';
         foreach ( $this->postTypes as $postType ) {
             if ( in_array( $postType->name, $this->filterPostTypes ) ) {
@@ -220,7 +220,7 @@ class Sidebar {
                 continue;
             }
 
-            $postsByCategory = $this->getLoopCategories( $postType, $categories );
+            $postsByCategory = $this->getRenderedCategoriesAsArray( $postType, $categories );
 
             $template = new Template( self::PARTIAL_DIR . '/loop-post-types.php', [
                 'postType' => $postType,
@@ -241,7 +241,7 @@ class Sidebar {
      * @return array
      * @throws \ImagickException
      */
-    public function getLoopCategories( $postType, $categories ) {
+    public function getRenderedCategoriesAsArray( $postType, $categories ) {
         $output = [];
 
         foreach ( $categories as $categoryName => $posts ) {
@@ -252,7 +252,7 @@ class Sidebar {
                 $this->cssPosts = $posts;
             }
 
-            $output[$categoryName] = $this->getLoopPosts( $postType, $posts );
+            $output[$categoryName] = $this->getRenderedPostsList( $postType, $posts );
         }
 
         return $output;
@@ -266,7 +266,7 @@ class Sidebar {
      * @return string
      * @throws \ImagickException
      */
-    public function getLoopPosts( $postType, $posts ) {
+    public function getRenderedPostsList( $postType, $posts ) {
         $output = '';
         foreach ( $posts as $post ) {
             if ( $post->post_name === 'default-kit' ) {

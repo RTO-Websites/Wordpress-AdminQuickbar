@@ -612,17 +612,17 @@ class Sidebar {
         $postid = filter_input( INPUT_POST, 'postid' );
         $title = filter_input( INPUT_POST, 'title' );
 
-        if ( empty( $postid ) || empty( $title ) ) {
-            var_dump( $postid );
-            var_dump( $title );
-            wp_die();
-        }
-
-        wp_update_post( [
+        $result = [
             'ID' => $postid,
             'post_title' => $title,
-        ] );
-        wp_die();
+        ];
+
+        if ( empty( $postid ) || empty( $title ) ) {
+            wp_die( json_encode( $result ) );
+        }
+
+        wp_update_post( $result );
+        wp_die( json_encode( $result ) );
     }
 
 

@@ -96,11 +96,16 @@ class Sidebar {
 
 
     /**
-     * Set post-types and filtered post-types
+     * Set post-types
      */
     public function setPostTypes() {
         $this->postTypes = get_post_types( [], 'object' );
+    }
 
+    /**
+     * Set filtered post-types
+     */
+    public function setFilteredPostTypes() {
         $this->filterPostTypes = [
             'nav_menu_item',
             'revision',
@@ -147,6 +152,7 @@ class Sidebar {
         $this->isWpmlActive();
         $this->initCacheList();
         $this->setPostTypes();
+        $this->setFilteredPostTypes();
         $postTypeLoop = $this->getLoopPostTypes();
         if ( is_admin() ) {
             $currentPost = filter_input( INPUT_GET, 'post' );

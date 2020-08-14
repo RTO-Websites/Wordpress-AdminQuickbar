@@ -427,14 +427,12 @@ class Sidebar {
      */
     public function getPostTitle( $post ) {
         if ( !empty( $post->post_title ) ) {
-            $output = $post->post_title;
-        } else if ( !empty( $post->post_name ) ) {
-            $output = $post->post_name;
-        } else {
-            $output = $post->ID;
+            return $post->post_title;
         }
-
-        return $output;
+        if ( !empty( $post->post_name ) ) {
+            return $post->post_name;
+        }
+        return $post->ID;
     }
 
     /**

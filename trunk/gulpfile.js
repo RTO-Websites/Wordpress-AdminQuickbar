@@ -16,16 +16,13 @@ gulp.task('default', function() {
   gulp.src(sassAdminFiles)
     .pipe(sass({style: 'expanded'}))
     .pipe(autoprefixer("last 3 version", "safari 5", "ie 8", "ie 9"))
-    .pipe(gulp.dest("Admin/css"))
     .pipe(rename({suffix: '.min'}))
     .pipe(minifycss())
-    .pipe(gulp.dest('Admin/css'));
+    .pipe(gulp.dest('Admin/css'))
 
   gulp.src(jsFiles)
     .pipe(concat('build.js'))
-    .pipe(gulp.dest(jsDest))
     .pipe(rename('build.min.js'))
     .pipe(uglify().on('error', util.log))
     .pipe(gulp.dest(jsDest));
-
 });

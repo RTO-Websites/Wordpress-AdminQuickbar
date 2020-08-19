@@ -163,7 +163,6 @@ class Sidebar {
      * @throws \ImagickException
      */
     public function renderSidebar( $data ) {
-        $this->isWpmlActive();
         $this->initCacheList();
         $this->setPostTypes();
         $this->setFilteredPostTypes();

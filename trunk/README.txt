@@ -3,9 +3,9 @@ Contributors: rtowebsites
 Donate link: https://www.rto.de
 Tags: post, post list, sidebar, elementor, rto, rto.de
 Requires at least: 5.0
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 7.0
-Stable tag: 1.6.1
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,8 +30,10 @@ Just install and activate the plugin.
 = 1.7.0 =
 * Posts can now be deleted from contextmenu
 * Fix issues with wpml
-* Fix issues with gutenberg an Wordpress 5.4
+* Fix issues with gutenberg and Wordpress 5.4
 * Fix not listed private pages
+* Works now on website
+* Search bar
 
 = 1.6.0 =
 * WPML Integration

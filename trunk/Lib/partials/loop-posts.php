@@ -8,16 +8,23 @@
  * @var string $languageFlag
  * @var string $postTitle
  * @var array $postTypeInfo
+ * @var string $postClasses
  * @var string $permalink
+ * @var string $trashUrl
+ * @var string $unTrashUrl
  */
 ?>
-<div class="admin-quickbar-post <?php echo $activeClass; ?>" data-postid="<?php echo $post->ID; ?>" <?php echo $style; ?> data-contextmenu='<?php echo $contextMenuData; ?>'>
+<div class="admin-quickbar-post <?php echo $postClasses . ' ' . $activeClass; ?>"
+        data-postid="<?php echo $post->ID; ?>" <?php echo $style; ?>
+        data-contextmenu='<?php echo $contextMenuData; ?>'
+        data-trash-url="<?php echo $trashUrl; ?>"
+        data-untrash-url="<?php echo $unTrashUrl; ?>">
     <?php
     echo $thumb;
     ?>
     <span class="label">
         <?php echo $languageFlag; ?>
-        <?php echo $postTitle; ?>
+        <span class="aqb-post-title"><?php echo $postTitle; ?></span>
     </span>
     <div class="admin-quickbar-post-options">
         <a class="aqb-icon aqb-icon-wordpress dashicons-edit"

@@ -62,11 +62,39 @@
   }
 }
 
-.aqb-icon-id {
+.aqb-icon-trash {
+  cursor: pointer;
 
+  &::before {
+    content: "\f182";
+  }
+}
+
+.aqb-icon-rename {
+  cursor: pointer;
+
+  &::before {
+    content: "\f464";
+  }
+}
+
+.aqb-icon-id {
   &::before {
     font-size: 24px !important;
     content: "\f336";
+  }
+}
+
+.save-rename {
+  &::before {
+    content: "\f12a";
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    font-size: 16px;
+    font-family: Dashicons;
+    padding: 2px 5px;
+    cursor: pointer;
   }
 }
 

@@ -57,6 +57,8 @@ class AdminQuickbar {
      */
     protected $version;
 
+    protected $sidebar;
+
     /**
      * Define the core functionality of the plugin.
      *
@@ -72,11 +74,12 @@ class AdminQuickbar {
         $this->version = AdminQuickbar_VERSION;
 
         $this->loadDependencies();
-        #$this->setLocale();
 
         if ( filter_has_var( INPUT_GET, 'noaqb' ) ) {
             return;
         }
+        $this->addCapatibilites();
+        $this->setLocale();
 
         if ( is_admin() ) {
             $this->defineAdminHooks();
@@ -133,15 +136,7 @@ class AdminQuickbar {
      */
     private function defineAdminHooks() {
         $pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
-
-        $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
-        $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueScripts' );
-
-        // admin_footer
-        $this->loader->addAction( 'admin_print_footer_scripts', $pluginAdmin, 'renderSidebar' );
-
-        $this->loader->addAction( 'elementor/editor/before_enqueue_styles', $pluginAdmin, 'enqueueStyles' );
-        $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $pluginAdmin, 'enqueueScripts', 99999 );
+        $this->loader->addAction( 'plugins_loaded', $this, 'registerSidebar' );
     }
 
     /**
@@ -152,14 +147,15 @@ class AdminQuickbar {
      * @access   private
      */
     private function definePublicHooks() {
-        $this->loader->addAction( 'plugins_loaded', $this, 'checkLoginOnWebsite' );
+        $pluginPublic = new AdminQuickbarPublic( $this->getAdminQuickbar(), $this->getVersion() );
+        $this->loader->addAction( 'plugins_loaded', $this, 'registerSidebar' );
     }
 
     /**
      * Checks if user is logged in and register actions for public-jumpicons
      */
-    public function checkLoginOnWebsite() {
-        if ( !current_user_can( 'administrator' ) ) {
+    public function registerSidebar() {
+        if ( !current_user_can( 'view_admin_quickbar' ) ) {
             return;
         }
 
@@ -167,11 +163,17 @@ class AdminQuickbar {
             return;
         }
 
-        $pluginPublic = new AdminQuickbarPublic( $this->getAdminQuickbar(), $this->getVersion() );
+        $this->sidebar = new Sidebar( $this->getAdminQuickbar(), $this->getVersion() );
+    }
 
-        // can´t use loader->addAction here, cause it is nested in plugins_loaded
-        add_action( 'wp_footer', [ $pluginPublic, 'renderJumpIcons' ] );
-        add_action( 'wp_enqueue_scripts', [ $pluginPublic, 'enqueueStyles' ] );
+
+
+    /**
+     * Gives admin the use_admin_quickbar capatibility
+     */
+    private function addCapatibilites() {
+        $administratorRole = get_role( 'administrator' );
+        $administratorRole->add_cap( 'view_admin_quickbar' );
     }
 
     /**

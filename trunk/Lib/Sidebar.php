@@ -115,7 +115,7 @@ class Sidebar {
      * @return bool
      */
     private function isWpmlActive() {
-        return is_plugin_active( 'the_wplm_plugin_slug' );
+        return is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' );
     }
 
 
@@ -350,8 +350,8 @@ class Sidebar {
      */
     public function renderAllLanguageFlags() {
         $output = '';
-
-        if ( !$this->isWpmlActive() || empty( $wpmlLanguages = apply_filters( 'wpml_active_languages', null ) ) ) {
+        $wpmlLanguages = apply_filters( 'wpml_active_languages', null );
+        if ( !$this->isWpmlActive() || empty( $wpmlLanguages ) ) {
             return '';
         }
 

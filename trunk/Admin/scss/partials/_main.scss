@@ -71,6 +71,14 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   #query-monitor-main {
     width: calc(100% - 322px) !important;
   }
+
+  .interface-interface-skeleton {
+    right: 320px;
+  }
+
+  .edit-post-layout .editor-post-publish-panel {
+    right: 320px;
+  }
 }
 
 .admin-quickbar.toggle .admin-quickbar-inner {
@@ -109,6 +117,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     vertical-align: bottom;
     padding-top: 3px;
     box-sizing: border-box;
+    z-index: 10;
   }
 }
 
@@ -176,6 +185,10 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 
   &.post-status-trash {
     display: none;
+
+    .admin-quickbar-post-options {
+      display: none;
+    }
   }
 }
 
@@ -241,19 +254,21 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 
 .admin-quickbar .wp-post-image {
   display: inline-block;
-  height: calc(1em + 20px);
-  margin-top: -10px;
-  margin-bottom: -10px;
+  height: calc(1em + 29px);
+  margin-top: -12px;
+  margin-bottom: -17px;
   margin-right: 7px;
   transition: all 0.3s ease;
   transform-origin: top left;
   width: auto !important;
+  z-index: 20;
 }
 
 .admin-quickbar .wp-post-image:hover {
   transform: scale(4.5);
 }
 
+.aqb-search-wrapper,
 .aqb-options label {
   padding-left: 2px;
   margin-bottom: 1em;
@@ -268,9 +283,65 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     display: inline-block;
     position: relative;
     top: 2px;
-    margin-left: 7px !important;
-    border-color: #8888882e !important;
+  }
+
+  input[type=checkbox] {
+    top: -1px;
+    vertical-align: middle;
+    margin-right: 5px;
     -webkit-appearance: checkbox;
+    margin-left: 7px;
+    height: auto;
+    width: auto;
+  }
+
+  input,
+  select,
+  textarea {
+    border-radius: 3px;
+    font-size: 12px;
+    background: none;
+    background-color: transparent;
+    box-shadow: none;
+    color: #6d7882;
+    border: 1px solid;
+    padding: 5px;
+    outline: none;
+    border-color: #74777a47 !important;
+
+    &:focus {
+      border-color: #74777a47;
+      box-shadow: none;
+      outline: none;
+    }
+  }
+
+  input[type=search] {
+    line-height: 1;
+    min-height: 1em;
+  }
+
+  &.admin-quickbar-theme {
+    padding: 0 8px;
+
+    select {
+      height: 27px;
+    }
+  }
+
+  select {
+    width: 100%;
+  }
+
+  select option {
+    padding: 3px;
+  }
+
+  .sublabel {
+    font-size: 8px;
+    background: #80808014;
+    padding: 3px;
+    border-radius: 4px;
   }
 }
 
@@ -327,8 +398,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   margin-top: 0;
 }
 
-.admin-quickbar-hide-posttypes select,
-.admin-quickbar-new-select {
+.admin-quickbar-hide-posttypes select {
   width: calc(100% - 43px);
   margin-left: 5px;
   padding: 2px 5px;
@@ -346,7 +416,8 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
 .admin-quickbar-post-type .add-new,
 .admin-quickbar-post-options a,
 .admin-quickbar-jumpicons .aqb-icon-css,
-.admin-quickbar-jumpicons a {
+.admin-quickbar-jumpicons .aqb-icon a,
+.admin-quickbar-jumpicons a.aqb-icon {
   color: #2f87b1;
 
   &:hover {
@@ -370,5 +441,42 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
     width: 100%;
     padding: 4px 5px;
     resize: vertical;
+  }
+}
+
+h2.aqb-settings-headline:first-child {
+  margin-top: 0;
+}
+
+h2.aqb-settings-headline {
+  font-size: 12px;
+  padding: 9px 0;
+  margin-top: 30px;
+  margin-bottom: 13px;
+  text-align: center;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  background: #80808014;
+  color: #79838c;
+  font-weight: 400;
+}
+
+.aqb-post-title {
+  &.is-renaming {
+    display: inline-block;
+    padding: 3px 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: text;
+  }
+}
+
+.wp-block {
+  max-width: 1200px;
+}
+
+body.aqb-hide-on-website:not(.wp-admin) {
+  .admin-quickbar,
+  .admin-quickbar-jumpicons {
+    display: none;
   }
 }

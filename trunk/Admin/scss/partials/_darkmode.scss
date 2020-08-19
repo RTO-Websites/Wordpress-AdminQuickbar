@@ -35,4 +35,15 @@
   .aqb-tab-button {
     background-color: #3c3c3c;
   }
+
+
+  .aqb-search-wrapper,
+  .aqb-options label {
+    input,
+    select,
+    textarea {
+      color: #e0e1e3;
+      background-color: #34383c;
+    }
+  }
 }

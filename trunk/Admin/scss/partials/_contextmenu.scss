@@ -25,10 +25,24 @@
     cursor: default;
   }
 
+  .item.item-trash:hover .item,
+  .item.item-favorite:hover .item,
+  .item.item-rename:hover .item,
   .item:not(.has-sub):hover {
     color: #c1c1c1;
     background-color: transparent;
+  }
 
+  .item.item-trash:hover .label,
+  .item.item-favorite:hover .label,
+  .item.item-rename:hover .label {
+    font-weight: 500;
+  }
+
+  .item.item-trash,
+  .item.item-favorite,
+  .item.item-rename {
+    cursor: pointer;
   }
 
   .item.has-sub {

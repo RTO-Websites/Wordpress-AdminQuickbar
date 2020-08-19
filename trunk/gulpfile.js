@@ -21,8 +21,7 @@ gulp.task('default', function() {
     .pipe(gulp.dest('Admin/css'))
 
   gulp.src(jsFiles)
-    .pipe(concat('build.js'))
-    .pipe(rename('build.min.js'))
+    .pipe(concat('build.min.js'))
     .pipe(uglify().on('error', util.log))
     .pipe(gulp.dest(jsDest));
 });

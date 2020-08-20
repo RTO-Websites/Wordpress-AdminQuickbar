@@ -1,22 +1,24 @@
-.admin-quickbar .admin-quickbar-postlist.aqb-search-hidden,
-.admin-quickbar .admin-quickbar-post.aqb-search-hidden {
-  display: none;
-}
-
-.aqb-search-wrapper {
-  display: block;
-  padding: 15px 5px 6px 2px;
-
-  .dashicons {
-    float: left;
-    display: block;
-    position: relative;
-    top: 3px;
-    margin-right: 5px;
+body .admin-quickbar {
+  .admin-quickbar-postlist.aqb-search-hidden,
+  .admin-quickbar-post.aqb-search-hidden {
+    display: none;
   }
 
-  input {
+  .aqb-search-wrapper {
     display: block;
-    width: calc(100% - 25px);
+    padding: 15px 5px 6px 2px;
+
+    .dashicons {
+      float: left;
+      display: block;
+      position: relative;
+      top: 3px;
+      margin-right: 5px;
+    }
+
+    input {
+      display: block;
+      width: calc(100% - 25px);
+    }
   }
 }

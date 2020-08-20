@@ -1,26 +1,27 @@
 
-.admin-quickbar-jumpicons a.aqb-icon-swift,
-.aqb-icon-swift {
-  color: #c73535;
-  cursor: pointer;
+body {
+  .admin-quickbar-jumpicons a.aqb-icon-swift,
+  .aqb-icon-swift {
+    color: #c73535;
+    cursor: pointer;
 
-  &.is-in-cache {
-    color: #01a252;
+    &.is-in-cache {
+      color: #01a252;
+    }
+
+    &::before {
+      display: inline-block;
+    }
+
+    &.loading::before {
+      animation: rotating 1.5s linear infinite;
+    }
   }
 
-  &::before {
-    display: inline-block;
-  }
-
-  &.loading::before {
-    animation: rotating 1.5s linear infinite;
+  &.swift-setup .admin-quickbar {
+    display: none !important;
   }
 }
-
-body.swift-setup .admin-quickbar {
-  display: none !important;
-}
-
 
 @keyframes rotating {
   from {

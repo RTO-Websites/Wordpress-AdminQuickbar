@@ -1,123 +1,126 @@
-.aqb-css-list,
-.admin-quickbar-contextmenu {
-  display: none;
-  position: absolute;
-  left: 0;
-  right: 0;
-  color: #6d7882;
-  border-radius: 0;
-  background: #fff;
-  box-shadow: 1px 3px 4px #1b1c1d24;
-  border-top: 1px solid #1b1c1d12;
-
-  z-index: 999999999;
-
-  &.open {
-    display: block;
-  }
-
-  > .item {
-    display: block;
-    position: relative;
-    padding: 0 15px;
-    height: 30px;
-    margin: 7px 0;
-    cursor: default;
-  }
-
-  .item.item-trash:hover .item,
-  .item.item-favorite:hover .item,
-  .item.item-rename:hover .item,
-  .item:not(.has-sub):hover {
-    color: #c1c1c1;
-    background-color: transparent;
-  }
-
-  .item.item-trash:hover .label,
-  .item.item-favorite:hover .label,
-  .item.item-rename:hover .label {
-    font-weight: 500;
-  }
-
-  .item.item-trash,
-  .item.item-favorite,
-  .item.item-rename {
-    cursor: pointer;
-  }
-
-  .item.has-sub {
-    text-align: right;
-  }
-
-  .item .label {
-    font-size: 13px;
-    font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
-  }
-
-  .item.has-sub .label {
-    display: block;
+body .admin-quickbar-jumpicons,
+body .admin-quickbar {
+  .aqb-css-list,
+  .admin-quickbar-contextmenu {
+    display: none;
     position: absolute;
-    text-align: left;
-    top: 8px;
-    background-color: transparent;
-    line-height: 19px;
-    color: #6d7882;
-    font-weight: 400;
-    padding: 0;
-  }
-
-  .subitem {
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    top: 0;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    background-color: transparent;
-    margin: 0;
-    overflow: hidden;
-  }
-
-  .subitem::before {
-    display: inline-block;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 17px;
-  }
-
-  .subitem.aqb-icon-swift::before {
-    top: 5px;
-    transform: none;
-  }
-
-  .item.item-copy .subitem {
-    cursor: copy;
-  }
-
-  .item.item-favorite .subitem {
-    cursor: pointer;
-  }
-
-  .subitem.item-elementor::before {
-    font-size: 15px;
-    top: calc(50% - 1px);
-  }
-
-  .subitem.item-shortcode::before {
-    content: "\e883";
-    font-family: eicons;
-    font-size: 24px;
-    top: 50%;
-  }
-
-  .item input {
-    position: absolute;
-    top: 0;
     left: 0;
-    width: auto;
-    height: auto;
-    transform: scale(0);
+    right: 0;
+    color: #6d7882;
+    border-radius: 0;
+    background: #fff;
+    box-shadow: 1px 3px 4px #1b1c1d24;
+    border-top: 1px solid #1b1c1d12;
+
+    z-index: 999999999;
+
+    &.open {
+      display: block;
+    }
+
+    > .item {
+      display: block;
+      position: relative;
+      padding: 0 15px;
+      height: 30px;
+      margin: 7px 0;
+      cursor: default;
+    }
+
+    .item.item-trash:hover .item,
+    .item.item-favorite:hover .item,
+    .item.item-rename:hover .item,
+    .item:not(.has-sub):hover {
+      color: #c1c1c1;
+      background-color: transparent;
+    }
+
+    .item.item-trash:hover .label,
+    .item.item-favorite:hover .label,
+    .item.item-rename:hover .label {
+      font-weight: 500;
+    }
+
+    .item.item-trash,
+    .item.item-favorite,
+    .item.item-rename {
+      cursor: pointer;
+    }
+
+    .item.has-sub {
+      text-align: right;
+    }
+
+    .item .label {
+      font-size: 13px;
+      font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
+    }
+
+    .item.has-sub .label {
+      display: block;
+      position: absolute;
+      text-align: left;
+      top: 8px;
+      background-color: transparent;
+      line-height: 19px;
+      color: #6d7882;
+      font-weight: 400;
+      padding: 0;
+    }
+
+    .subitem {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      top: 0;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      background-color: transparent;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .subitem::before {
+      display: inline-block;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 17px;
+    }
+
+    .subitem.aqb-icon-swift::before {
+      top: 5px;
+      transform: none;
+    }
+
+    .item.item-copy .subitem {
+      cursor: copy;
+    }
+
+    .item.item-favorite .subitem {
+      cursor: pointer;
+    }
+
+    .subitem.item-elementor::before {
+      font-size: 15px;
+      top: calc(50% - 1px);
+    }
+
+    .subitem.item-shortcode::before {
+      content: "\e883";
+      font-family: eicons;
+      font-size: 24px;
+      top: 50%;
+    }
+
+    .item input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: auto;
+      height: auto;
+      transform: scale(0);
+    }
   }
 }

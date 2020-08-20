@@ -1,104 +1,123 @@
-
-.aqb-icon {
-  display: inline-block;
-  position: relative;
-  font-family: Dashicons;
-  padding-left: 2px;
-  padding-right: 1px;
-  vertical-align: top;
-  text-decoration: none;
-
-  &::before {
-    vertical-align: top;
-  }
-}
-
-.aqb-icon-elementor {
-  top: 0;
-
-  &::before {
-    content: "\e812";
-    font-family: eicons;
-  }
-}
-
-.aqb-icon-edit {
-  &::before {
-    content: "\f464";
-  }
-}
-
-.aqb-icon-website {
-  top: 1px;
-
-  &::before {
-    content: "\f319";
-  }
-}
-
-.aqb-icon-wordpress {
-  &::before {
-    content: "\f324";
-  }
-}
-
-.aqb-icon-swift {
-  &::before {
-    content: "\f113";
-  }
-}
-
-.aqb-icon-favorite {
-  &::before {
-    font-size: 22px !important;
-    content: "\f154";
-  }
-}
-
-.aqb-icon-favorite-alt {
-  &::before {
-    font-size: 22px !important;
-    content: "\f155";
-  }
-}
-
-.aqb-icon-trash {
-  cursor: pointer;
-
-  &::before {
-    content: "\f182";
-  }
-}
-
-.aqb-icon-rename {
-  cursor: pointer;
-
-  &::before {
-    content: "\f464";
-  }
-}
-
-.aqb-icon-id {
-  &::before {
-    font-size: 24px !important;
-    content: "\f336";
-  }
-}
-
-.save-rename {
-  &::before {
-    content: "\f12a";
+body .admin-quickbar-jumpicons,
+body .admin-quickbar {
+  .aqb-icon {
     display: inline-block;
     position: relative;
-    top: 3px;
-    font-size: 16px;
     font-family: Dashicons;
-    padding: 2px 5px;
+    padding-left: 2px;
+    padding-right: 1px;
+    vertical-align: top;
+    text-decoration: none;
+
+    &::before {
+      vertical-align: top;
+    }
+  }
+
+  .aqb-icon-elementor {
+    top: 0;
+
+    &::before {
+      content: "\e812";
+      font-family: eicons;
+    }
+  }
+
+  .aqb-icon-edit {
+    &::before {
+      content: "\f464";
+    }
+  }
+
+  .aqb-icon-website {
+    top: 1px;
+
+    &::before {
+      content: "\f319";
+    }
+  }
+
+  .aqb-icon-wordpress {
+    &::before {
+      content: "\f324";
+    }
+  }
+
+  .aqb-icon-swift {
+    &::before {
+      content: "\f113";
+    }
+  }
+
+  .aqb-icon-favorite {
+    &::before {
+      font-size: 22px !important;
+      content: "\f154";
+    }
+  }
+
+  .aqb-icon-favorite-alt {
+    &::before {
+      font-size: 22px !important;
+      content: "\f155";
+    }
+  }
+
+  .aqb-icon-trash {
     cursor: pointer;
+
+    &::before {
+      content: "\f182";
+    }
+  }
+
+  .aqb-icon-rename {
+    cursor: pointer;
+
+    &::before {
+      content: "\f464";
+    }
+  }
+
+  .aqb-icon-id {
+    &::before {
+      font-size: 24px !important;
+      content: "\f336";
+    }
+  }
+
+  .save-rename {
+    &::before {
+      content: "\f12a";
+      display: inline-block;
+      position: relative;
+      top: 3px;
+      font-size: 16px;
+      font-family: Dashicons;
+      padding: 2px 5px;
+      cursor: pointer;
+    }
+  }
+
+  .admin-quickbar-post-options {
+    .aqb-icon {
+      font-size: 16px;
+      padding-left: 4px;
+      padding-right: 1px;
+      opacity: 0.75;
+    }
+
+    .aqb-icon-elementor {
+      font-size: 12px;
+    }
+
+    .aqb-icon-wordpress {
+      font-size: 14px;
+    }
   }
 }
 
-.admin-quickbar-jumpicons {
+body .admin-quickbar-jumpicons {
   position: fixed;
   bottom: 10px;
   right: 25px;
@@ -163,22 +182,5 @@
         right: 0;
       }
     }
-  }
-}
-
-.admin-quickbar-post-options {
-  .aqb-icon {
-    font-size: 16px;
-    padding-left: 4px;
-    padding-right: 1px;
-    opacity: 0.75;
-  }
-
-  .aqb-icon-elementor {
-    font-size: 12px;
-  }
-
-  .aqb-icon-wordpress {
-    font-size: 14px;
   }
 }

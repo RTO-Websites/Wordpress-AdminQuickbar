@@ -1,5 +1,5 @@
 
-.admin-quickbar {
+body .admin-quickbar {
   position: fixed;
   top: 32px;
   right: 0;
@@ -12,31 +12,395 @@
   //box-shadow: 0 0 5px 0 rgba(0, 0, 0, .2);
 
   font-size: 13px;
+  font-weight: normal;
   line-height: 1.4em;
   font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
 
   z-index: 99999;
-}
 
-.admin-quickbar-inner {
-  position: absolute;
-  display: none;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 0 8px 15px;
-  overflow: auto;
+  .admin-quickbar-inner {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 8px 15px;
+    overflow: auto;
 
-  > label {
-    white-space: nowrap;
+    > label {
+      white-space: nowrap;
+    }
+  }
+
+  &.toggle {
+    width: 320px;
+    display: block;
+
+    .admin-quickbar-inner {
+      display: block;
+    }
+
+
+    .toggle-quickbar-button {
+      width: 13px;
+    }
+
+    .toggle-quickbar-button::before {
+      content: "\f345";
+    }
+  }
+
+  .admin-quickbar-post-type {
+    padding: 10px 15px 12px 0;
+    font-weight: 400;
+    letter-spacing: 0.095rem;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    cursor: pointer;
+
+    &::before {
+      content: "\f140";
+      display: inline-block;
+      position: relative;
+      top: -1px;
+      margin-right: 2px;
+      font-family: Dashicons;
+      font-size: 15px;
+      line-height: 0;
+      vertical-align: middle;
+    }
+
+    .add-new {
+      position: relative;
+      top: 2px;
+      font-size: 12px;
+      vertical-align: bottom;
+      padding-top: 3px;
+      box-sizing: border-box;
+      z-index: 10;
+    }
+  }
+
+  .admin-quickbar-post-options {
+    float: right;
+  }
+
+  .admin-quickbar-post {
+    //position: relative;
+    padding: 12px 10px 12px 15px;
+    background-color: #fff;
+    margin-bottom: 3px;
+
+    .label {
+      cursor: default;
+    }
+
+    &.is-favorite .label::after {
+      content: '\f155';
+      display: inline-block;
+      position: relative;
+      top: 1px;
+      margin-left: 5px;
+      font-family: Dashicons;
+      font-size: 12px;
+      color: #2f87b1;
+    }
+
+    &.is-active .label {
+      font-weight: 600;
+    }
+
+    &.post-status-publish.has-password,
+    &.post-status-draft,
+    &.post-status-trash,
+    &.post-status-private {
+      .label::after {
+        content: 'Private';
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        font-size: 7px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-left: 10px;
+        margin-top: -2px;
+      }
+    }
+
+    &.post-status-draft .label::after {
+      content: 'Draft';
+    }
+
+    &.post-status-trash .label::after {
+      content: 'Trash';
+    }
+
+    &.post-status-publish.has-password .label::after {
+      content: 'Password';
+    }
+
+    &.post-status-trash {
+      display: none;
+
+      .admin-quickbar-post-options {
+        display: none;
+      }
+    }
+  }
+
+  .admin-quickbar-post::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  .admin-quickbar-postlist-inner {
+    display: none;
+  }
+
+  .show-list .admin-quickbar-post-type::before {
+    content: "\f142";
+  }
+
+  .show-list .admin-quickbar-postlist-inner {
+    display: block;
+  }
+
+  .toggle-quickbar-button {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    width: 22px;
+    height: 50px;
+    line-height: 50px;
+    transform: translateY(-50%);
+    background-color: #e6e9ec;
+    font-size: 15px;
+    box-shadow: -3px -1px 5px rgba(0, 0, 0, .1);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    transition: width .3s ease 50ms;
+    cursor: pointer;
+
+    &::before {
+      content: "\f341";
+      font-family: dashicons;
+      margin-left: 2px;
+    }
+
+    &::after {
+      content: '';
+      width: 16px;
+      background: transparent;
+      display: inline-block;
+      height: 49px;
+      position: absolute;
+      right: 22px;
+      top: 0;
+    }
+  }
+
+  .wp-post-image {
+    display: inline-block;
+    height: calc(1em + 29px);
+    margin-top: -12px;
+    margin-bottom: -17px;
+    margin-right: 7px;
+    transition: all 0.3s ease;
+    transform-origin: top left;
+    width: auto !important;
+    z-index: 20;
+  }
+
+  .wp-post-image:hover {
+    transform: scale(4.5);
+  }
+
+  .aqb-search-wrapper,
+  .aqb-options label {
+    padding-left: 2px;
+    margin-bottom: 1em;
+    display: block;
+    position: relative;
+    color: #34383c;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    input {
+      display: inline-block;
+      position: relative;
+      top: 2px;
+    }
+
+    input[type=checkbox] {
+      top: -1px;
+      vertical-align: middle;
+      margin-right: 5px;
+      -webkit-appearance: checkbox;
+      margin-left: 7px;
+      height: auto;
+      width: auto;
+    }
+
+    input,
+    select,
+    textarea {
+      border-radius: 3px;
+      font-size: 12px;
+      background: none;
+      background-color: transparent;
+      box-shadow: none;
+      color: #6d7882;
+      border: 1px solid;
+      padding: 5px;
+      outline: none;
+      border-color: #74777a47 !important;
+
+      &:focus {
+        border-color: #74777a47;
+        box-shadow: none;
+        outline: none;
+      }
+    }
+
+    input[type=search] {
+      line-height: 1;
+      min-height: 1em;
+    }
+
+    &.admin-quickbar-theme {
+      padding: 0 8px;
+
+      select {
+        height: 27px;
+      }
+    }
+
+    select {
+      width: 100%;
+    }
+
+    select option {
+      padding: 3px;
+    }
+
+    .sublabel {
+      font-size: 8px;
+      background: #80808014;
+      padding: 3px;
+      border-radius: 4px;
+    }
+  }
+
+  .add-post-button {
+    display: inline-block;
+    width: 25px;
+    padding: 0 0 7px;
+    font-size: 18px;
+    text-align: center;
+
+    &::before {
+      content: "\f132 ";
+      display: inline-block;
+      position: relative;
+      top: 2px;
+      margin-right: 2px;
+      font-family: Dashicons;
+      vertical-align: middle;
+    }
+  }
+
+  .admin-quickbar-post-type::-moz-selection { /* Code for Firefox */
+    color: inherit;
+    background: inherit;
+  }
+
+  .admin-quickbar-post-type::selection {
+    color: inherit;
+    background: inherit;
+  }
+
+  .wp-post-image[src=""] {
+    display: none;
+  }
+
+  .admin-quickbar-category {
+    position: relative;
+    margin-bottom: 0.75em;
+    margin-top: 0.75em;
+    margin-left: 12px;
+
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 0.6rem;
+    letter-spacing: 0.1rem;
+    color: #6e737da6;
+  }
+
+  .admin-quickbar-category:first-child {
+    margin-top: 0;
+  }
+
+  .admin-quickbar-hide-posttypes select {
+    width: calc(100% - 43px);
+    margin-left: 5px;
+    padding: 2px 5px;
+    border-color: #8888882e !important;
+    border-radius: 3px;
+    font-size: 12px;
+    background: none;
+    box-shadow: none;
+    color: #6d7882;
+    border: 1px solid;
+    outline: none;
+  }
+
+
+  .admin-quickbar-hide-posttypes {
+    position: relative;
+    margin-left: 8px;
+
+    select {
+      position: relative;
+      margin-left: 0;
+      margin-top: 0.25em;
+      min-height: 15em;
+      width: 100%;
+      padding: 4px 5px;
+      resize: vertical;
+    }
+  }
+
+  h2.aqb-settings-headline:first-child {
+    margin-top: 0;
+  }
+
+  h2.aqb-settings-headline {
+    font-size: 12px;
+    padding: 9px 0;
+    margin-top: 30px;
+    margin-bottom: 13px;
+    text-align: center;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    background: #80808014;
+    color: #79838c;
+    font-weight: 400;
+  }
+
+  .aqb-post-title {
+    &.is-renaming {
+      display: inline-block;
+      padding: 3px 5px;
+      background-color: rgba(255, 255, 255, 0.1);
+      cursor: text;
+    }
   }
 }
 
-.admin-quickbar.toggle {
-  width: 320px;
-  display: block;
-}
 
 body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   #wpcontent {
@@ -81,392 +445,34 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   }
 }
 
-.admin-quickbar.toggle .admin-quickbar-inner {
-  display: block;
-}
-
 .elementor-editor-active:not(.wp-admin) .admin-quickbar {
   top: 0;
 }
 
-
-.admin-quickbar-post-type {
-  padding: 10px 15px 12px 0;
-  font-weight: 400;
-  letter-spacing: 0.095rem;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-  cursor: pointer;
-
-  &::before {
-    content: "\f140";
-    display: inline-block;
-    position: relative;
-    top: -1px;
-    margin-right: 2px;
-    font-family: Dashicons;
-    font-size: 15px;
-    line-height: 0;
-    vertical-align: middle;
-  }
-
-  .add-new {
-    position: relative;
-    top: 2px;
-    font-size: 12px;
-    vertical-align: bottom;
-    padding-top: 3px;
-    box-sizing: border-box;
-    z-index: 10;
-  }
-}
-
-.show-list .admin-quickbar-post-type::before {
-  content: "\f142";
-}
-
-.admin-quickbar-post-options {
-  float: right;
-}
-
-.admin-quickbar-post {
-  //position: relative;
-  padding: 12px 10px 12px 15px;
-  background-color: #fff;
-  margin-bottom: 3px;
-
-  .label {
-    cursor: default;
-  }
-
-  &.is-favorite .label::after {
-    content: '\f155';
-    display: inline-block;
-    position: relative;
-    top: 1px;
-    margin-left: 5px;
-    font-family: Dashicons;
-    font-size: 12px;
-    color: #2f87b1;
-  }
-
-  &.is-active .label {
-    font-weight: 600;
-  }
-
-  &.post-status-publish.has-password,
-  &.post-status-draft,
-  &.post-status-trash,
-  &.post-status-private {
-    .label::after {
-      content: 'Private';
-      position: relative;
-      display: inline-block;
-      vertical-align: top;
-      font-size: 7px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-left: 10px;
-      margin-top: -2px;
-    }
-  }
-
-  &.post-status-draft .label::after {
-    content: 'Draft';
-  }
-
-  &.post-status-trash .label::after {
-    content: 'Trash';
-  }
-
-  &.post-status-publish.has-password .label::after {
-    content: 'Password';
-  }
-
-  &.post-status-trash {
-    display: none;
-
-    .admin-quickbar-post-options {
-      display: none;
-    }
-  }
-}
-
-.admin-quickbar-show-trash .admin-quickbar-post.post-status-trash {
+body.admin-quickbar-show-trash .admin-quickbar .admin-quickbar-post.post-status-trash {
   display: block;
-}
-
-.admin-quickbar-post::after {
-  content: '';
-  display: block;
-  clear: both;
-}
-
-.admin-quickbar-postlist-inner {
-  display: none;
-}
-
-.show-list .admin-quickbar-postlist-inner {
-  display: block;
-}
-
-.toggle-quickbar-button {
-  position: absolute;
-  right: 100%;
-  top: 50%;
-  width: 22px;
-  height: 50px;
-  line-height: 50px;
-  transform: translateY(-50%);
-  background-color: #e6e9ec;
-  font-size: 15px;
-  box-shadow: -3px -1px 5px rgba(0, 0, 0, .1);
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  transition: width .3s ease 50ms;
-  cursor: pointer;
-
-  &::before {
-    content: "\f341";
-    font-family: dashicons;
-    margin-left: 2px;
-  }
-
-  &::after {
-    content: '';
-    width: 16px;
-    background: transparent;
-    display: inline-block;
-    height: 49px;
-    position: absolute;
-    right: 22px;
-    top: 0;
-  }
-}
-
-.admin-quickbar.toggle .toggle-quickbar-button {
-  width: 13px;
-}
-
-.admin-quickbar.toggle .toggle-quickbar-button::before {
-  content: "\f345";
-}
-
-.admin-quickbar .wp-post-image {
-  display: inline-block;
-  height: calc(1em + 29px);
-  margin-top: -12px;
-  margin-bottom: -17px;
-  margin-right: 7px;
-  transition: all 0.3s ease;
-  transform-origin: top left;
-  width: auto !important;
-  z-index: 20;
-}
-
-.admin-quickbar .wp-post-image:hover {
-  transform: scale(4.5);
-}
-
-.aqb-search-wrapper,
-.aqb-options label {
-  padding-left: 2px;
-  margin-bottom: 1em;
-  display: block;
-  position: relative;
-
-  &:first-child {
-    margin-top: 0;
-  }
-
-  input {
-    display: inline-block;
-    position: relative;
-    top: 2px;
-  }
-
-  input[type=checkbox] {
-    top: -1px;
-    vertical-align: middle;
-    margin-right: 5px;
-    -webkit-appearance: checkbox;
-    margin-left: 7px;
-    height: auto;
-    width: auto;
-  }
-
-  input,
-  select,
-  textarea {
-    border-radius: 3px;
-    font-size: 12px;
-    background: none;
-    background-color: transparent;
-    box-shadow: none;
-    color: #6d7882;
-    border: 1px solid;
-    padding: 5px;
-    outline: none;
-    border-color: #74777a47 !important;
-
-    &:focus {
-      border-color: #74777a47;
-      box-shadow: none;
-      outline: none;
-    }
-  }
-
-  input[type=search] {
-    line-height: 1;
-    min-height: 1em;
-  }
-
-  &.admin-quickbar-theme {
-    padding: 0 8px;
-
-    select {
-      height: 27px;
-    }
-  }
-
-  select {
-    width: 100%;
-  }
-
-  select option {
-    padding: 3px;
-  }
-
-  .sublabel {
-    font-size: 8px;
-    background: #80808014;
-    padding: 3px;
-    border-radius: 4px;
-  }
 }
 
 .admin-quickbar-keepopen {
   padding-left: 0;
 }
 
-.admin-quickbar .add-post-button {
-  display: inline-block;
-  width: 25px;
-  padding: 0 0 7px;
-  font-size: 18px;
-  text-align: center;
+body {
+  .add-post-button,
+  .admin-quickbar-post-type .add-new,
+  .admin-quickbar-post-options a,
+  .admin-quickbar-jumpicons .aqb-icon-css,
+  .admin-quickbar-jumpicons .aqb-icon a,
+  .admin-quickbar-jumpicons a.aqb-icon {
+    color: #2f87b1;
 
-  &::before {
-    content: "\f132 ";
-    display: inline-block;
-    position: relative;
-    top: 2px;
-    margin-right: 2px;
-    font-family: Dashicons;
-    vertical-align: middle;
-  }
-}
+    &:hover {
+      color: #0aa4ef;
+    }
 
-.admin-quickbar-post-type::-moz-selection { /* Code for Firefox */
-  color: inherit;
-  background: inherit;
-}
-
-.admin-quickbar-post-type::selection {
-  color: inherit;
-  background: inherit;
-}
-
-.admin-quickbar .wp-post-image[src=""] {
-  display: none;
-}
-
-.admin-quickbar-category {
-  position: relative;
-  margin-bottom: 0.75em;
-  margin-top: 0.75em;
-  margin-left: 12px;
-
-  font-weight: 400;
-  text-transform: uppercase;
-  font-size: 0.6rem;
-  letter-spacing: 0.1rem;
-  color: #6e737da6;
-}
-
-.admin-quickbar-category:first-child {
-  margin-top: 0;
-}
-
-.admin-quickbar-hide-posttypes select {
-  width: calc(100% - 43px);
-  margin-left: 5px;
-  padding: 2px 5px;
-  border-color: #8888882e !important;
-  border-radius: 3px;
-  font-size: 12px;
-  background: none;
-  box-shadow: none;
-  color: #6d7882;
-  border: 1px solid;
-  outline: none;
-}
-
-.add-post-button,
-.admin-quickbar-post-type .add-new,
-.admin-quickbar-post-options a,
-.admin-quickbar-jumpicons .aqb-icon-css,
-.admin-quickbar-jumpicons .aqb-icon a,
-.admin-quickbar-jumpicons a.aqb-icon {
-  color: #2f87b1;
-
-  &:hover {
-    color: #0aa4ef;
-  }
-
-  &:focus {
-    box-shadow: none;
-  }
-}
-
-.admin-quickbar-hide-posttypes {
-  position: relative;
-  margin-left: 8px;
-
-  select {
-    position: relative;
-    margin-left: 0;
-    margin-top: 0.25em;
-    min-height: 15em;
-    width: 100%;
-    padding: 4px 5px;
-    resize: vertical;
-  }
-}
-
-h2.aqb-settings-headline:first-child {
-  margin-top: 0;
-}
-
-h2.aqb-settings-headline {
-  font-size: 12px;
-  padding: 9px 0;
-  margin-top: 30px;
-  margin-bottom: 13px;
-  text-align: center;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  background: #80808014;
-  color: #79838c;
-  font-weight: 400;
-}
-
-.aqb-post-title {
-  &.is-renaming {
-    display: inline-block;
-    padding: 3px 5px;
-    background-color: rgba(255, 255, 255, 0.1);
-    cursor: text;
+    &:focus {
+      box-shadow: none;
+    }
   }
 }
 

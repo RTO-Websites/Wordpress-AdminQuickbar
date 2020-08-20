@@ -1,21 +1,47 @@
 
-.admin-quickbar-is-darkmode {
-  .aqb-css-list,
-  .admin-quickbar-contextmenu {
-    background-color: #333;
+body.admin-quickbar-is-darkmode {
+  .admin-quickbar-jumpicons,
+  .admin-quickbar {
+    .aqb-css-list,
+    .admin-quickbar-contextmenu {
+      background-color: #333;
 
-    .item:not(.has-sub):hover {
-      color: #c7c7c7;
-      background-color: transparent;
+      .item:not(.has-sub):hover {
+        color: #c7c7c7;
+        background-color: transparent;
+      }
+    }
+
+    .toggle-quickbar-button {
+      background-color: #333;
+    }
+
+    .admin-quickbar-post {
+      background-color: #3c3c3c;
+    }
+
+    .aqb-tab-button {
+      background-color: #3c3c3c;
+    }
+
+    .aqb-search-wrapper,
+    .aqb-options label {
+      input,
+      select,
+      textarea {
+        color: #e0e1e3;
+        background-color: #34383c;
+      }
+    }
+
+    .aqb-options label {
+      color: #e0e1e3;
     }
   }
 
+
   .admin-quickbar-jumpicons {
     background-color: #3c3c3c;
-  }
-
-  .toggle-quickbar-button {
-    background-color: #333;
   }
 
   .aqb-css-list,
@@ -26,24 +52,5 @@
 
   .aqb-css-list .item.has-sub .label {
     color: #767e86;
-  }
-
-  .admin-quickbar-post {
-    background-color: #3c3c3c;
-  }
-
-  .aqb-tab-button {
-    background-color: #3c3c3c;
-  }
-
-
-  .aqb-search-wrapper,
-  .aqb-options label {
-    input,
-    select,
-    textarea {
-      color: #e0e1e3;
-      background-color: #34383c;
-    }
   }
 }

@@ -449,7 +449,7 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   top: 0;
 }
 
-.admin-quickbar-show-trash .admin-quickbar-post.post-status-trash {
+body.admin-quickbar-show-trash .admin-quickbar .admin-quickbar-post.post-status-trash {
   display: block;
 }
 

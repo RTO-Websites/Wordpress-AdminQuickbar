@@ -40,8 +40,8 @@
                 <span class="sublabel">[<?php _e( 'Ctrl+Click', 'admin-quickbar' ); ?>]</span>
                 <br/>
                 <select class="aqm-hide-posttypes"
-                        multiple
-                        rows="<?php echo count( $filteredPostTypes ); ?>">
+                    multiple
+                    rows="<?php echo count( $filteredPostTypes ); ?>">
                     <option value="aqb-favorites"><?php echo __( 'Favorites' ); ?></option>
                     <?php foreach ( $filteredPostTypes as $postType ): ?>
                         <option value="<?php echo $postType->name; ?>"><?php echo $postType->label; ?></option>
@@ -118,6 +118,27 @@
         </div>
         <div class="admin-quickbar-contextmenu"></div>
     </div>
+
+    <div class="admin-quickbar-toolbar">
+        <a href="<?php echo admin_url( 'plugins.php' ); ?>">
+            <i class="dashicons-before dashicons-admin-plugins" title="Plugins"></i>
+        </a>
+
+        <?php if ( defined( 'ELEMENTOR_VERSION' ) ): ?>
+            <a href="<?php echo admin_url( 'edit.php?post_type=elementor_library&tabs_group=library' ); ?>">
+                <i class="dashicons-before dashicons-admin-page" title="Templates"></i>
+            </a>
+        <?php endif; ?>
+
+        <a href="<?php echo admin_url( 'options-general.php' ); ?>">
+            <i class="dashicons-before dashicons-admin-settings" title="Settings"></i>
+        </a>
+
+        <a href="<?php echo admin_url( 'customize.php?return=' . urlencode( $_SERVER['REQUEST_URI'] ) ); ?>">
+            <i class="dashicons-before dashicons-admin-appearance" title="Customize"></i>
+        </a>
+    </div>
+
     <div class="toggle-quickbar-button"></div>
 </div>
 

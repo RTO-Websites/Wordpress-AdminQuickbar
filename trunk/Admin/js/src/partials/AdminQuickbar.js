@@ -25,6 +25,9 @@ let AdminQuickbar = function() {
     $doc.on('click', '.admin-quickbar-post-type', self.togglePostTypes);
     $doc.on('click', '.aqb-tab-button', self.changeTab);
 
+    $doc.on('mouseenter', '.aqb-toolbar-item', self.showIndicator);
+    $doc.on('mouseleave', '.aqb-toolbar-item', self.hideIndicator);
+
     /**
      * Keep open
      */
@@ -445,6 +448,24 @@ let AdminQuickbar = function() {
       $element.prop('src', $element.data('src'));
     });
   };
+
+  self.showIndicator = function(e) {
+    let $target = $(e.currentTarget),
+      $toolbar = $('.admin-quickbar-toolbar'),
+      $indicator = $('.aqb-toolbar-indicator');
+
+    $indicator.html($target.data('title'));
+    $toolbar.addClass('show-indicator');
+
+  }
+
+  self.hideIndicator = function(e) {
+    let $target = $(e.currentTarget),
+      $toolbar = $('.admin-quickbar-toolbar'),
+      $indicator = $('.aqb-toolbar-indicator');
+
+    $toolbar.removeClass('show-indicator');
+  }
 
   init();
 };

@@ -120,23 +120,38 @@
     </div>
 
     <div class="admin-quickbar-toolbar">
-        <a href="<?php echo admin_url( 'plugins.php' ); ?>">
-            <i class="dashicons-before dashicons-admin-plugins" title="Plugins"></i>
-        </a>
+        <span class="aqb-toolbar-item" data-title="<?php _e('Plugins'); ?>">
+            <a href="<?php echo admin_url( 'plugins.php' ); ?>">
+                <i class="dashicons-before dashicons-admin-plugins"></i>
+            </a>
+            <span class="aqb-toolbar-submenu">
+                <a href="<?php echo admin_url( 'plugins.php' ); ?>"><?php _e('Installed Plugins'); ?></a>
+                <a href="<?php echo admin_url( 'plugin-install.php' ); ?>"><?php _e('Add New'); ?></a>
+            </span>
+        </span>
 
         <?php if ( defined( 'ELEMENTOR_VERSION' ) ): ?>
-            <a href="<?php echo admin_url( 'edit.php?post_type=elementor_library&tabs_group=library' ); ?>">
-                <i class="dashicons-before dashicons-admin-page" title="Templates"></i>
-            </a>
+            <span class="aqb-toolbar-item"  data-title="<?php _e('Templates'); ?>">
+                <a href="<?php echo admin_url( 'edit.php?post_type=elementor_library&tabs_group=library' ); ?>">
+                    <i class="dashicons-before dashicons-admin-page"></i>
+                </a>
+            </span>
         <?php endif; ?>
 
-        <a href="<?php echo admin_url( 'options-general.php' ); ?>">
-            <i class="dashicons-before dashicons-admin-settings" title="Settings"></i>
-        </a>
+        <span class="aqb-toolbar-item"  data-title="<?php _e('Settings'); ?>">
+            <a href="<?php echo admin_url( 'options-general.php' ); ?>">
+                <i class="dashicons-before dashicons-admin-settings"></i>
+            </a>
+        </span>
 
-        <a href="<?php echo admin_url( 'customize.php?return=' . urlencode( $_SERVER['REQUEST_URI'] ) ); ?>">
-            <i class="dashicons-before dashicons-admin-appearance" title="Customize"></i>
-        </a>
+        <span class="aqb-toolbar-item"  data-title="<?php _e('Customize'); ?>">
+            <a href="<?php echo admin_url( 'customize.php?return=' . urlencode( $_SERVER['REQUEST_URI'] ) ); ?>">
+                <i class="dashicons-before dashicons-admin-appearance"></i>
+            </a>
+        </span>
+
+
+        <span class="aqb-toolbar-indicator">Plugins</span>
     </div>
 
     <div class="toggle-quickbar-button"></div>

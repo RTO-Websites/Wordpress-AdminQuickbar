@@ -481,7 +481,7 @@ body {
   max-width: 1200px;
 }
 
-body.aqb-hide-on-website:not(.wp-admin) {
+body.aqb-hide-on-website:not(.wp-admin):not(.elementor-editor-active) {
   .admin-quickbar,
   .admin-quickbar-jumpicons {
     display: none;

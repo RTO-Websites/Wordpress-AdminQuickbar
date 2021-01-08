@@ -27,7 +27,8 @@ let AdminQuickbarContextMenu = function() {
     $doc.on('click', closeContextMenu);
 
 
-    $doc.on('click', '.aqb-icon-swift', AdminQuickbarActions.checkSwiftCache);
+    $doc.on('click', '.aqb-icon-swift:not(.clear-all)', AdminQuickbarActions.checkSwiftCache);
+    $doc.on('click', '.aqb-icon-swift.clear-all', AdminQuickbarActions.clearAllSwiftCache);
     $doc.on('click', '.aqb-icon-external', AdminQuickbarActions.openWindow);
 
   };

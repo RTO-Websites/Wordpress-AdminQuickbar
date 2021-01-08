@@ -41,13 +41,35 @@ let AdminQuickbarActions = {
 
     jQuery.post(aqbLocalize.ajaxUrl, {
       action: 'swift_performance_single_clear_cache',
-      '_wpnonce': $target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
+      '_wpnonce': $target.closest('.admin-quickbar').data('swift-nonce'),
       'url': url,
     }, function(response) {
       $target.removeClass('is-in-cache');
       AdminQuickbarActions.addPageToSwiftCache(e);
     });
   },
+
+
+  /**
+   * Removes all pages from swift cache
+   *
+   * @param e
+   */
+  clearAllSwiftCache: function(e) {
+    e.preventDefault();
+    let $target = $(e.currentTarget);
+
+    $target.addClass('loading');
+
+    jQuery.post(aqbLocalize.ajaxUrl, {
+      action: 'swift_performance_clear_cache',
+      type: 'all',
+      '_wpnonce': $target.closest('.admin-quickbar').data('swift-nonce')
+    }, function(response) {
+      $target.removeClass('loading');
+    });
+  },
+
 
   /**
    * Checks if page is cached and clear/add or only add it

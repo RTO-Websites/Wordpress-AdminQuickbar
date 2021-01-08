@@ -177,7 +177,7 @@
                 <a
                     class="admin-quickbar-control-cache  <?php echo $inCache ? ' is-in-cache' : ''; ?>"
                     data-url="<?php echo $permalink; ?>">
-                    <i class="aqb-icon-swift dashicons dashicons-update-alt"></i>
+                    <i class="aqb-icon-swift clear-all dashicons dashicons-update-alt"></i>
                 </a>
             </span>
         <?php endif; ?>

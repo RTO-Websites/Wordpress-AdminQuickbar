@@ -186,7 +186,7 @@
             <span class="aqb-toolbar-item" data-title="CSS">
                 <a class="icon-inner"
                     href="<?php echo admin_url() . 'post.php?post=' . end( $cssPosts )->ID; ?>&action=edit">
-                    CSS
+                    <i class="dashicons dashicons-editor-code"></i>
                 </a>
             <span class="aqb-toolbar-submenu">
                 <?php reset( $cssPosts );

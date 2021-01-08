@@ -24,7 +24,7 @@ body .admin-quickbar {
     top: 0;
     left: 0;
     right: 0;
-    bottom: 106px;
+    bottom: 49px;
     padding: 0 8px 15px;
     overflow: auto;
 
@@ -461,10 +461,7 @@ body.admin-quickbar-show-trash .admin-quickbar .admin-quickbar-post.post-status-
 body {
   .add-post-button,
   .admin-quickbar-post-type .add-new,
-  .admin-quickbar-post-options a,
-  .admin-quickbar-jumpicons .aqb-icon-css,
-  .admin-quickbar-jumpicons .aqb-icon a,
-  .admin-quickbar-jumpicons a.aqb-icon {
+  .admin-quickbar-post-options a {
     color: #2f87b1;
 
     &:hover {
@@ -482,8 +479,7 @@ body {
 }
 
 body.aqb-hide-on-website:not(.wp-admin):not(.elementor-editor-active) {
-  .admin-quickbar,
-  .admin-quickbar-jumpicons {
+  .admin-quickbar {
     display: none;
   }
 }

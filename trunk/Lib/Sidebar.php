@@ -190,16 +190,6 @@ class Sidebar {
         ] );
         $template->render();
 
-        $template = new Template( self::PARTIAL_DIR . '/jump-icons.php', [
-            'currentPost' => $currentPost,
-            'permalink' => $permalink,
-            'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
-            'hasSwift' => $this->hasSwift() && !empty( $currentPost ),
-            'inCache' => in_array( $permalink, $this->cacheList ),
-            'cssPosts' => array_reverse( $this->cssPosts ),
-        ] );
-        $template->render();
-
         return $data;
     }
 

@@ -177,7 +177,7 @@ class Sidebar {
             ? get_bloginfo( 'wpurl' )
             : get_permalink( $currentPost );
 
-        $template = new Template( self::PARTIAL_DIR . '/sidebar.php', [
+        $templateVars = [
             'postTypeLoop' => $postTypeLoop,
             'filteredPostTypes' => $this->filteredPostTypes,
             'currentPost' => $currentPost,
@@ -187,7 +187,15 @@ class Sidebar {
             'inCache' => in_array( $permalink, $this->cacheList ),
             'languageFlags' => $this->renderAllLanguageFlags(),
             'cssPosts' => array_reverse( $this->cssPosts ),
-        ] );
+        ];
+
+        $settings = new Template( self::PARTIAL_DIR . '/settings.php', $templateVars );
+        $toolbar = new Template( self::PARTIAL_DIR . '/toolbar.php', $templateVars );
+
+        $templateVars['settings'] = $settings->getRendered();
+        $templateVars['toolbar'] = $toolbar->getRendered();
+
+        $template = new Template( self::PARTIAL_DIR . '/sidebar.php', $templateVars );
         $template->render();
 
         return $data;

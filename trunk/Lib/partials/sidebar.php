@@ -62,6 +62,12 @@
                 <?php _e( 'Show trashed posts', 'admin-quickbar' ); ?>
             </label>
 
+            <label class="admin-quickbar-max-recent">
+                <?php _e( 'Max. Recent', 'admin-quickbar' ); ?>
+                <br/>
+                <input type="number" min="0" value="4" name="admin-quickbar-max-recent"/>
+            </label>
+
             <label class="admin-quickbar-hide-on-website">
                 <input type="checkbox" name="admin-quickbar-hide-on-website"/>
                 <?php _e( 'Hide quickbar on website', 'admin-quickbar' ); ?>

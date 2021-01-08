@@ -324,9 +324,14 @@ let AdminQuickbar = function() {
    * Read local storage and moves all posts in it to favorites
    */
   initRecent = function() {
+    $('.admin-quickbar-max-recent input').val(localStorage.adminQuickbarMaxRecent ?? 4);
+    $doc.on('change', '.admin-quickbar-max-recent input', function(e) {
+      localStorage.adminQuickbarMaxRecent = $('.admin-quickbar-max-recent input').val();
+    });
+
     let storage = [],
       newStorage = [],
-      max = 5,
+      max = parseInt(localStorage.adminQuickbarMaxRecent),
       count = 0,
       currentPost = $('.admin-quickbar').data('current-post');
 

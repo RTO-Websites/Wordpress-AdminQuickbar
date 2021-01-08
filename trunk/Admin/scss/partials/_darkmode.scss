@@ -41,7 +41,7 @@ body.admin-quickbar-is-darkmode {
   .aqb-css-list,
   .admin-quickbar {
     background-color: #333;
-    color: #79838c;
+    color: var(--aqb-secondary-color);
   }
 
   .aqb-css-list .item.has-sub .label {

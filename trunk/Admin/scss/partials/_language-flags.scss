@@ -19,7 +19,7 @@ body .admin-quickbar {
       margin-right: 7px;
 
       &.active {
-        border: 1px solid #2f87b1;
+        border: 1px solid var(--aqb-accent);
       }
     }
 

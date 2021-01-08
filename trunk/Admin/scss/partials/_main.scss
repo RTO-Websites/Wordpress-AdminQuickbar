@@ -6,8 +6,8 @@ body .admin-quickbar {
   width: 0;
   bottom: 0;
 
-  background-color: #e6e9ec;
-  color: #6d7882;
+  background-color: var(--aqb-secondary-bg);
+  color: var(--aqb-main-color);
 
   //box-shadow: 0 0 5px 0 rgba(0, 0, 0, .2);
 
@@ -89,7 +89,7 @@ body .admin-quickbar {
   .admin-quickbar-post {
     //position: relative;
     padding: 12px 10px 12px 15px;
-    background-color: #fff;
+    background-color: var(--aqb-main-bg);
     margin-bottom: 3px;
 
     .label {
@@ -104,7 +104,7 @@ body .admin-quickbar {
       margin-left: 5px;
       font-family: Dashicons;
       font-size: 12px;
-      color: #2f87b1;
+      color: var(--aqb-accent);
     }
 
     &.is-active .label {
@@ -173,10 +173,10 @@ body .admin-quickbar {
     top: 50%;
     width: 25px;
     height: 57px;
-    color: #7f7f7f78;
+    color: var(--aqb-toggle-button-color);
     line-height: 59px;
     transform: translateY(-50%);
-    background-color: #e6e9ec;
+    background-color: var(--aqb-secondary-bg);
     font-size: 19px;
     box-shadow: -3px -1px 5px rgba(0, 0, 0, .1);
     border-top-left-radius: 10px;
@@ -224,7 +224,7 @@ body .admin-quickbar {
     margin-bottom: 1em;
     display: block;
     position: relative;
-    color: #6e737da6;
+    color: var(--aqb-transparent-color);
 
     &:first-child {
       margin-top: 0;
@@ -254,14 +254,14 @@ body .admin-quickbar {
       background: none;
       background-color: transparent;
       box-shadow: none;
-      color: #6d7882;
+      color: var(--aqb-main-color);
       border: 1px solid;
       padding: 5px;
       outline: none;
-      border-color: #74777a47 !important;
+      border-color: var(--aqb-transparent-bg-alt) !important;
 
       &:focus {
-        border-color: #74777a47;
+        border-color: var(--aqb-transparent-bg-alt);
         box-shadow: none;
         outline: none;
       }
@@ -290,7 +290,7 @@ body .admin-quickbar {
 
     .sublabel {
       font-size: 8px;
-      background: #80808014;
+      background: var(--aqb-transparent-bg);
       padding: 3px;
       border-radius: 4px;
     }
@@ -338,7 +338,7 @@ body .admin-quickbar {
     text-transform: uppercase;
     font-size: 0.6rem;
     letter-spacing: 0.1rem;
-    color: #6e737da6;
+    color: var(--aqb-transparent-color);
   }
 
   .admin-quickbar-category:first-child {
@@ -349,12 +349,12 @@ body .admin-quickbar {
     width: calc(100% - 43px);
     margin-left: 5px;
     padding: 2px 5px;
-    border-color: #8888882e !important;
+    border-color: var(--aqb-select-border-color) !important;
     border-radius: 3px;
     font-size: 12px;
     background: none;
     box-shadow: none;
-    color: #6d7882;
+    color: var(--aqb-main-color);
     border: 1px solid;
     outline: none;
   }
@@ -387,8 +387,8 @@ body .admin-quickbar {
     text-align: center;
     letter-spacing: 1.8px;
     text-transform: uppercase;
-    background: #80808014;
-    color: #79838c;
+    background: var(--aqb-transparent-bg);
+    color: var(--aqb-secondary-color);
     font-weight: 400;
   }
 
@@ -462,10 +462,10 @@ body {
   .add-post-button,
   .admin-quickbar-post-type .add-new,
   .admin-quickbar-post-options a {
-    color: #2f87b1;
+    color: var(--aqb-accent);
 
     &:hover {
-      color: #0aa4ef;
+      color: var(--aqb-accent-alt);
     }
 
     &:focus {

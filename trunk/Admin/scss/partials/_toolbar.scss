@@ -7,7 +7,7 @@
   right: 0;
   text-align: center;
   padding: 0 12px;
-  background-color: #fff;
+  background-color: var(--aqb-main-bg);
   //box-shadow: -3px 0px 5px rgba(0, 0, 0, .1);
 
   .aqb-toolbar-item {
@@ -17,12 +17,12 @@
 
     > a {
       display: inline-block;
-      color: #2f87b1;
+      color: var(--aqb-accent);
       padding: 5px 10px 20px;
     }
 
     &:hover > a {
-      color: #0aa4ef;
+      color: var(--aqb-accent-alt);
     }
 
     i {
@@ -33,11 +33,11 @@
       cursor: pointer;
 
       i {
-        color: #2f87b1 !important;
+        color: var(--aqb-accent) !important;
       }
 
       &:hover i {
-        color: #0aa4ef !important;
+        color: var(--aqb-accent-alt) !important;
       }
     }
 
@@ -47,8 +47,8 @@
       bottom: 100%;
       left: 0;
       right: 0;
-      background-color: #fff;
-      border-top: 1px solid #e6e9ec;
+      background-color: var(--aqb-main-bg);
+      border-top: 1px solid var(--aqb-secondary-bg);
       padding: 16px 0 20px 7px;
 
       .aqb-toolbar-subitem {
@@ -95,7 +95,7 @@
     text-transform: uppercase;
     font-size: 11px;
     line-height: 18px;
-    background-color: #74777a47;
+    background-color: var(--aqb-transparent-bg-alt);
     pointer-events: none;
     transition: opacity 0.3s linear;
   }

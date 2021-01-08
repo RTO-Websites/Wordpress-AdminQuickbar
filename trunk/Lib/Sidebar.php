@@ -186,6 +186,7 @@ class Sidebar {
             'hasSwift' => $this->hasSwift(),
             'inCache' => in_array( $permalink, $this->cacheList ),
             'languageFlags' => $this->renderAllLanguageFlags(),
+            'cssPosts' => array_reverse( $this->cssPosts ),
         ] );
         $template->render();
 

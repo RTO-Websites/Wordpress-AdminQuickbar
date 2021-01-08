@@ -29,6 +29,18 @@
       font-size: 24px;
     }
 
+    > .admin-quickbar-control-cache {
+      cursor: pointer;
+
+      i {
+        color: #2f87b1 !important;
+      }
+
+      &:hover i {
+        color: #0aa4ef !important;
+      }
+    }
+
     .aqb-toolbar-submenu {
       display: none;
       position: absolute;
@@ -39,13 +51,31 @@
       border-top: 1px solid #e6e9ec;
       padding: 16px 0 20px 7px;
 
-      a {
+      .aqb-toolbar-subitem {
         display: inline-block;
+        position: relative;
         width: 100%;
         font-size: 13px;
         padding: 10px 16px;
         text-align: left;
         text-decoration: none;
+
+        .aqb-toolbar-actions {
+          position: absolute;
+          top: 0;
+          right: 20px;
+
+          .aqb-icon {
+            padding: 10px 5px;
+            height: auto;
+            font-size: 16px;
+
+            &.aqb-icon-wordpress {
+              font-size: 13px;
+              padding-top: 9px;
+            }
+          }
+        }
       }
     }
 

@@ -8,6 +8,7 @@ let AdminQuickbar = function() {
     contextMenu,
     refreshPostListStorage,
     initFavorites,
+    initRecent,
     initDefaultConfig,
     search,
     keyEvent;
@@ -109,6 +110,7 @@ let AdminQuickbar = function() {
   domReady = function() {
     let $body = $('body');
     initFavorites();
+    initRecent();
 
     // open quickbar
     if (localStorage.adminQuickbarToggle === 'true' && localStorage.adminQuickbarKeepopen === 'true') {
@@ -316,6 +318,44 @@ let AdminQuickbar = function() {
         self.toggleSidebar();
         break;
     }
+  };
+
+  /**
+   * Read local storage and moves all posts in it to favorites
+   */
+  initRecent = function() {
+    let storage = [],
+      newStorage = [],
+      max = 5,
+      count = 0,
+      currentPost = $('.admin-quickbar').data('current-post');
+
+    if (typeof (localStorage.adminQuickbarRecent) !== 'undefined') {
+      storage = JSON.parse(localStorage.adminQuickbarRecent);
+    }
+
+    if (currentPost) {
+      storage.unshift(currentPost);
+    }
+
+    for (let i in storage) {
+      if (newStorage.indexOf(storage[i]) !== -1) {
+        continue;
+      }
+      newStorage.push(storage[i]);
+      count += 1;
+
+      let $listItem = $('.admin-quickbar-post[data-postid=' + storage[i] + ']'),
+        $listItemFav = $listItem.first().clone();
+      $listItemFav.css({marginLeft: ''});
+      $('.aqb-recent .admin-quickbar-postlist-inner').append($listItemFav);
+
+      if (count >= max) {
+        break;
+      }
+    }
+
+    localStorage.adminQuickbarRecent = JSON.stringify(newStorage);
   };
 
   /**

@@ -16,10 +16,11 @@
  * @var string $addNewPosts
  * @var string $postTypeLoop
  * @var string $languageFlags
+ * @var int $currentPost
  * @var array $filteredPostTypes
  */
 ?>
-<div class="admin-quickbar" data-swift-nonce="<?php echo $swiftNonce; ?>">
+<div class="admin-quickbar" data-swift-nonce="<?php echo $swiftNonce; ?>" data-current-post="<?php echo $currentPost; ?>">
     <div class="admin-quickbar-inner">
 
         <div class="aqb-tab-button-wrapper">
@@ -42,6 +43,7 @@
                 <select class="aqm-hide-posttypes"
                     multiple
                     rows="<?php echo count( $filteredPostTypes ); ?>">
+                    <option value="aqb-recent"><?php echo __( 'Recent' ); ?></option>
                     <option value="aqb-favorites"><?php echo __( 'Favorites' ); ?></option>
                     <?php foreach ( $filteredPostTypes as $postType ): ?>
                         <option value="<?php echo $postType->name; ?>"><?php echo $postType->label; ?></option>
@@ -107,6 +109,12 @@
                     <?php echo $languageFlags; ?>
                 </div>
             <?php endif; ?>
+
+            <div class="admin-quickbar-postlist aqb-recent" data-post-type="aqb-recent">
+                <div class="admin-quickbar-post-type"><?php echo __( 'Recent' ); ?>
+                </div>
+                <div class="admin-quickbar-postlist-inner"></div>
+            </div>
 
             <div class="admin-quickbar-postlist aqb-favorites" data-post-type="aqb-favorites">
                 <div class="admin-quickbar-post-type"><?php echo __( 'Favorites' ); ?>

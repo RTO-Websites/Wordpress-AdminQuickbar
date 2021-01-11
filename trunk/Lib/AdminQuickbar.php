@@ -167,7 +167,6 @@ class AdminQuickbar {
     }
 
 
-
     /**
      * Gives admin the use_admin_quickbar capatibility
      */

@@ -177,6 +177,7 @@ class Sidebar {
             ? get_bloginfo( 'wpurl' )
             : get_permalink( $currentPost );
 
+
         $templateVars = [
             'postTypeLoop' => $postTypeLoop,
             'filteredPostTypes' => $this->filteredPostTypes,
@@ -190,7 +191,7 @@ class Sidebar {
         ];
 
         $settings = new Template( self::PARTIAL_DIR . '/settings.php', $templateVars );
-        $toolbar = new Template( self::PARTIAL_DIR . '/toolbar.php', $templateVars );
+        $toolbar = new Toolbar( $templateVars );
 
         $templateVars['settings'] = $settings->getRendered();
         $templateVars['toolbar'] = $toolbar->getRendered();

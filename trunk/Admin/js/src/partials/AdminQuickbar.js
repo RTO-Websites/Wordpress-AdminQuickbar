@@ -150,6 +150,7 @@ let AdminQuickbar = function() {
     self.setLanguageSwitchActiveClass();
     self.hideByLanguage();
 
+    self.checkElementorNavigator();
     let $previewIframe = $('#elementor-preview-iframe');
     if ($previewIframe.length) {
       $previewIframe.on('load', function() {
@@ -162,7 +163,6 @@ let AdminQuickbar = function() {
         }, 2000);
       });
     }
-
   };
 
   self.checkTheme = function() {
@@ -522,9 +522,6 @@ let AdminQuickbar = function() {
   self.checkElementorNavigator = function() {
     let $navigator = $('#elementor-navigator');
 
-    console.info('check navigator', $navigator.length,
-      $body.hasClass('admin-quickbar-visible'),
-      $body.hasClass('elementor-navigator-docked'));
     if (!$navigator.length ||
       !$body.hasClass('admin-quickbar-visible')
       || $body.hasClass('elementor-navigator-docked')
@@ -534,13 +531,11 @@ let AdminQuickbar = function() {
 
     let offsetRight = window.innerWidth - ($navigator.offset().left + $navigator.width());
 
-    console.info('aqb nav offset', $navigator.offset().left, $navigator.width());
     if (offsetRight >= 320) {
       return;
     }
 
     $navigator.css({'left': window.innerWidth - $navigator.width() - 320});
-
   };
 
   init();

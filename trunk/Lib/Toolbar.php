@@ -18,7 +18,7 @@ class Toolbar {
      * Toolbar constructor.
      * @param array $templateVars
      */
-    public function __construct( array $templateVars = []) {
+    public function __construct( array $templateVars = [] ) {
         $this->initAdminMenuItems();
         $this->templateVars = $templateVars;
         $this->templateVars['submenuItems'] = $this->getRenderedSubmenus();
@@ -30,7 +30,7 @@ class Toolbar {
      *
      * @return array
      */
-    private function getRenderedSubmenus():array {
+    private function getRenderedSubmenus(): array {
         $result = [];
         foreach ( $this->submenuItems as $key => $item ) {
             $result[$key] = '';
@@ -55,7 +55,7 @@ class Toolbar {
      *
      * @return string
      */
-    public function getRendered():string {
+    public function getRendered(): string {
         $toolbar = new Template( self::PARTIAL_DIR . '/toolbar.php', $this->templateVars );
         return $toolbar->getRendered();
     }
@@ -94,6 +94,7 @@ class Toolbar {
         if ( defined( 'ELEMENTOR_VERSION' ) ) {
             $submenu['elementor'][10] = [ _x( 'Templates', '' ), 'edit_posts', 'edit.php?post_type=elementor_library&tabs_group=library' ];
             $submenu['elementor'][15] = [ _x( 'Popups', '' ), 'edit_posts', 'edit.php?post_type=elementor_library&tabs_group=popup&elementor_library_type=popup' ];
+            $submenu['elementor'][20] = [ _x( 'Tools', '' ), 'manage_options', 'admin.php?page=elementor-tools' ];
         }
 
 

@@ -14,14 +14,23 @@ class Toolbar {
 
     const PARTIAL_DIR = AdminQuickbar_DIR . '/Lib/partials/';
 
-    public function __construct( $templateVars ) {
+    /**
+     * Toolbar constructor.
+     * @param array $templateVars
+     */
+    public function __construct( array $templateVars = []) {
         $this->initAdminMenuItems();
         $this->templateVars = $templateVars;
         $this->templateVars['submenuItems'] = $this->getRenderedSubmenus();
     }
 
 
-    private function getRenderedSubmenus() {
+    /**
+     * Returns an array with rendered submenu items
+     *
+     * @return array
+     */
+    private function getRenderedSubmenus():array {
         $result = [];
         foreach ( $this->submenuItems as $key => $item ) {
             $result[$key] = '';
@@ -41,7 +50,12 @@ class Toolbar {
         return $result;
     }
 
-    public function getRendered() {
+    /**
+     * Returns fully rendered toolbar
+     *
+     * @return string
+     */
+    public function getRendered():string {
         $toolbar = new Template( self::PARTIAL_DIR . '/toolbar.php', $this->templateVars );
         return $toolbar->getRendered();
     }

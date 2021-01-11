@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   text-align: center;
-  padding: 0 12px;
+  padding: 0 7px;
   background-color: var(--aqb-main-bg);
   z-index: 50;
 
@@ -18,7 +18,7 @@
     > a {
       display: inline-block;
       color: var(--aqb-accent);
-      padding: 5px 10px 20px;
+      padding: 16px 10px 12px;
     }
 
     &:hover > a {
@@ -49,7 +49,9 @@
       right: 0;
       background-color: var(--aqb-main-bg);
       border-top: 1px solid var(--aqb-secondary-bg);
-      padding: 16px 0 20px 7px;
+      padding: 20px 0 17px 7px;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
 
       .aqb-toolbar-subitem {
         display: inline-block;
@@ -59,6 +61,7 @@
         padding: 10px 16px;
         text-align: left;
         text-decoration: none;
+        box-sizing: border-box;
 
         .aqb-toolbar-actions {
           position: absolute;
@@ -94,17 +97,20 @@
 
   .aqb-toolbar-indicator {
     position: absolute;
-    bottom: 0;
+    bottom: 30px;
     left: 0;
     right: 0;
     opacity: 0;
     padding: 1px;
     text-align: center;
     text-transform: uppercase;
-    font-size: 11px;
-    line-height: 18px;
-    background-color: var(--aqb-transparent-bg-alt);
+    font-size: 12px;
+    line-height: 50px;
+    letter-spacing: 3px;
+    background-color: var(--aqb-main-bg);
     pointer-events: none;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     transition: opacity 0.3s linear;
   }
 

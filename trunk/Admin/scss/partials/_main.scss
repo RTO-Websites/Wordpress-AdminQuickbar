@@ -59,6 +59,10 @@ body .admin-quickbar {
     font-size: 0.7rem;
     cursor: pointer;
 
+    &.hidden-posttype {
+      display: none;
+    }
+
     &::before {
       content: "\f140";
       display: inline-block;

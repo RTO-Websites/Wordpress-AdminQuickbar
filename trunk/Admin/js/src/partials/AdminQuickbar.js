@@ -3,6 +3,7 @@ let AdminQuickbar = function() {
     doc = win.document,
     $doc = $(doc),
     self = this,
+    $body = $('body'),
     init,
     domReady,
     contextMenu,
@@ -14,7 +15,6 @@ let AdminQuickbar = function() {
     keyEvent;
 
   init = function() {
-    let $body = $('body');
 
     $(function($) {
       domReady();
@@ -108,7 +108,6 @@ let AdminQuickbar = function() {
    * Open sidebar and postlists on dom-ready
    */
   domReady = function() {
-    let $body = $('body');
     initFavorites();
     initRecent();
 
@@ -116,6 +115,7 @@ let AdminQuickbar = function() {
     if (localStorage.adminQuickbarToggle === 'true' && localStorage.adminQuickbarKeepopen === 'true') {
       $('.admin-quickbar').addClass('toggle');
       $body.addClass('admin-quickbar-visible');
+      self.checkElementorNavigator();
     }
 
     if (localStorage.adminQuickbarKeepopen === 'true') {
@@ -156,13 +156,17 @@ let AdminQuickbar = function() {
         $($previewIframe.get(0).contentDocument).on('keydown', function(e) {
           keyEvent(e);
         });
+
+        setTimeout(function() {
+          self.checkElementorNavigator();
+        }, 2000);
       });
     }
+
   };
 
   self.checkTheme = function() {
-    let $body = $('body'),
-      $themeSelect = $('.admin-quickbar-theme select');
+    let $themeSelect = $('.admin-quickbar-theme select');
 
     switch (localStorage.adminQuickbarTheme) {
       case 'light':
@@ -221,10 +225,10 @@ let AdminQuickbar = function() {
   self.hidePostTypes = function() {
     let hiddenTypes = JSON.parse(localStorage.adminQuickbarHiddenPostTypes);
 
-    $('.admin-quickbar-postlist').removeClass('hidden');
+    $('.admin-quickbar-postlist').removeClass('hidden-posttype');
 
     for (let index in hiddenTypes) {
-      $('.admin-quickbar-postlist[data-post-type="' + hiddenTypes[index] + '"]').addClass('hidden');
+      $('.admin-quickbar-postlist[data-post-type="' + hiddenTypes[index] + '"]').addClass('hidden-posttype');
     }
   };
 
@@ -305,7 +309,7 @@ let AdminQuickbar = function() {
 
     switch (key) {
       case 'f':
-        if (!$('body').hasClass('admin-quickbar-visible')) {
+        if (!$body.hasClass('admin-quickbar-visible')) {
           self.toggleSidebar();
         }
         $('#aqb-search').focus();
@@ -386,7 +390,6 @@ let AdminQuickbar = function() {
    * @param e
    */
   self.checkOverlap = function(e) {
-    let $body = $('body');
     localStorage.adminQuickbarOverlap = $('.admin-quickbar-overlap input').is(':checked');
 
     if (localStorage.adminQuickbarOverlap === 'true') {
@@ -401,7 +404,6 @@ let AdminQuickbar = function() {
    * @param e
    */
   self.checkTrash = function(e) {
-    let $body = $('body');
     localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash-option input').is(':checked');
 
     if (localStorage.adminQuickbarShowTrash === 'true') {
@@ -443,8 +445,10 @@ let AdminQuickbar = function() {
   self.toggleSidebar = function() {
     let $adminQuickbar = $('.admin-quickbar');
     $adminQuickbar.toggleClass('toggle');
-    $('body').toggleClass('admin-quickbar-visible');
+    $body.toggleClass('admin-quickbar-visible');
     localStorage.adminQuickbarToggle = $adminQuickbar.hasClass('toggle');
+
+    self.checkElementorNavigator();
   };
 
   /**
@@ -501,8 +505,7 @@ let AdminQuickbar = function() {
 
     $indicator.html($target.data('title'));
     $toolbar.addClass('show-indicator');
-
-  }
+  };
 
   self.hideIndicator = function(e) {
     let $target = $(e.currentTarget),
@@ -510,7 +513,35 @@ let AdminQuickbar = function() {
       $indicator = $('.aqb-toolbar-indicator');
 
     $toolbar.removeClass('show-indicator');
-  }
+  };
+
+
+  /**
+   * Moves elementor navigator in viewport if hidden by sidebar
+   */
+  self.checkElementorNavigator = function() {
+    let $navigator = $('#elementor-navigator');
+
+    console.info('check navigator', $navigator.length,
+      $body.hasClass('admin-quickbar-visible'),
+      $body.hasClass('elementor-navigator-docked'));
+    if (!$navigator.length ||
+      !$body.hasClass('admin-quickbar-visible')
+      || $body.hasClass('elementor-navigator-docked')
+    ) {
+      return;
+    }
+
+    let offsetRight = window.innerWidth - ($navigator.offset().left + $navigator.width());
+
+    console.info('aqb nav offset', $navigator.offset().left, $navigator.width());
+    if (offsetRight >= 320) {
+      return;
+    }
+
+    $navigator.css({'left': window.innerWidth - $navigator.width() - 320});
+
+  };
 
   init();
 };

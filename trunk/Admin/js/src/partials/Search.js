@@ -47,7 +47,9 @@ let AdminQuickbarSearch = function() {
       $post.addClass('aqb-search-hidden');
     });
 
-    hideEmptyPostTypes();
+    if (searchVal.length) {
+      hideEmptyPostTypes();
+    }
 
     if (!searchVal.length) {
       restorePostlistState();

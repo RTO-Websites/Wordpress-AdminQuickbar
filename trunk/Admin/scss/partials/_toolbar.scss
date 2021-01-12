@@ -12,13 +12,24 @@
 
   .aqb-toolbar-item {
     display: inline-block;
-    //position: relative;
     width: 100%;
 
     > a {
       display: inline-block;
       color: var(--aqb-accent);
       padding: 16px 10px 12px;
+
+      &:active,
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+
+      .dashicons-editor-code::before {
+        display: inline-block;
+        top: -1px;
+        position: relative;
+      }
     }
 
     &:hover > a {
@@ -63,6 +74,12 @@
         text-decoration: none;
         box-sizing: border-box;
 
+        &:active,
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
+
         .aqb-toolbar-actions {
           position: absolute;
           top: 0;
@@ -97,7 +114,7 @@
 
   .aqb-toolbar-indicator {
     position: absolute;
-    bottom: 30px;
+    bottom: 35px;
     left: 0;
     right: 0;
     opacity: 0;
@@ -105,7 +122,7 @@
     text-align: center;
     text-transform: uppercase;
     font-size: 12px;
-    line-height: 50px;
+    line-height: 45px;
     letter-spacing: 3px;
     background-color: var(--aqb-main-bg);
     pointer-events: none;

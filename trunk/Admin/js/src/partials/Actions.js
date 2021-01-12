@@ -146,7 +146,8 @@ let AdminQuickbarActions = {
   },
 
   startRenamePost: function(e, postid) {
-    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+    let $contextMenu = $('.admin-quickbar-contextmenu'),
+      $listItem = $contextMenu.data('listitem'),
       $titleItem = $listItem.find('.aqb-post-title'),
       $saveButton = $('<span class="save-rename" />');
 
@@ -171,8 +172,14 @@ let AdminQuickbarActions = {
         action: 'aqbRenamePost',
         postid: postid,
         title: title,
+      },
+      success: function() {
+        let $listItems = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+          $listTitles = $listItems.find('.aqb-post-title');
+        $listTitles.html(title);
       }
     });
+
     $('.save-rename').remove();
     $postTitle.prop('contenteditable', false);
     $postTitle.removeClass('is-renaming');

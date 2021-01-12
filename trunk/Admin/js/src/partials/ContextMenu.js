@@ -46,6 +46,7 @@ let AdminQuickbarContextMenu = function() {
       offsetTop = $('.admin-quickbar-inner').scrollTop() + $target.offset().top - $('.admin-quickbar').offset().top + 35;
 
     $contextMenu.data('postid', $target.data('postid'));
+    $contextMenu.data('listitem', $target);
     buildContextMenu($target.data('contextmenu'));
 
     $contextMenu.css({

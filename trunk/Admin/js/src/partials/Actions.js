@@ -133,7 +133,7 @@ let AdminQuickbarActions = {
 
   /**
    *
-   * @param [Event} e
+   * @param {Event} e
    * @param {int} postid
    */
   trashPost: function(e, postid) {
@@ -152,7 +152,7 @@ let AdminQuickbarActions = {
 
   /**
    *
-   * @param [Event} e
+   * @param {Event} e
    * @param {int} postid
    */
   startRenamePost: function(e, postid) {

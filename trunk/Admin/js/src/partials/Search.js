@@ -24,6 +24,7 @@ let AdminQuickbarSearch = function() {
 
   /**
    * Check search input and hide not found posts
+   * @param {Event} e
    */
   searchPosts = function(e) {
     let $searchInput = $('#aqb-search'),

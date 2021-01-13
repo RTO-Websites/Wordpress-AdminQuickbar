@@ -165,6 +165,9 @@ let AdminQuickbar = function() {
     }
   };
 
+  /**
+   * Checks and set theme dark/light
+   */
   self.checkTheme = function() {
     let $themeSelect = $('.admin-quickbar-theme select');
 
@@ -234,7 +237,7 @@ let AdminQuickbar = function() {
 
   /**
    *
-   * @param e
+   * @param {Event} e
    */
   self.changeLanguageFilter = function(e) {
     let $target = $(e.currentTarget),
@@ -275,7 +278,7 @@ let AdminQuickbar = function() {
 
   /**
    *
-   * @param e
+   * @param {Event} e
    */
   self.changeTab = function(e) {
     let $target = $(e.currentTarget),
@@ -287,6 +290,11 @@ let AdminQuickbar = function() {
     $('.aqb-tab-' + tabSlug).addClass('active');
   };
 
+  /**
+   * Event handler for keypress
+   *
+   * @param {Event} e
+   */
   keyEvent = function(e) {
     if ((!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
       return;
@@ -387,7 +395,7 @@ let AdminQuickbar = function() {
 
   /**
    * Checks if overlapping is active
-   * @param e
+   * @param {Event} e
    */
   self.checkOverlap = function(e) {
     localStorage.adminQuickbarOverlap = $('.admin-quickbar-overlap input').is(':checked');
@@ -401,7 +409,7 @@ let AdminQuickbar = function() {
 
   /**
    * Checks if show trashed is active
-   * @param e
+   * @param {Event} e
    */
   self.checkTrash = function(e) {
     localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash-option input').is(':checked');
@@ -415,7 +423,7 @@ let AdminQuickbar = function() {
 
   /**
    * Checks if overlapping is active
-   * @param e
+   * @param {Event} e
    */
   self.changeTheme = function(e) {
     localStorage.adminQuickbarTheme = $('.admin-quickbar-theme select').val();
@@ -426,7 +434,7 @@ let AdminQuickbar = function() {
   /**
    * Check if load-thumbs is active
    *
-   * @param e
+   * @param {Event} e
    */
   self.checkThumbs = function(e) {
     localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
@@ -498,6 +506,11 @@ let AdminQuickbar = function() {
     });
   };
 
+  /**
+   * Change and show the toolbar indicator
+   *
+   * @param {Event} e
+   */
   self.showIndicator = function(e) {
     let $target = $(e.currentTarget),
       $toolbar = $('.admin-quickbar-toolbar'),
@@ -507,6 +520,11 @@ let AdminQuickbar = function() {
     $toolbar.addClass('show-indicator');
   };
 
+  /**
+   * Hides the toolbar indicator
+   *
+   * @param {Event} e
+   */
   self.hideIndicator = function(e) {
     let $target = $(e.currentTarget),
       $toolbar = $('.admin-quickbar-toolbar'),

@@ -36,7 +36,7 @@ let AdminQuickbarContextMenu = function() {
 
   /**
    *
-   * @param e
+   * @param {Event} e
    */
   openContextMenu = function(e) {
     e.preventDefault();
@@ -57,7 +57,7 @@ let AdminQuickbarContextMenu = function() {
   };
 
   /**
-   * @param data
+   * @param {object} data
    */
   buildContextMenu = function(data) {
     let $contextMenu = $('.admin-quickbar-contextmenu');
@@ -92,7 +92,7 @@ let AdminQuickbarContextMenu = function() {
   /**
    * Build menu-item to add item to favorites
    *
-   * @param data
+   * @param {object} data
    */
   buildContextMenuSwift = function(data) {
     let $parent = $('<div class="item has-sub item-swift" />'),
@@ -117,7 +117,7 @@ let AdminQuickbarContextMenu = function() {
   /**
    * Build menu-item to delete item
    *
-   * @param data
+   * @param {object} data
    */
   buildContextMenuTrash = function(data) {
     let $parent = $('<div class="item has-sub item-trash" />'),
@@ -141,7 +141,7 @@ let AdminQuickbarContextMenu = function() {
   /**
    * Build menu-item to rename item
    *
-   * @param data
+   * @param {object} data
    */
   buildContextMenuRename = function(data) {
     let $parent = $('<div class="item has-sub item-rename" />'),
@@ -165,7 +165,7 @@ let AdminQuickbarContextMenu = function() {
   /**
    * Build menu-item to add item to favorites
    *
-   * @param data
+   * @param {object} data
    */
   buildContextMenuFavorite = function(data) {
     let $parent = $('<div class="item has-sub item-favorite" />'),
@@ -199,7 +199,7 @@ let AdminQuickbarContextMenu = function() {
   /**
    * Build menu-item with icons to copy id, permalink, shortcode, etc
    *
-   * @param data
+   * @param {object} data
    * @returns {*|jQuery.fn.init|jQuery|HTMLElement}
    */
   buildContextMenuCopy = function(data) {
@@ -238,7 +238,11 @@ let AdminQuickbarContextMenu = function() {
     $contextMenu.removeClass('open');
   };
 
-
+  /**
+   *
+   * @param $item
+   * @param {string} index
+   */
   addTitleToElement = function($item, index) {
     let title;
 

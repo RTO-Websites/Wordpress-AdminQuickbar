@@ -190,6 +190,78 @@ class Sidebar {
             'cssPosts' => array_reverse( $this->cssPosts ),
         ];
 
+
+        $hidePostTypes = [
+            'aqb-recent' => __( 'Recent' ),
+            'aqb-favorites' => __( 'Favorites' ),
+        ];
+        foreach ( $this->filteredPostTypes as $postType ) {
+            $hidePostTypes[$postType->name] = $postType->label;
+        }
+
+        $settingsFields = [
+            [
+                'label' => __( 'Visibility' ),
+                'fields' => [
+                    'hide-posttypes' => [
+                        // TODO: checkup classname in theme begins currently with 'aqm'
+                        'type' => 'select',
+                        'multiple' => true,
+                        'label' => __( 'Hide main container (PostTypes)', 'admin-quickbar' ),
+                        'sublabel' => '[' . __( 'Ctrl+Click', 'admin-quickbar' ) . ']',
+                        'rows' => count( $this->filteredPostTypes ),
+                        'options' => $hidePostTypes,
+                    ],
+                    'loadthumbs' => [
+                        'type' => 'checkbox',
+                        'label' => __( 'Show thumbs', 'admin-quickbar' ),
+                    ],
+                    'show-trash' => [
+                        'type' => 'checkbox',
+                        'label' => __( 'Show trashed posts', 'admin-quickbar' ),
+                    ],
+                    'max-recent' => [
+                        'type' => 'number',
+                        'label' => __( 'Max. Recent', 'admin-quickbar' ),
+                        'min' => 0,
+                    ],
+                    'hide-on-website' => [
+                        'type' => 'checkbox',
+                        'label' => __( 'Hide quickbar on website', 'admin-quickbar' ),
+                    ],
+                ],
+            ],
+            [
+                'label' => __( 'Quickbar behavior', 'admin-quickbar' ),
+                'fields' => [
+                    'keepopen' => [
+                        'type' => 'checkbox',
+                        'label' => __( 'Keep open when switching page', 'admin-quickbar' ),
+                    ],
+                    'overlap' => [
+                        'type' => 'checkbox',
+                        'label' => __( 'Overlap', 'admin-quickbar' ),
+                    ],
+                ],
+            ],
+            [
+                'label' => __( 'Quickbar Color-Theme' ),
+                'fields' => [
+                    'theme' => [
+                        'type' => 'select',
+                        'label' => '',
+                        'options' => [
+                            'auto' => __( 'Auto detect', 'admin-quickbar' ),
+                            'dark' => __( 'Dark', 'admin-quickbar' ),
+                            'light' => __( 'Light', 'admin-quickbar' ),
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $settingsFields = json_decode( json_encode( $settingsFields ) );
+        $templateVars['fieldGroups'] = $settingsFields;
+
         $settings = new Template( self::PARTIAL_DIR . '/settings.php', $templateVars );
         $toolbar = new Toolbar( $templateVars );
 

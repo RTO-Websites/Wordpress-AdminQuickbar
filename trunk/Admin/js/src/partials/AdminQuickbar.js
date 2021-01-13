@@ -71,7 +71,7 @@ let AdminQuickbar = function() {
 
     $doc.on('click', '.language-switch .language-flag, .language-switch .language-all', self.changeLanguageFilter);
 
-    $doc.on('change', '.aqm-hide-posttypes', function() {
+    $doc.on('change', '.aqb-input-hide-posttypes', function() {
       self.updateHiddenPostTypes();
     });
 
@@ -210,7 +210,7 @@ let AdminQuickbar = function() {
       localStorage.adminQuickbarHiddenPostTypes = '[]';
     }
     let hiddenTypes = JSON.parse(localStorage.adminQuickbarHiddenPostTypes);
-    $('.aqm-hide-posttypes').val(hiddenTypes);
+    $('.aqb-input-hide-posttypes').val(hiddenTypes);
     self.hidePostTypes();
   };
 
@@ -218,7 +218,7 @@ let AdminQuickbar = function() {
    * Update localstorage for hidden post-types and hide the post-types
    */
   self.updateHiddenPostTypes = function() {
-    localStorage.adminQuickbarHiddenPostTypes = JSON.stringify($('.aqm-hide-posttypes').val());
+    localStorage.adminQuickbarHiddenPostTypes = JSON.stringify($('.aqb-input-hide-posttypes').val());
     self.hidePostTypes();
   };
 

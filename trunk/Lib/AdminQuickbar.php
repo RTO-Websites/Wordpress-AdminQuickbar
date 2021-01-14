@@ -167,9 +167,8 @@ class AdminQuickbar {
     }
 
 
-
     /**
-     * Gives admin the use_admin_quickbar capatibility
+     * Gives admin the view_admin_quickbar capatibility
      */
     private function addCapatibilites() {
         $administratorRole = get_role( 'administrator' );

@@ -3,7 +3,7 @@ let AdminQuickbarActions = {
   /**
    * Adds a page to swift-cache
    *
-   * @param e
+   * @param {Event} e
    */
   addPageToSwiftCache: function(e) {
     e.preventDefault();
@@ -30,7 +30,7 @@ let AdminQuickbarActions = {
   /**
    * Removes a page from swift-cache
    *
-   * @param e
+   * @param {Event} e
    */
   refreshSwiftCache: function(e) {
     e.preventDefault();
@@ -41,7 +41,7 @@ let AdminQuickbarActions = {
 
     jQuery.post(aqbLocalize.ajaxUrl, {
       action: 'swift_performance_single_clear_cache',
-      '_wpnonce': $target.closest('.admin-quickbar, .admin-quickbar-jumpicons').data('swift-nonce'),
+      '_wpnonce': $target.closest('.admin-quickbar').data('swift-nonce'),
       'url': url,
     }, function(response) {
       $target.removeClass('is-in-cache');
@@ -49,10 +49,32 @@ let AdminQuickbarActions = {
     });
   },
 
+
+  /**
+   * Removes all pages from swift cache
+   *
+   * @param {Event} e
+   */
+  clearAllSwiftCache: function(e) {
+    e.preventDefault();
+    let $target = $(e.currentTarget);
+
+    $target.addClass('loading');
+
+    jQuery.post(aqbLocalize.ajaxUrl, {
+      action: 'swift_performance_clear_cache',
+      type: 'all',
+      '_wpnonce': $target.closest('.admin-quickbar').data('swift-nonce')
+    }, function(response) {
+      $target.removeClass('loading');
+    });
+  },
+
+
   /**
    * Checks if page is cached and clear/add or only add it
    *
-   * @param e
+   * @param {Event} e
    */
   checkSwiftCache: function(e) {
     e.preventDefault();
@@ -68,7 +90,7 @@ let AdminQuickbarActions = {
 
   /**
    * Adds a post to favorites
-   * @param postid
+   * @param {int} postid
    */
   addToFavorites: function(postid) {
     let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
@@ -85,7 +107,7 @@ let AdminQuickbarActions = {
   },
   /**
    * Removes a post from favorites
-   * @param postid
+   * @param {int} postid
    */
   removeFromFavorites: function(postid) {
     let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
@@ -109,6 +131,11 @@ let AdminQuickbarActions = {
     localStorage.adminQuickbarFavorites = JSON.stringify(storage);
   },
 
+  /**
+   *
+   * @param {Event} e
+   * @param {int} postid
+   */
   trashPost: function(e, postid) {
     let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
       trashUrl = $listItem.data('trash-url'),
@@ -123,8 +150,14 @@ let AdminQuickbarActions = {
     }
   },
 
+  /**
+   *
+   * @param {Event} e
+   * @param {int} postid
+   */
   startRenamePost: function(e, postid) {
-    let $listItem = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+    let $contextMenu = $('.admin-quickbar-contextmenu'),
+      $listItem = $contextMenu.data('listitem'),
       $titleItem = $listItem.find('.aqb-post-title'),
       $saveButton = $('<span class="save-rename" />');
 
@@ -141,6 +174,11 @@ let AdminQuickbarActions = {
     $titleItem.focus();
   },
 
+  /**
+   *
+   * @param {int} postid
+   * @param {string} title
+   */
   saveRenamePost: function(postid, title) {
     let $postTitle = $('.aqb-post-title');
     $.post({
@@ -149,8 +187,14 @@ let AdminQuickbarActions = {
         action: 'aqbRenamePost',
         postid: postid,
         title: title,
+      },
+      success: function() {
+        let $listItems = $('.admin-quickbar-post[data-postid=' + postid + ']'),
+          $listTitles = $listItems.find('.aqb-post-title');
+        $listTitles.html(title);
       }
     });
+
     $('.save-rename').remove();
     $postTitle.prop('contenteditable', false);
     $postTitle.removeClass('is-renaming');

@@ -177,7 +177,8 @@ class Sidebar {
             ? get_bloginfo( 'wpurl' )
             : get_permalink( $currentPost );
 
-        $template = new Template( self::PARTIAL_DIR . '/sidebar.php', [
+
+        $templateVars = [
             'postTypeLoop' => $postTypeLoop,
             'filteredPostTypes' => $this->filteredPostTypes,
             'currentPost' => $currentPost,
@@ -186,17 +187,19 @@ class Sidebar {
             'hasSwift' => $this->hasSwift(),
             'inCache' => in_array( $permalink, $this->cacheList ),
             'languageFlags' => $this->renderAllLanguageFlags(),
-        ] );
-        $template->render();
-
-        $template = new Template( self::PARTIAL_DIR . '/jump-icons.php', [
-            'currentPost' => $currentPost,
-            'permalink' => $permalink,
-            'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
-            'hasSwift' => $this->hasSwift() && !empty( $currentPost ),
-            'inCache' => in_array( $permalink, $this->cacheList ),
             'cssPosts' => array_reverse( $this->cssPosts ),
+        ];
+
+
+        $settings = new Settings( [
+            'filteredPostTypes' => $this->filteredPostTypes,
         ] );
+        $toolbar = new Toolbar( $templateVars );
+
+        $templateVars['settings'] = $settings->getRendered();
+        $templateVars['toolbar'] = $toolbar->getRendered();
+
+        $template = new Template( self::PARTIAL_DIR . '/sidebar.php', $templateVars );
         $template->render();
 
         return $data;

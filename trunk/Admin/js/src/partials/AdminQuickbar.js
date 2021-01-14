@@ -3,17 +3,18 @@ let AdminQuickbar = function() {
     doc = win.document,
     $doc = $(doc),
     self = this,
+    $body = $('body'),
     init,
     domReady,
     contextMenu,
     refreshPostListStorage,
     initFavorites,
+    initRecent,
     initDefaultConfig,
     search,
     keyEvent;
 
   init = function() {
-    let $body = $('body');
 
     $(function($) {
       domReady();
@@ -24,6 +25,9 @@ let AdminQuickbar = function() {
     $doc.on('click', '.toggle-quickbar-button', self.toggleSidebar);
     $doc.on('click', '.admin-quickbar-post-type', self.togglePostTypes);
     $doc.on('click', '.aqb-tab-button', self.changeTab);
+
+    $doc.on('mouseenter', '.aqb-toolbar-item', self.showIndicator);
+    $doc.on('mouseleave', '.aqb-toolbar-item', self.hideIndicator);
 
     /**
      * Keep open
@@ -67,7 +71,7 @@ let AdminQuickbar = function() {
 
     $doc.on('click', '.language-switch .language-flag, .language-switch .language-all', self.changeLanguageFilter);
 
-    $doc.on('change', '.aqm-hide-posttypes', function() {
+    $doc.on('change', '.aqb-input-hide-posttypes', function() {
       self.updateHiddenPostTypes();
     });
 
@@ -104,13 +108,14 @@ let AdminQuickbar = function() {
    * Open sidebar and postlists on dom-ready
    */
   domReady = function() {
-    let $body = $('body');
     initFavorites();
+    initRecent();
 
     // open quickbar
     if (localStorage.adminQuickbarToggle === 'true' && localStorage.adminQuickbarKeepopen === 'true') {
       $('.admin-quickbar').addClass('toggle');
       $body.addClass('admin-quickbar-visible');
+      self.checkElementorNavigator();
     }
 
     if (localStorage.adminQuickbarKeepopen === 'true') {
@@ -145,19 +150,26 @@ let AdminQuickbar = function() {
     self.setLanguageSwitchActiveClass();
     self.hideByLanguage();
 
+    self.checkElementorNavigator();
     let $previewIframe = $('#elementor-preview-iframe');
     if ($previewIframe.length) {
       $previewIframe.on('load', function() {
         $($previewIframe.get(0).contentDocument).on('keydown', function(e) {
           keyEvent(e);
         });
+
+        setTimeout(function() {
+          self.checkElementorNavigator();
+        }, 2000);
       });
     }
   };
 
+  /**
+   * Checks and set theme dark/light
+   */
   self.checkTheme = function() {
-    let $body = $('body'),
-      $themeSelect = $('.admin-quickbar-theme select');
+    let $themeSelect = $('.admin-quickbar-theme select');
 
     switch (localStorage.adminQuickbarTheme) {
       case 'light':
@@ -198,7 +210,7 @@ let AdminQuickbar = function() {
       localStorage.adminQuickbarHiddenPostTypes = '[]';
     }
     let hiddenTypes = JSON.parse(localStorage.adminQuickbarHiddenPostTypes);
-    $('.aqm-hide-posttypes').val(hiddenTypes);
+    $('.aqb-input-hide-posttypes').val(hiddenTypes);
     self.hidePostTypes();
   };
 
@@ -206,7 +218,7 @@ let AdminQuickbar = function() {
    * Update localstorage for hidden post-types and hide the post-types
    */
   self.updateHiddenPostTypes = function() {
-    localStorage.adminQuickbarHiddenPostTypes = JSON.stringify($('.aqm-hide-posttypes').val());
+    localStorage.adminQuickbarHiddenPostTypes = JSON.stringify($('.aqb-input-hide-posttypes').val());
     self.hidePostTypes();
   };
 
@@ -216,16 +228,16 @@ let AdminQuickbar = function() {
   self.hidePostTypes = function() {
     let hiddenTypes = JSON.parse(localStorage.adminQuickbarHiddenPostTypes);
 
-    $('.admin-quickbar-postlist').removeClass('hidden');
+    $('.admin-quickbar-postlist').removeClass('hidden-posttype');
 
     for (let index in hiddenTypes) {
-      $('.admin-quickbar-postlist[data-post-type="' + hiddenTypes[index] + '"]').addClass('hidden');
+      $('.admin-quickbar-postlist[data-post-type="' + hiddenTypes[index] + '"]').addClass('hidden-posttype');
     }
   };
 
   /**
    *
-   * @param e
+   * @param {Event} e
    */
   self.changeLanguageFilter = function(e) {
     let $target = $(e.currentTarget),
@@ -266,7 +278,7 @@ let AdminQuickbar = function() {
 
   /**
    *
-   * @param e
+   * @param {Event} e
    */
   self.changeTab = function(e) {
     let $target = $(e.currentTarget),
@@ -278,6 +290,11 @@ let AdminQuickbar = function() {
     $('.aqb-tab-' + tabSlug).addClass('active');
   };
 
+  /**
+   * Event handler for keypress
+   *
+   * @param {Event} e
+   */
   keyEvent = function(e) {
     if ((!e.ctrlKey && !e.metaKey) || !e.shiftKey) {
       return;
@@ -300,7 +317,7 @@ let AdminQuickbar = function() {
 
     switch (key) {
       case 'f':
-        if (!$('body').hasClass('admin-quickbar-visible')) {
+        if (!$body.hasClass('admin-quickbar-visible')) {
           self.toggleSidebar();
         }
         $('#aqb-search').focus();
@@ -313,6 +330,49 @@ let AdminQuickbar = function() {
         self.toggleSidebar();
         break;
     }
+  };
+
+  /**
+   * Read local storage and moves all posts in it to favorites
+   */
+  initRecent = function() {
+    $('.admin-quickbar-max-recent input').val(localStorage.adminQuickbarMaxRecent ?? 4);
+    $doc.on('change', '.admin-quickbar-max-recent input', function(e) {
+      localStorage.adminQuickbarMaxRecent = $('.admin-quickbar-max-recent input').val();
+    });
+
+    let storage = [],
+      newStorage = [],
+      max = parseInt(localStorage.adminQuickbarMaxRecent),
+      count = 0,
+      currentPost = $('.admin-quickbar').data('current-post');
+
+    if (typeof (localStorage.adminQuickbarRecent) !== 'undefined') {
+      storage = JSON.parse(localStorage.adminQuickbarRecent);
+    }
+
+    if (currentPost) {
+      storage.unshift(currentPost);
+    }
+
+    for (let i in storage) {
+      if (newStorage.indexOf(storage[i]) !== -1) {
+        continue;
+      }
+      newStorage.push(storage[i]);
+      count += 1;
+
+      let $listItem = $('.admin-quickbar-post[data-postid=' + storage[i] + ']'),
+        $listItemFav = $listItem.first().clone();
+      $listItemFav.css({marginLeft: ''});
+      $('.aqb-recent .admin-quickbar-postlist-inner').append($listItemFav);
+
+      if (count >= max) {
+        break;
+      }
+    }
+
+    localStorage.adminQuickbarRecent = JSON.stringify(newStorage);
   };
 
   /**
@@ -335,10 +395,9 @@ let AdminQuickbar = function() {
 
   /**
    * Checks if overlapping is active
-   * @param e
+   * @param {Event} e
    */
   self.checkOverlap = function(e) {
-    let $body = $('body');
     localStorage.adminQuickbarOverlap = $('.admin-quickbar-overlap input').is(':checked');
 
     if (localStorage.adminQuickbarOverlap === 'true') {
@@ -350,10 +409,9 @@ let AdminQuickbar = function() {
 
   /**
    * Checks if show trashed is active
-   * @param e
+   * @param {Event} e
    */
   self.checkTrash = function(e) {
-    let $body = $('body');
     localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash-option input').is(':checked');
 
     if (localStorage.adminQuickbarShowTrash === 'true') {
@@ -365,7 +423,7 @@ let AdminQuickbar = function() {
 
   /**
    * Checks if overlapping is active
-   * @param e
+   * @param {Event} e
    */
   self.changeTheme = function(e) {
     localStorage.adminQuickbarTheme = $('.admin-quickbar-theme select').val();
@@ -376,7 +434,7 @@ let AdminQuickbar = function() {
   /**
    * Check if load-thumbs is active
    *
-   * @param e
+   * @param {Event} e
    */
   self.checkThumbs = function(e) {
     localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
@@ -395,8 +453,10 @@ let AdminQuickbar = function() {
   self.toggleSidebar = function() {
     let $adminQuickbar = $('.admin-quickbar');
     $adminQuickbar.toggleClass('toggle');
-    $('body').toggleClass('admin-quickbar-visible');
+    $body.toggleClass('admin-quickbar-visible');
     localStorage.adminQuickbarToggle = $adminQuickbar.hasClass('toggle');
+
+    self.checkElementorNavigator();
   };
 
   /**
@@ -444,6 +504,56 @@ let AdminQuickbar = function() {
       let $element = $(element);
       $element.prop('src', $element.data('src'));
     });
+  };
+
+  /**
+   * Change and show the toolbar indicator
+   *
+   * @param {Event} e
+   */
+  self.showIndicator = function(e) {
+    let $target = $(e.currentTarget),
+      $toolbar = $('.admin-quickbar-toolbar'),
+      $indicator = $('.aqb-toolbar-indicator');
+
+    $indicator.html($target.data('title'));
+    $toolbar.addClass('show-indicator');
+  };
+
+  /**
+   * Hides the toolbar indicator
+   *
+   * @param {Event} e
+   */
+  self.hideIndicator = function(e) {
+    let $target = $(e.currentTarget),
+      $toolbar = $('.admin-quickbar-toolbar'),
+      $indicator = $('.aqb-toolbar-indicator');
+
+    $toolbar.removeClass('show-indicator');
+  };
+
+
+  /**
+   * Moves elementor navigator in viewport if hidden by sidebar
+   */
+  self.checkElementorNavigator = function() {
+    let $navigator = $('#elementor-navigator');
+
+    if (!$navigator.length ||
+      !$body.hasClass('admin-quickbar-visible')
+      || $body.hasClass('elementor-navigator-docked')
+    ) {
+      return;
+    }
+
+    let offsetRight = window.innerWidth - ($navigator.offset().left + $navigator.width());
+
+    if (offsetRight >= 320) {
+      return;
+    }
+
+    $navigator.css({'left': window.innerWidth - $navigator.width() - 320});
   };
 
   init();

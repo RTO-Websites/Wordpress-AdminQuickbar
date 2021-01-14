@@ -1,16 +1,14 @@
-body .admin-quickbar-jumpicons,
 body .admin-quickbar {
-  .aqb-css-list,
   .admin-quickbar-contextmenu {
     display: none;
     position: absolute;
     left: 0;
     right: 0;
-    color: #6d7882;
+    color: var(--aqb-main-color);
     border-radius: 0;
-    background: #fff;
-    box-shadow: 1px 3px 4px #1b1c1d24;
-    border-top: 1px solid #1b1c1d12;
+    background: var(--aqb-main-bg);
+    box-shadow: 1px 3px 4px var(--aqb-contextmenu-shadow-color);
+    border-top: 1px solid var(--aqb-contectmenu-border-color);
 
     z-index: 999999999;
 
@@ -31,7 +29,7 @@ body .admin-quickbar {
     .item.item-favorite:hover .item,
     .item.item-rename:hover .item,
     .item:not(.has-sub):hover {
-      color: #c1c1c1;
+      color: var(--aqb-tertiary-color);
       background-color: transparent;
     }
 
@@ -63,7 +61,7 @@ body .admin-quickbar {
       top: 8px;
       background-color: transparent;
       line-height: 19px;
-      color: #6d7882;
+      color: var(--aqb-main-color);
       font-weight: 400;
       padding: 0;
     }

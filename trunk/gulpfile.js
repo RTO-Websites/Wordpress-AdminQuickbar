@@ -7,7 +7,7 @@ var gulp = require('gulp'),
   concat = require('gulp-concat'),
   uglify = require('gulp-terser');
 
-gulp.task('default', function() {
+gulp.task('default', function(done) {
   // Admin
   var sassAdminFiles = ['Admin/scss/*.*'],
     jsFiles = ['Admin/js/src/partials/**/*.js', 'Admin/js/src/main.js'],
@@ -24,4 +24,6 @@ gulp.task('default', function() {
     .pipe(concat('build.min.js'))
     .pipe(uglify().on('error', util.log))
     .pipe(gulp.dest(jsDest));
+
+  done();
 });

@@ -1,0 +1,137 @@
+
+.admin-quickbar-toolbar {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 0 7px;
+  background-color: var(--aqb-main-bg);
+  z-index: 50;
+
+  .aqb-toolbar-item {
+    display: inline-block;
+    width: 100%;
+
+    > a {
+      display: inline-block;
+      color: var(--aqb-accent);
+      padding: 16px 10px 12px;
+
+      &:active,
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+
+      .dashicons-editor-code::before {
+        display: inline-block;
+        top: -1px;
+        position: relative;
+      }
+    }
+
+    &:hover > a {
+      color: var(--aqb-accent-alt);
+    }
+
+    i {
+      font-size: 24px;
+    }
+
+    > .admin-quickbar-control-cache {
+      cursor: pointer;
+
+      i {
+        color: var(--aqb-accent) !important;
+      }
+
+      &:hover i {
+        color: var(--aqb-accent-alt) !important;
+      }
+    }
+
+    .aqb-toolbar-submenu {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--aqb-main-bg);
+      border-top: 1px solid var(--aqb-secondary-bg);
+      padding: 20px 0 17px 7px;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+
+      .aqb-toolbar-subitem {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+        font-size: 13px;
+        padding: 10px 16px;
+        text-align: left;
+        text-decoration: none;
+        box-sizing: border-box;
+
+        &:active,
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
+
+        .aqb-toolbar-actions {
+          position: absolute;
+          top: 0;
+          right: 20px;
+
+          .aqb-icon {
+            padding: 10px 5px;
+            height: auto;
+            font-size: 16px;
+
+            &.aqb-icon-wordpress {
+              font-size: 13px;
+              padding-top: 9px;
+            }
+          }
+        }
+      }
+
+      a {
+        color: var(--aqb-accent);
+
+        &:hover {
+          color: var(--aqb-accent-alt);
+        }
+      }
+    }
+
+    &:hover .aqb-toolbar-submenu {
+      display: block;
+    }
+  }
+
+  .aqb-toolbar-indicator {
+    position: absolute;
+    bottom: 35px;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    padding: 1px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 45px;
+    letter-spacing: 3px;
+    background-color: var(--aqb-main-bg);
+    pointer-events: none;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    transition: opacity 0.3s linear;
+  }
+
+  &.show-indicator .aqb-toolbar-indicator {
+    opacity: 1;
+  }
+}

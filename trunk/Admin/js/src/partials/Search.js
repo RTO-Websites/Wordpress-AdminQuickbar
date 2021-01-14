@@ -24,6 +24,7 @@ let AdminQuickbarSearch = function() {
 
   /**
    * Check search input and hide not found posts
+   * @param {Event} e
    */
   searchPosts = function(e) {
     let $searchInput = $('#aqb-search'),
@@ -47,7 +48,9 @@ let AdminQuickbarSearch = function() {
       $post.addClass('aqb-search-hidden');
     });
 
-    hideEmptyPostTypes();
+    if (searchVal.length) {
+      hideEmptyPostTypes();
+    }
 
     if (!searchVal.length) {
       restorePostlistState();

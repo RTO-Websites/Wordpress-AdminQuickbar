@@ -1,12 +1,11 @@
 
 body {
-  .admin-quickbar-jumpicons a.aqb-icon-swift,
   .aqb-icon-swift {
-    color: #c73535;
+    color: var(--aqb-error-color);
     cursor: pointer;
 
     &.is-in-cache {
-      color: #01a252;
+      color: var(--aqb-success-color);
     }
 
     &::before {

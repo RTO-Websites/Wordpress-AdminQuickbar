@@ -19,7 +19,7 @@ body .admin-quickbar {
     padding-bottom: 12px;
     letter-spacing: 1.4px;
 
-    background-color: #fff;
+    background-color: var(--aqb-main-bg);
 
     border-bottom: 3px solid transparent;
 
@@ -27,7 +27,7 @@ body .admin-quickbar {
     user-select: none;
 
     &.active {
-      border-color: #2f87b1;
+      border-color: var(--aqb-accent);
     }
   }
 

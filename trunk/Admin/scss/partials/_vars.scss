@@ -1,0 +1,34 @@
+
+body .admin-quickbar {
+  --aqb-main-bg: #fff;
+  --aqb-secondary-bg: #e6e9ec;
+
+  --aqb-main-color: #6d7882;
+  --aqb-secondary-color: #79838c;
+  --aqb-tertiary-color: #c1c1c1;
+
+  --aqb-transparent-color: #6e737da6;
+  --aqb-transparent-bg: #80808014;
+  --aqb-transparent-bg-alt: #74777a47;
+
+  --aqb-accent: #2f87b1;
+  --aqb-accent-alt: #0aa4ef;
+
+  --aqb-toggle-button-color: #7f7f7f78;
+  --aqb-select-border-color: #8888882e;
+
+  --aqb-contextmenu-shadow-color: #1b1c1d24;
+  --aqb-contectmenu-border-color: #1b1c1d12;
+
+  --aqb-success-color: #01a252;
+  --aqb-error-color: #c73535;
+}
+
+body.admin-quickbar-is-darkmode .admin-quickbar {
+  --aqb-main-bg: #3c3c3c;
+  --aqb-secondary-bg: #333;
+
+  --aqb-main-color: #79838c;
+  --aqb-secondary-color: #79838c;
+  --aqb-tertiary-color: #c7c7c7;
+}

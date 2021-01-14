@@ -3,9 +3,9 @@ Contributors: rtowebsites
 Donate link: https://www.rto.de
 Tags: post, post list, sidebar, elementor, rto, rto.de
 Requires at least: 5.0
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 7.0
-Stable tag: 1.7.1
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,13 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.8.0 =
+* Add Recent posts
+* Replace Jump-Icons with toolbar
+* Add clear all for swift
+* Fix overlapped navigator in elementor
+* Fix some other issues
+
 = 1.7.0 =
 * Posts can now be deleted from contextmenu
 * Fix issues with wpml

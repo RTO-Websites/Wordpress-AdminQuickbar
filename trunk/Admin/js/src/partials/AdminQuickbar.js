@@ -340,6 +340,7 @@ let AdminQuickbar = function() {
     $doc.on('change', '.admin-quickbar-max-recent input', function(e) {
       localStorage.adminQuickbarMaxRecent = $('.admin-quickbar-max-recent input').val();
     });
+    $('.admin-quickbar-max-recent input').change();
 
     let storage = [],
       newStorage = [],

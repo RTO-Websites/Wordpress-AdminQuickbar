@@ -493,6 +493,9 @@ class Sidebar {
             'post_status' => get_post_stati(),
             'orderby' => $postType->hierarchical ? [ 'parent' => 'ASC', 'menu_order' => 'ASC' ] : 'menu_order',
             'order' => 'ASC',
+            'no_found_rows' => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
         ];
 
         if ( $postType->hierarchical ) {

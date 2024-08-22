@@ -13,17 +13,11 @@ class Settings {
 
     const PARTIAL_DIR = AdminQuickbar_DIR . '/Lib/partials/';
 
-    /**
-     * Settings constructor.
-     * @param array $args
-     */
+
     public function __construct( array $args = [] ) {
         $this->initFieldGroups( $args );
     }
 
-    /**
-     * @param array $args
-     */
     private function initFieldGroups( array $args = [] ) {
         $hidePostTypes = [
             'aqb-recent' => __( 'Recent' ),
@@ -95,11 +89,6 @@ class Settings {
         $this->fieldGroups = json_decode( json_encode( $this->fieldGroups ) );
     }
 
-    /**
-     * Returns fully rendered settings
-     *
-     * @return string
-     */
     public function getRendered(): string {
         $template = new Template( self::PARTIAL_DIR . '/settings.php', [
             'fieldGroups' => $this->fieldGroups,

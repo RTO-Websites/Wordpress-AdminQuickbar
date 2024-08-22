@@ -32,7 +32,7 @@ class Sidebar {
     private array $filterPostTypes = [
         'nav_menu_item',
         'revision',
-        #'custom_css',
+        'custom_css',
         'customize_changeset',
         'oembed_cache',
         'ocean_modal_window',
@@ -169,6 +169,7 @@ class Sidebar {
      */
     public function getRenderedPostTypeList(): string {
         $output = '';
+        $startTime = microtime( true );
         foreach ( $this->postTypes as $postType ) {
             if ( in_array( $postType->name, $this->filterPostTypes ) ) {
                 continue;
@@ -204,6 +205,8 @@ class Sidebar {
             ] );
             $output .= $template->getRendered();
         }
+        $duration = microtime( true ) - $startTime;
+        die('duration: ' . $duration);
 
         return $output;
     }
@@ -440,7 +443,7 @@ class Sidebar {
                     $wpdb->posts.post_type,
                     GROUP_CONCAT($wpdb->term_relationships.term_taxonomy_id) as post_category
                 FROM $wpdb->posts
-                    JOIN wp_term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
+                    LEFT OUTER JOIN wp_term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
                 WHERE $wpdb->posts.post_type = '$postType->name'
                 GROUP BY $wpdb->posts.ID
                 ORDER BY menu_order ASC

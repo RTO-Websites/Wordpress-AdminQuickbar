@@ -7,13 +7,6 @@ use AdminQuickbar\Lib\Activator;
 use AdminQuickbar\Lib\Deactivator;
 
 /**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
- *
  * @link              https://www.rto.de
  * @since             1.0.0
  * @package           AdminQuickbar
@@ -67,6 +60,4 @@ register_deactivation_hook( __FILE__, [ Deactivator::class, 'deactivate' ] );
  *
  * @since    1.0.0
  */
-
-
 AdminQuickbar::run();

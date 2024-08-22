@@ -32,11 +32,13 @@ class Sidebar {
     private array $filterPostTypes = [
         'nav_menu_item',
         'revision',
-        'custom_css',
+        #'custom_css',
         'customize_changeset',
         'oembed_cache',
         'ocean_modal_window',
         'nxs_qp',
+        'wp_global_styles',
+        'acf-field',
     ];
 
     private string $pluginName;
@@ -55,7 +57,7 @@ class Sidebar {
         $this->loader->run();
 
 
-        foreach (get_categories() as $category) {
+        foreach ( get_categories() as $category ) {
             $this->categoryList[$category->term_id] = $category;
         }
     }
@@ -403,6 +405,7 @@ class Sidebar {
     }
 
     public function getPostsByPostType( $postType ): array {
+        global $wpdb;
         $countPostType = 0;
         $categories = [];
 
@@ -410,38 +413,58 @@ class Sidebar {
             do_action( 'wpml_switch_language', 'all' );
         }
 
-        $args = [
-            'post_type' => $postType->name,
-            'posts_per_page' => -1,
-            'suppress_filters' => false,
-            'post_status' => get_post_stati(),
-            'orderby' => $postType->hierarchical ? [ 'parent' => 'ASC', 'menu_order' => 'ASC' ] : 'menu_order',
-            'order' => 'ASC',
-        ];
-
         $categoryCount = [];
         if ( $postType->hierarchical ) {
-            $posts = get_pages( $args );
-            $categories = [
-                'none' => $posts,
-            ];
-            $countPostType += count( $posts );
-        } else {
-            $args = $args + [
-                    'post_status' => 'any',
-                ];
+            $queryString = "
+                SELECT 
+                    $wpdb->posts.ID,
+                    $wpdb->posts.post_title,
+                    $wpdb->posts.post_status,
+                    $wpdb->posts.post_type
+                FROM $wpdb->posts
+                WHERE $wpdb->posts.post_type = '$postType->name'
+                ORDER BY `post_parent` ASC, menu_order ASC
+             ";
 
-            $allPosts = get_posts( $args );
+            $pages = $wpdb->get_results( $queryString, OBJECT );
+            $categories = [
+                'none' => $pages,
+            ];
+            $countPostType += count( $pages );
+        } else {
+            $queryString = "
+                SELECT 
+                    $wpdb->posts.ID,
+                    $wpdb->posts.post_title,
+                    $wpdb->posts.post_status,
+                    $wpdb->posts.post_type,
+                    GROUP_CONCAT($wpdb->term_relationships.term_taxonomy_id) as post_category
+                FROM $wpdb->posts
+                    JOIN wp_term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
+                WHERE $wpdb->posts.post_type = '$postType->name'
+                GROUP BY $wpdb->posts.ID
+                ORDER BY menu_order ASC
+             ";
+
+            $allPosts = $wpdb->get_results( $queryString, OBJECT );
+
+            $templateTypesByPostId = $this->getTemplateTypesByPostId( $postType, $allPosts );
 
             foreach ( $allPosts as $post ) {
-                foreach ( $post->post_category as $postCategory ) {
-                    $categoryName = $this->categoryList[$postCategory]->name;
+                $postCategories = explode( ',', $post->post_category );
+                foreach ( $postCategories as $postCategory ) {
+                    if ( $postType->name === 'elementor_library' ) {
+                        $categoryName = $templateTypesByPostId[$post->ID];
+                    } else {
+                        $categoryName = $this->categoryList[$postCategory]->name;
+                    }
                     $categories[$categoryName][] = $post;
+                    ksort( $categories );
+                    $categoryCount[$categoryName] = !empty( $categoryCount[$categoryName] )
+                        ? $categoryCount[$categoryName] + 1
+                        : 1;
                 }
-                $countPostType+=1;
-                $categoryCount[$this->categoryList[$postCategory]->name] = !empty( $categoryCount[$categoryName] )
-                    ? $categoryCount[$categoryName] + 1
-                    : 1;
+                $countPostType += 1;
             }
         }
 
@@ -450,6 +473,28 @@ class Sidebar {
             'categories' => $categories,
             'categoryCount' => $categoryCount,
         ];
+    }
+
+    private function getTemplateTypesByPostId( $postType, $allPosts ): array {
+        global $wpdb;
+        if ( $postType->name !== 'elementor_library' || empty( $allPosts ) ) {
+            return [];
+        }
+
+        $postIds = array_map( function ( $post ) {
+            return $post->ID;
+        }, $allPosts );
+
+        $queryString = "SELECT $wpdb->postmeta.post_id, `meta_value` 
+                    FROM $wpdb->postmeta 
+                    WHERE post_id IN (" . implode( ',', $postIds ) . ") 
+                        AND meta_key = '_elementor_template_type'";
+        $templateTypes = $wpdb->get_results( $queryString, OBJECT );
+        $templateTypesByPostId = [];
+        foreach ( $templateTypes as $templateType ) {
+            $templateTypesByPostId[$templateType->post_id] = $templateType->meta_value;
+        }
+        return $templateTypesByPostId;
     }
 
     /**
@@ -477,6 +522,7 @@ class Sidebar {
 
             case 'elementor_font':
             case 'elebee-global-css':
+            case 'custom-css':
             case 'postgalleryslider':
             case 'acf-field-group':
                 $noElementor = true;

@@ -3,34 +3,25 @@
 namespace AdminQuickbar\Lib;
 
 class Sidebar {
-
-    /**
-     * The loader that's responsible for maintaining and registering all hooks that power
-     * the plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      Loader $loader Maintains and registers all hooks for the plugin.
-     */
-    protected $loader;
+    protected Loader $loader;
 
     const PARTIAL_DIR = AdminQuickbar_DIR . '/Lib/partials/';
 
 
-    private $postTypes = [];
-    private $filteredPostTypes = [];
-    private $categoryList = [];
+    private array $postTypes = [];
+    private array $filteredPostTypes = [];
+    private array $categoryList = [];
 
-    private $cacheList = [];
+    private array $cacheList = [];
 
-    private $cssPosts = [];
+    private array $cssPosts = [];
 
     /**
      * List of post-names that should not be displayed and filtered out
      *
      * @var string[]
      */
-    private $filterPosts = [
+    private array $filterPosts = [
         'default-kit', // used from elementor for theme-style
     ];
 
@@ -38,7 +29,7 @@ class Sidebar {
      * List of post-types that should not be displayed and filtered out
      * @var string[]
      */
-    private $filterPostTypes = [
+    private array $filterPostTypes = [
         'nav_menu_item',
         'revision',
         'custom_css',
@@ -48,32 +39,11 @@ class Sidebar {
         'nxs_qp',
     ];
 
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string $pluginName The ID of this plugin.
-     */
-    private $pluginName;
+    private string $pluginName;
 
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string $version The current version of this plugin.
-     */
-    private $version;
+    private string $version;
 
-    /**
-     * Initialize the class and set its properties.
-     *
-     * @param string $pluginName The name of this plugin.
-     * @param string $version The version of this plugin.
-     * @since    1.0.0
-     */
-    public function __construct( $pluginName, $version ) {
+    public function __construct( string $pluginName, string $version ) {
 
         $this->pluginName = $pluginName;
         $this->version = $version;
@@ -84,13 +54,13 @@ class Sidebar {
 
         $this->loader->run();
 
-        $this->categoryList = get_categories();
+
+        foreach (get_categories() as $category) {
+            $this->categoryList[$category->term_id] = $category;
+        }
     }
 
-    /**
-     * Register all of the hooks related to the sidebar functionality
-     */
-    private function defineHooks() {
+    private function defineHooks(): void {
         $this->loader->addAction( 'wp_enqueue_scripts', $this, 'enqueueStyles' );
         $this->loader->addAction( 'wp_enqueue_scripts', $this, 'enqueueScripts' );
         $this->loader->addAction( 'admin_enqueue_scripts', $this, 'enqueueStyles' );
@@ -109,28 +79,16 @@ class Sidebar {
 
     }
 
-    /**
-     * Checks if wmpl plugin is active
-     *
-     * @return bool
-     */
-    private function isWpmlActive() {
+    private function isWpmlActive(): bool {
         require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
         return is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' );
     }
 
-
-    /**
-     * Set post-types
-     */
-    public function setPostTypes() {
+    public function setPostTypes(): void {
         $this->postTypes = get_post_types( [], 'object' );
     }
 
-    /**
-     * Set filtered post-types
-     */
-    public function setFilteredPostTypes() {
+    public function setFilteredPostTypes(): void {
         foreach ( $this->postTypes as $postType ) {
             if ( in_array( $postType->name, $this->filterPostTypes ) ) {
                 continue;
@@ -142,7 +100,7 @@ class Sidebar {
     /**
      * Get cache list from swift and writes to $cacheList
      */
-    public function initCacheList() {
+    public function initCacheList(): void {
         if ( !$this->hasSwift() ) {
             return;
         }
@@ -152,7 +110,7 @@ class Sidebar {
             : \Swift_Performance_Lite::cache_status()['files'];
     }
 
-    private function hasSwift() {
+    private function hasSwift(): bool {
         return class_exists( 'Swift_Performance' ) || class_exists( 'Swift_Performance_Lite' );
     }
 
@@ -160,10 +118,9 @@ class Sidebar {
      * Adds the sidebar to footer
      *
      * @param string $data
-     * @return string $data
      * @throws \ImagickException
      */
-    public function renderSidebar( $data ) {
+    public function renderSidebar( $data ): string {
         $this->initCacheList();
         $this->setPostTypes();
         $this->setFilteredPostTypes();
@@ -206,12 +163,9 @@ class Sidebar {
     }
 
     /**
-     * Gets rendered post-type list
-     *
-     * @return string
      * @throws \ImagickException
      */
-    public function getRenderedPostTypeList() {
+    public function getRenderedPostTypeList(): string {
         $output = '';
         foreach ( $this->postTypes as $postType ) {
             if ( in_array( $postType->name, $this->filterPostTypes ) ) {
@@ -241,8 +195,10 @@ class Sidebar {
 
             $template = new Template( self::PARTIAL_DIR . '/loop-post-types.php', [
                 'postType' => $postType,
+                'postTypeCount' => $countPostType,
                 'postsByCategory' => $postsByCategory,
                 'createNewUrl' => $createNewUrl,
+                'categoriesCount' => $posts['categoryCount'],
             ] );
             $output .= $template->getRendered();
         }
@@ -251,14 +207,9 @@ class Sidebar {
     }
 
     /**
-     * Get rendered category loop
-     *
-     * @param $postType
-     * @param $categories
-     * @return array
      * @throws \ImagickException
      */
-    public function getRenderedCategoriesAsArray( $postType, $categories ) {
+    public function getRenderedCategoriesAsArray( $postType, array $categories ): array {
         $output = [];
 
         foreach ( $categories as $categoryName => $posts ) {
@@ -276,14 +227,9 @@ class Sidebar {
     }
 
     /**
-     * Get rendered posts loop
-     *
-     * @param $postType
-     * @param $posts
-     * @return string
      * @throws \ImagickException
      */
-    public function getRenderedPostsList( $postType, $posts ) {
+    public function getRenderedPostsList( $postType, array $posts ): string {
         $output = '';
         foreach ( $posts as $post ) {
             if ( in_array( $post->post_name, $this->filterPosts ) ) {
@@ -324,11 +270,7 @@ class Sidebar {
         return $output;
     }
 
-    /**
-     * @param $post
-     * @return string
-     */
-    public function getRenderedLanguageFlag( $post ) {
+    public function getRenderedLanguageFlag( $post ): string {
         if ( !$this->isWpmlActive() ) {
             return '';
         }
@@ -347,12 +289,7 @@ class Sidebar {
         return $template->getRendered();
     }
 
-    /**
-     * Renders all wpml language-flags
-     *
-     * @return string
-     */
-    public function renderAllLanguageFlags() {
+    public function renderAllLanguageFlags(): string {
         $output = '';
         $wpmlLanguages = apply_filters( 'wpml_active_languages', null );
         if ( !$this->isWpmlActive() || empty( $wpmlLanguages ) ) {
@@ -372,13 +309,10 @@ class Sidebar {
     }
 
     /**
-     * Returns post-thumb html
-     *
      * @param \WP_Post $post
-     * @return string
      * @throws \ImagickException
      */
-    public function getRenderedPostThumbnail( $post ) {
+    public function getRenderedPostThumbnail( $post ): string {
         $class = '';
         if ( has_post_thumbnail( $post ) ) {
             // from post-thumbnail
@@ -433,12 +367,9 @@ class Sidebar {
     }
 
     /**
-     * Get post-title, or post-name/post-id if empty
-     *
      * @param \WP_Post $post
-     * @return string
      */
-    public function getPostTitle( $post ) {
+    public function getPostTitle( $post ): string {
         if ( !empty( $post->post_title ) ) {
             return $post->post_title;
         }
@@ -453,9 +384,8 @@ class Sidebar {
      * @param \WP_Post_Type $postType
      * @param int $lastParent
      * @param int $margin
-     * @return string
      */
-    public function getMarginStyle( $post, $postType, &$lastParent, &$margin = 0 ) {
+    public function getMarginStyle( $post, $postType, &$lastParent, &$margin = 0 ): string {
         $style = '';
 
         if ( empty( $post->post_parent ) ) {
@@ -472,13 +402,7 @@ class Sidebar {
         return $style;
     }
 
-    /**
-     * Get posts by post-type
-     *
-     * @param $postType
-     * @return array
-     */
-    public function getPostsByPostType( $postType ) {
+    public function getPostsByPostType( $postType ): array {
         $countPostType = 0;
         $categories = [];
 
@@ -495,6 +419,7 @@ class Sidebar {
             'order' => 'ASC',
         ];
 
+        $categoryCount = [];
         if ( $postType->hierarchical ) {
             $posts = get_pages( $args );
             $categories = [
@@ -502,28 +427,28 @@ class Sidebar {
             ];
             $countPostType += count( $posts );
         } else {
-            $count = 0;
             $args = $args + [
                     'post_status' => 'any',
                 ];
 
-            foreach ( $this->categoryList as $category ) {
-                $args['category'] = $category->term_id;
-                $categories[$category->name] = get_posts( $args );
-                $count += count( $categories[$category->name] );
-            }
-            $countPostType += $count;
+            $allPosts = get_posts( $args );
 
-            if ( !$count ) {
-                unset( $args['category'] );
-                $categories[__( 'Uncategorized' )] = get_posts( $args );
-                $countPostType += count( $categories[__( 'Uncategorized' )] );
+            foreach ( $allPosts as $post ) {
+                foreach ( $post->post_category as $postCategory ) {
+                    $categoryName = $this->categoryList[$postCategory]->name;
+                    $categories[$categoryName][] = $post;
+                }
+                $countPostType+=1;
+                $categoryCount[$this->categoryList[$postCategory]->name] = !empty( $categoryCount[$categoryName] )
+                    ? $categoryCount[$categoryName] + 1
+                    : 1;
             }
         }
 
         return [
             'count' => $countPostType,
             'categories' => $categories,
+            'categoryCount' => $categoryCount,
         ];
     }
 
@@ -532,9 +457,8 @@ class Sidebar {
      *
      * @param \WP_Post_Type $postType
      * @param \WP_Post $post
-     * @return array
      */
-    public function getPostTypeInfo( $postType, $post ) {
+    public function getPostTypeInfo( $postType, $post ): array {
         $noElementor = false;
         $noView = false;
         $link = admin_url() . 'post.php?post=' . $post->ID;
@@ -578,9 +502,8 @@ class Sidebar {
      * @param \WP_Post_Type $postType
      * @param \WP_Post $post
      * @param array $postTypeInfo
-     * @return array
      */
-    public function getContextMenuData( $postType, $post, $postTypeInfo ) {
+    public function getContextMenuData( $postType, $post, $postTypeInfo ): array {
         $data = [
             'favorite' => true,
             'copy' => [
@@ -621,7 +544,7 @@ class Sidebar {
      * Rename a post
      *  Typically called via admin-ajax
      */
-    public function renamePost() {
+    public function renamePost(): void {
         $postid = filter_input( INPUT_POST, 'postid' );
         $title = filter_input( INPUT_POST, 'title' );
 
@@ -648,48 +571,14 @@ class Sidebar {
         $current_user->locale = $userLocale;
     }
 
-    /**
-     * Register the stylesheets for the admin area.
-     *
-     * @since    1.0.0
-     */
     public function enqueueStyles() {
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in AdminPostListSidebarLoader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The AdminPostListSidebarLoader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
-
         wp_enqueue_style( $this->pluginName, AdminQuickbar_URL . '/Admin/css/admin-quickbar-admin.min.css', [], $this->version, 'all' );
         if ( !is_admin() ) {
             wp_enqueue_style( 'dashicons' );
         }
     }
 
-    /**
-     * Register the JavaScript for the admin area.
-     *
-     * @since    1.0.0
-     */
     public function enqueueScripts() {
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in AdminPostListSidebarLoader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The AdminPostListSidebarLoader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
-
         wp_enqueue_script( $this->pluginName, AdminQuickbar_URL . '/Admin/js/build.min.js', [ 'jquery' ], $this->version, true );
 
         wp_localize_script( $this->pluginName, 'aqbLocalize',

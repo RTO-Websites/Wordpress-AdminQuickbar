@@ -404,6 +404,18 @@ body .admin-quickbar {
       cursor: text;
     }
   }
+
+  .aqb-category-count,
+  .aqb-post-type-count {
+    font-size: 0.8em;
+
+    &::before {
+      content: '(';
+    }
+    &::after {
+      content: ')';
+    }
+  }
 }
 
 

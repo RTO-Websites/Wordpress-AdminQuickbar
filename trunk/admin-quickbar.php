@@ -44,7 +44,7 @@ define( 'AdminQuickbar_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 /**
  * The class responsible for auto loading classes.
  */
-require_once AdminQuickbar_DIR . '/vendor/autoload.php';
+require_once AdminQuickbar_DIR . '/autoload.php';
 
 /**
  * The code that runs during plugin activation.

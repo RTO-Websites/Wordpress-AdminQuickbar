@@ -163,6 +163,32 @@ trait Render {
         return $output;
     }
 
+
+    public function getPostThumbnailUrlCached( $post ): string {
+        if ( !empty( $this->transistentThumbnailUrls[$post->ID] ) ) {
+            return $this->transistentThumbnailUrls[$post->ID];
+        }
+
+        if ( has_post_thumbnail( $post ) ) {
+            // from post-thumbnail
+            $attachmentId = get_post_thumbnail_id( $post );
+            #$path = get_attached_file( $attachmentId );
+            $url = wp_get_attachment_image_src( $attachmentId, 'thumbnail' );
+            $url = !empty( $url ) ? $url[0] : '';
+        } else if ( $post->post_type == 'attachment' ) {
+            // direct from attachment
+            #$path = get_attached_file( $post->ID );
+            $url = wp_get_attachment_image_src( $post->ID, 'thumbnail' );
+            $url = !empty( $url ) ? $url[0] : '';
+        }
+
+        $this->transistentThumbnailUrls[$post->ID] = empty($url) ? 'none' : $url;
+        set_transient( 'aqb_thumbnails', $this->transistentThumbnailUrls, 3600 );
+
+        return !is_string( $url ) ? '' : $url;
+    }
+
+
     /**
      * @param \WP_Post $post
      * @throws \ImagickException
@@ -173,47 +199,10 @@ trait Render {
         }
 
         $class = '';
-        if ( has_post_thumbnail( $post ) ) {
-            // from post-thumbnail
-            $attachmentId = get_post_thumbnail_id( $post->ID );
-            $path = get_attached_file( $attachmentId );
-            $url = wp_get_attachment_image_src( $attachmentId, 'thumbnail' );
-            $url = !empty( $url ) ? $url[0] : '';
-        } else if ( $post->post_type == 'attachment' ) {
-            // direct from attachment
-            $path = get_attached_file( $post->ID );
-            $url = wp_get_attachment_image_src( $post->ID, 'thumbnail' );
-            $url = !empty( $url ) ? $url[0] : '';
-        }
 
-        if ( empty( $url ) && class_exists( 'Lib\PostGalleryImageList' ) ) {
-            // from post-gallery
-            $postGalleryImages = \Lib\PostGalleryImageList::get( $post->ID );
-            if ( count( $postGalleryImages ) ) {
-                $firstThumb = array_shift( $postGalleryImages );
-                $path = $firstThumb['path'];
-            }
-        }
+        $url = $this->getPostThumbnailUrlCached( $post );
 
-        if ( !empty( $path ) && class_exists( 'Lib\Thumb' ) ) {
-            $path = explode( '/wp-content/', $path );
-            $path = '/wp-content/' . array_pop( $path );
-
-            $thumbInstance = new \Lib\Thumb();
-            $thumb = $thumbInstance->getThumb( [
-                'path' => $path,
-                'width' => '150',
-                'height' => '150',
-                'scale' => '0',
-            ] );
-
-            if ( !empty( $thumb['url'] ) ) {
-                $url = $thumb['url'];
-                $class .= '  post-image-from-postgallery';
-            }
-        }
-
-        if ( empty( $url ) ) {
+        if ( empty( $url ) || $url === 'none' ) {
             return '';
         }
 

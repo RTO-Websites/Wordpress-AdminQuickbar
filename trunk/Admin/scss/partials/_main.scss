@@ -216,14 +216,8 @@ body .admin-quickbar {
     margin-top: -12px;
     margin-bottom: -17px;
     margin-right: 7px;
-    transition: all 0.3s ease;
-    transform-origin: top left;
     width: auto !important;
     z-index: 20;
-  }
-
-  .wp-post-image:hover {
-    transform: scale(4.5);
   }
 
   .aqb-search-wrapper,

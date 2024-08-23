@@ -26,6 +26,8 @@ class Sidebar {
 
     private array $settings = [];
 
+    private array $transistentThumbnailUrls = [];
+
     /**
      * List of post-names that should not be displayed and filtered out
      *
@@ -72,6 +74,10 @@ class Sidebar {
 
         foreach ( get_categories() as $category ) {
             $this->categoryList[$category->term_id] = $category;
+        }
+
+        if ( !empty( $this->settings['loadThumbs'] ) ) {
+            $this->transistentThumbnailUrls = get_transient( 'aqb_thumbnails' ) ?: [];
         }
     }
 
@@ -174,7 +180,7 @@ class Sidebar {
         $wpmlJoin = '';
         if ( $this->isWpmlActive() ) {
             $wpmlSelect = ', language_code';
-            $wpmlJoin = " INNER JOIN {$wpdb->prefix}icl_translations ON $wpdb->posts.ID = element_id AND element_type = 'post_$postType->name'";
+            $wpmlJoin = " LEFT OUTER JOIN {$wpdb->prefix}icl_translations ON $wpdb->posts.ID = element_id AND element_type = 'post_$postType->name'";
         }
 
         $categoryCount = [];
@@ -210,7 +216,7 @@ class Sidebar {
                     GROUP_CONCAT($wpdb->term_relationships.term_taxonomy_id) as post_category
                     $wpmlSelect
                 FROM $wpdb->posts
-                    INNER JOIN $wpdb->term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
+                    LEFT OUTER JOIN $wpdb->term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
                     $wpmlJoin
                 WHERE $wpdb->posts.post_type = '$postType->name'
                 AND $wpdb->posts.post_status NOT IN ('auto-draft')

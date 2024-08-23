@@ -61,7 +61,12 @@ let AdminQuickbar = function() {
     /**
      * Show/Hide trashed posts
      */
-    $doc.on('change', '.admin-quickbar-show-trash input', self.checkTrash);
+    $doc.on('change', '.admin-quickbar-show-trash-option input', self.checkTrash);
+
+    /**
+     * Show/Hide post-ids
+     */
+    $doc.on('change', '.admin-quickbar-show-postids input', self.checkShowPostIds);
 
     /**
      * Load thumbs
@@ -133,6 +138,10 @@ let AdminQuickbar = function() {
     if (localStorage.adminQuickbarShowTrash === 'true') {
       $('.admin-quickbar-show-trash-option input').prop('checked', true);
       $body.addClass('admin-quickbar-show-trash');
+    }
+    if (localStorage.adminQuickbarShowPostIds === 'true') {
+      $('.admin-quickbar-show-postids input').prop('checked', true);
+      $body.addClass('aqb-show-postids');
     }
 
     self.checkTheme();
@@ -410,12 +419,26 @@ let AdminQuickbar = function() {
    * @param {Event} e
    */
   self.checkTrash = function(e) {
-    localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash input').is(':checked');
+    localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash-option input').is(':checked');
 
     if (localStorage.adminQuickbarShowTrash === 'true') {
       $body.addClass('admin-quickbar-show-trash');
     } else {
       $body.removeClass('admin-quickbar-show-trash');
+    }
+  };
+
+  /**
+   * Checks if show trashed is active
+   * @param {Event} e
+   */
+  self.checkShowPostIds = function(e) {
+    localStorage.adminQuickbarShowPostIds = $('.admin-quickbar-show-postids input').is(':checked');
+
+    if (localStorage.adminQuickbarShowPostIds === 'true') {
+      $body.addClass('aqb-show-postids');
+    } else {
+      $body.removeClass('aqb-show-postids');
     }
   };
 

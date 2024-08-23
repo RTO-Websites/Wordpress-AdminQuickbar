@@ -3,9 +3,9 @@ Contributors: rtowebsites
 Donate link: https://www.rto.de
 Tags: post, post list, sidebar, elementor, rto, rto.de
 Requires at least: 5.0
-Tested up to: 5.7
-Requires PHP: 7.0
-Stable tag: 1.8.0
+Tested up to: 6.6
+Requires PHP: 7.4
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,15 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.9.0 =
+* Improve performance a lot
+* Fix default max-recent-value
+* Categorize elementor-templates by location
+* Dont load hidden post-types anymore
+* Better highlight current page
+* Show post-type-count and category-count
+* Add option to show post-ids
+
 = 1.8.0 =
 * Add Recent posts
 * Replace Jump-Icons with toolbar

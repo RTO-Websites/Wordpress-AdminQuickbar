@@ -172,12 +172,10 @@ trait Render {
         if ( has_post_thumbnail( $post ) ) {
             // from post-thumbnail
             $attachmentId = get_post_thumbnail_id( $post );
-            #$path = get_attached_file( $attachmentId );
             $url = wp_get_attachment_image_src( $attachmentId, 'thumbnail' );
             $url = !empty( $url ) ? $url[0] : '';
         } else if ( $post->post_type == 'attachment' ) {
             // direct from attachment
-            #$path = get_attached_file( $post->ID );
             $url = wp_get_attachment_image_src( $post->ID, 'thumbnail' );
             $url = !empty( $url ) ? $url[0] : '';
         }

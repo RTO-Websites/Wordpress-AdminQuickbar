@@ -497,3 +497,11 @@ body.aqb-hide-on-website:not(.wp-admin):not(.elementor-editor-active) {
     display: none;
   }
 }
+
+body.aqb-show-postids .aqb-post-title:not(.is-renaming) {
+  &::after {
+    content: ' (' attr(data-postid) ')';
+    font-size: 0.8em;
+    color: var(--aqb-transparent-color);
+  }
+}

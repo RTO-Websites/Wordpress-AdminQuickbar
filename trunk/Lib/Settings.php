@@ -67,7 +67,7 @@ class Settings {
                         'label' => __( 'Show thumbs', 'admin-quickbar' ),
                         'checked' => $this->settings['loadThumbs'] ?? false,
                     ],
-                    'show-trash' => [
+                    'show-trash-option' => [
                         'type' => 'checkbox',
                         'label' => __( 'Show trashed posts', 'admin-quickbar' ),
                     ],
@@ -75,6 +75,10 @@ class Settings {
                         'type' => 'number',
                         'label' => __( 'Max. Recent', 'admin-quickbar' ),
                         'min' => 0,
+                    ],
+                    'show-postids' => [
+                        'type' => 'checkbox',
+                        'label' => __( 'Show post-ids', 'admin-quickbar' ),
                     ],
                     'hide-on-website' => [
                         'type' => 'checkbox',

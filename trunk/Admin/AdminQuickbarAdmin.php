@@ -23,19 +23,4 @@ class AdminQuickbarAdmin {
 
     public function enqueueScripts(): void {
     }
-
-    public function saveSettings() {
-        if ( !current_user_can( 'manage_options' ) ) {
-            return;
-        }
-        $settings = filter_input( INPUT_POST, 'aqbSettings', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-        $settings['loadThumbs'] = filter_var( $settings['loadThumbs'], FILTER_VALIDATE_BOOLEAN );
-
-        set_transient( 'aqb_settings', $settings, 0 );
-
-        wp_send_json_success(get_transient( 'aqb_settings' ));
-
-        die();
-    }
-
 }

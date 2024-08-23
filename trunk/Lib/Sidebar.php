@@ -2,7 +2,14 @@
 
 namespace AdminQuickbar\Lib;
 
+use AdminQuickbar\Lib\Sidebar\ContextMenu;
+use AdminQuickbar\Lib\Sidebar\Render;
+use AdminQuickbar\Lib\Sidebar\Wpml;
+
 class Sidebar {
+    use Wpml;
+    use Render;
+    use ContextMenu;
     protected Loader $loader;
 
     const PARTIAL_DIR = AdminQuickbar_DIR . '/Lib/partials/';
@@ -47,13 +54,13 @@ class Sidebar {
 
     private string $version;
 
-    public function __construct( string $pluginName, string $version ) {
+    public function __construct( string $pluginName, string $version, array $settings ) {
 
         $this->pluginName = $pluginName;
         $this->version = $version;
 
         $this->loader = new Loader();
-        $this->settings = get_transient( 'aqb_settings' ) ?: [];
+        $this->settings = $settings;
 
         $this->filterPostTypes = array_merge( $this->filterPostTypes, $this->settings['hiddenPostTypes'] ?? [ 'attachment' ] );
 
@@ -86,11 +93,6 @@ class Sidebar {
 
     }
 
-    private function isWpmlActive(): bool {
-        require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-        return is_plugin_active( 'sitepress-multilingual-cms/sitepress.php' );
-    }
-
     public function setPostTypes(): void {
         $this->postTypes = get_post_types( [], 'object' );
     }
@@ -121,264 +123,6 @@ class Sidebar {
         return class_exists( 'Swift_Performance' ) || class_exists( 'Swift_Performance_Lite' );
     }
 
-    /**
-     * Adds the sidebar to footer
-     *
-     * @param string $data
-     * @throws \ImagickException
-     */
-    public function renderSidebar( $data ): string {
-        $this->initCacheList();
-        $this->setPostTypes();
-        $this->setFilteredPostTypes();
-        $postTypeLoop = $this->getRenderedPostTypeList();
-
-        $currentPost = is_admin()
-            ? filter_input( INPUT_GET, 'post' )
-            : get_the_ID();
-
-        $permalink = empty( $currentPost )
-            ? get_bloginfo( 'wpurl' )
-            : get_permalink( $currentPost );
-
-
-        $templateVars = [
-            'postTypeLoop' => $postTypeLoop,
-            'filteredPostTypes' => $this->filteredPostTypes,
-            'currentPost' => $currentPost,
-            'permalink' => $permalink,
-            'swiftNonce' => wp_create_nonce( 'swift-performance-ajax-nonce' ),
-            'hasSwift' => $this->hasSwift(),
-            'inCache' => in_array( $permalink, $this->cacheList ),
-            'languageFlags' => $this->renderAllLanguageFlags(),
-            'cssPosts' => array_reverse( $this->cssPosts ),
-        ];
-
-
-        $settings = new Settings( [
-            'filteredPostTypes' => $this->filteredPostTypes,
-        ] );
-        $toolbar = new Toolbar( $templateVars );
-
-        $templateVars['settings'] = $settings->getRendered();
-        $templateVars['toolbar'] = $toolbar->getRendered();
-
-        $template = new Template( self::PARTIAL_DIR . '/sidebar.php', $templateVars );
-        $template->render();
-
-        return $data;
-    }
-
-    /**
-     * @throws \ImagickException
-     */
-    public function getRenderedPostTypeList(): string {
-        $output = '';
-        $startTime = microtime( true );
-        foreach ( $this->postTypes as $postType ) {
-            if ( in_array( $postType->name, $this->filterPostTypes ) ) {
-                continue;
-            }
-
-            $posts = $this->getPostsByPostType( $postType );
-
-            switch ( $postType->name ) {
-                case 'elementor_library':
-                    $createNewUrl = admin_url( 'edit.php' ) . '?post_type=elementor_library';
-                    break;
-                default:
-                    $createNewUrl = admin_url( 'post-new.php' ) . '?post_type=' . $postType->name;
-                    break;
-            }
-
-            $countPostType = $posts['count'];
-            $categories = $posts['categories'];
-
-
-            if ( empty( $categories ) || empty( $countPostType ) ) {
-                continue;
-            }
-
-            $postsByCategory = $this->getRenderedCategoriesAsArray( $postType, $categories );
-
-            $template = new Template( self::PARTIAL_DIR . '/loop-post-types.php', [
-                'postType' => $postType,
-                'postTypeCount' => $countPostType,
-                'postsByCategory' => $postsByCategory,
-                'createNewUrl' => $createNewUrl,
-                'categoriesCount' => $posts['categoryCount'],
-            ] );
-            $output .= $template->getRendered();
-        }
-        #$duration = microtime( true ) - $startTime;
-        #die( 'duration: ' . $duration );
-
-        return $output;
-    }
-
-    /**
-     * @throws \ImagickException
-     */
-    public function getRenderedCategoriesAsArray( $postType, array $categories ): array {
-        $output = [];
-
-        foreach ( $categories as $categoryName => $posts ) {
-            if ( empty( $posts ) ) {
-                continue;
-            }
-            if ( $postType->name === 'custom-css' ) {
-                $this->cssPosts = $posts;
-            }
-
-            $output[$categoryName] = $this->getRenderedPostsList( $postType, $posts );
-        }
-
-        return $output;
-    }
-
-    /**
-     * @throws \ImagickException
-     */
-    public function getRenderedPostsList( $postType, array $posts ): string {
-        $output = '';
-        foreach ( $posts as $post ) {
-            if ( in_array( $post->post_name, $this->filterPosts ) ) {
-                continue;
-            }
-            $style = $this->getMarginStyle( $post, $postType, $lastParent, $margin );
-            $postTypeInfo = $this->getPostTypeInfo( $postType, $post );
-            $permalink = get_permalink( $post->ID );
-            $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
-            $trashUrl = admin_url() . wp_nonce_url( "post.php?action=trash&amp;post=$post->ID", 'trash-post_' . $post->ID );
-            $unTrasUrl = admin_url() . wp_nonce_url( "post.php?action=untrash&amp;post=$post->ID", 'untrash-post_' . $post->ID );
-
-            $postClasses = ' post-status-' . $post->post_status;
-            if ( !empty( $post->post_password ) ) {
-                $postClasses .= ' has-password';
-            }
-            $languageFlag = $this->getRenderedLanguageFlag( $post );
-
-            $template = new Template( self::PARTIAL_DIR . '/loop-posts.php', [
-                'post' => $post,
-                'postTypeInfo' => $postTypeInfo,
-                'contextMenuData' => json_encode( $this->getContextMenuData( $postType, $post, $postTypeInfo ) ),
-                'style' => $style,
-                'thumb' => $this->getRenderedPostThumbnail( $post ),
-                'postTitle' => $this->getPostTitle( $post ),
-                'inCache' => in_array( $permalink, $this->cacheList ),
-                'permalink' => $permalink,
-                'hasSwift' => $this->hasSwift(),
-                'activeClass' => $activeClass,
-                'languageFlag' => $languageFlag,
-                'postClasses' => $postClasses,
-                'trashUrl' => $trashUrl,
-                'unTrashUrl' => $unTrasUrl,
-            ] );
-            $output .= $template->getRendered();
-        }
-
-        return $output;
-    }
-
-    public function getRenderedLanguageFlag( $post ): string {
-        if ( !$this->isWpmlActive() ) {
-            return '';
-        }
-
-        global $sitepress;
-        $wpmlLanguageInfo = apply_filters( 'wpml_post_language_details', null, $post->ID );
-        $languageCode = $wpmlLanguageInfo['language_code'];
-        $flagUrl = $sitepress->get_flag_url( $languageCode );
-
-        $template = new Template( self::PARTIAL_DIR . '/language-flag.php', [
-            'flagUrl' => $flagUrl,
-            'alt' => $wpmlLanguageInfo['display_name'],
-            'languageCode' => $languageCode,
-        ] );
-
-        return $template->getRendered();
-    }
-
-    public function renderAllLanguageFlags(): string {
-        $output = '';
-        $wpmlLanguages = apply_filters( 'wpml_active_languages', null );
-        if ( !$this->isWpmlActive() || empty( $wpmlLanguages ) ) {
-            return '';
-        }
-
-        foreach ( $wpmlLanguages as $language ) {
-            $template = new Template( self::PARTIAL_DIR . '/language-flag.php', [
-                'flagUrl' => $language['country_flag_url'],
-                'alt' => $language['native_name'],
-                'languageCode' => $language['language_code'],
-            ] );
-            $output .= $template->getRendered();
-        }
-
-        return $output;
-    }
-
-    /**
-     * @param \WP_Post $post
-     * @throws \ImagickException
-     */
-    public function getRenderedPostThumbnail( $post ): string {
-        if ( empty( $this->settings['loadThumbs'] ) ) {
-            return '';
-        }
-
-        $class = '';
-        if ( has_post_thumbnail( $post ) ) {
-            // from post-thumbnail
-            $attachmentId = get_post_thumbnail_id( $post->ID );
-            $path = get_attached_file( $attachmentId );
-            $url = wp_get_attachment_image_src( $attachmentId, 'thumbnail' );
-            $url = !empty( $url ) ? $url[0] : '';
-        } else if ( $post->post_type == 'attachment' ) {
-            // direct from attachment
-            $path = get_attached_file( $post->ID );
-            $url = wp_get_attachment_image_src( $post->ID, 'thumbnail' );
-            $url = !empty( $url ) ? $url[0] : '';
-        }
-
-        if ( empty( $url ) && class_exists( 'Lib\PostGalleryImageList' ) ) {
-            // from post-gallery
-            $postGalleryImages = \Lib\PostGalleryImageList::get( $post->ID );
-            if ( count( $postGalleryImages ) ) {
-                $firstThumb = array_shift( $postGalleryImages );
-                $path = $firstThumb['path'];
-            }
-        }
-
-        if ( !empty( $path ) && class_exists( 'Lib\Thumb' ) ) {
-            $path = explode( '/wp-content/', $path );
-            $path = '/wp-content/' . array_pop( $path );
-
-            $thumbInstance = new \Lib\Thumb();
-            $thumb = $thumbInstance->getThumb( [
-                'path' => $path,
-                'width' => '150',
-                'height' => '150',
-                'scale' => '0',
-            ] );
-
-            if ( !empty( $thumb['url'] ) ) {
-                $url = $thumb['url'];
-                $class .= '  post-image-from-postgallery';
-            }
-        }
-
-        if ( empty( $url ) ) {
-            return '';
-        }
-
-        $template = new Template( self::PARTIAL_DIR . '/thumbnail.php', [
-            'url' => $url,
-            'class' => $class,
-        ] );
-
-        return $template->getRendered();
-    }
 
     /**
      * @param \WP_Post $post
@@ -431,6 +175,7 @@ class Sidebar {
                 SELECT 
                     $wpdb->posts.ID,
                     $wpdb->posts.post_title,
+                    $wpdb->posts.post_name,
                     $wpdb->posts.post_status,
                     $wpdb->posts.post_type
                 FROM $wpdb->posts
@@ -449,6 +194,7 @@ class Sidebar {
                 SELECT 
                     $wpdb->posts.ID,
                     $wpdb->posts.post_title,
+                    $wpdb->posts.post_name,
                     $wpdb->posts.post_status,
                     $wpdb->posts.post_type,
                     GROUP_CONCAT($wpdb->term_relationships.term_taxonomy_id) as post_category
@@ -465,10 +211,12 @@ class Sidebar {
             $templateTypesByPostId = $this->getTemplateTypesByPostId( $postType, $allPosts );
 
             foreach ( $allPosts as $post ) {
-                $postCategories = explode( ',', $post->post_category );
+                $postCategories = explode( ',', $post->post_category ?? '' );
                 foreach ( $postCategories as $postCategory ) {
                     if ( $postType->name === 'elementor_library' ) {
                         $categoryName = $templateTypesByPostId[$post->ID];
+                    } elseif ( empty( $postCategory ) ) {
+                        $categoryName = 'none';
                     } else {
                         $categoryName = $this->categoryList[$postCategory]->name;
                     }
@@ -554,50 +302,6 @@ class Sidebar {
             'noElementor' => $noElementor,
             'noView' => $noView,
         ];
-    }
-
-    /**
-     * Returns data-attributes based on post-type
-     *
-     * @param \WP_Post_Type $postType
-     * @param \WP_Post $post
-     * @param array $postTypeInfo
-     */
-    public function getContextMenuData( $postType, $post, $postTypeInfo ): array {
-        $data = [
-            'favorite' => true,
-            'copy' => [
-                'id' => $post->ID,
-                'wordpress' => $postTypeInfo['link'] . '&action=edit',
-                'elementor' => empty( $postTypeInfo['noElementor'] ) ? $postTypeInfo['link'] . '&action=elementor' : '',
-                'website' => get_permalink( $post->ID ),
-            ],
-        ];
-
-        if ( $this->hasSwift() ) {
-            $permalink = get_the_permalink( $post->ID );
-            $data['swift'] = [
-                'inCache' => in_array( $permalink, $this->cacheList ),
-                'permalink' => $permalink,
-            ];
-        }
-
-        if ( $postType->name !== 'attachment' ) {
-            $data['trash'] = [
-                'id' => $post->ID,
-            ];
-            $data['rename'] = [
-                'id' => $post->ID,
-            ];
-        }
-
-        switch ( $postType->name ) {
-            case 'elementor_library':
-                $data['copy']['shortcode'] = '[elementor-template id=' . $post->ID . ']';
-                break;
-        }
-
-        return $data;
     }
 
     /**

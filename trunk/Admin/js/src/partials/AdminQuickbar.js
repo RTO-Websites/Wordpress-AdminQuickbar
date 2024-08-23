@@ -45,13 +45,12 @@ let AdminQuickbar = function() {
      * Hide on website
      */
     $doc.on('change', '.admin-quickbar-hide-on-website input', function(e) {
-      localStorage.adminQuickbarHideOnWebsite = $('.admin-quickbar-hide-on-website input').is(':checked');
-
-      if (localStorage.adminQuickbarHideOnWebsite === 'true') {
+      if ($('.admin-quickbar-hide-on-website input').is(':checked')) {
         $body.addClass('aqb-hide-on-website');
       } else {
         $body.removeClass('aqb-hide-on-website');
       }
+      self.saveSettings();
     });
 
     /**
@@ -122,11 +121,6 @@ let AdminQuickbar = function() {
       $('.admin-quickbar-keepopen input').prop('checked', true);
     }
 
-    if (localStorage.adminQuickbarHideOnWebsite === 'true') {
-      $('.admin-quickbar-hide-on-website input').prop('checked', true);
-      $body.addClass('aqb-hide-on-website');
-    }
-
     if ($('.admin-quickbar-loadthumbs input').is(':checked')) {
       self.loadThumbs();
     }
@@ -165,9 +159,10 @@ let AdminQuickbar = function() {
     let aqbSettings = {
       hiddenPostTypes: $('.aqb-input-hide-posttypes').val() ?? [],
       loadThumbs: $('.admin-quickbar-loadthumbs input').is(':checked'),
+      hideOnWebsite: $('.admin-quickbar-hide-on-website input').is(':checked')
     };
 
-    $.post(ajaxurl, {
+    $.post(aqbLocalize.ajaxUrl, {
       action: 'aqb_save_settings',
       aqbSettings: aqbSettings,
     }, function(result) {

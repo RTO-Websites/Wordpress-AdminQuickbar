@@ -12,11 +12,13 @@ class AdminQuickbar {
     protected string $version;
 
     protected ?Sidebar $sidebar = null;
+    private array $settings = [];
 
     public function __construct() {
 
         $this->pluginName = 'admin-quickbar';
         $this->version = AdminQuickbar_VERSION;
+        $this->settings = get_transient( 'aqb_settings' ) ?: [];
 
         $this->loadDependencies();
 
@@ -48,16 +50,21 @@ class AdminQuickbar {
     }
 
     private function defineAdminHooks(): void {
-        $pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
+        #$pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
         $this->loader->addAction( 'plugins_loaded', $this, 'registerSidebar' );
 
         // Register ajax
-        $this->loader->addAction( 'wp_ajax_aqb_save_settings', $pluginAdmin, 'saveSettings' );
+        $this->loader->addAction( 'wp_ajax_aqb_save_settings', $this, 'saveSettings' );
     }
 
     private function definePublicHooks(): void {
-        $pluginPublic = new AdminQuickbarPublic( $this->getAdminQuickbar(), $this->getVersion() );
+        #$pluginPublic = new AdminQuickbarPublic( $this->getAdminQuickbar(), $this->getVersion() );
+        if ( !empty( $this->settings['hideOnWebsite'] ) ) {
+            return;
+        }
         $this->loader->addAction( 'plugins_loaded', $this, 'registerSidebar' );
+        // Register ajax
+        $this->loader->addAction( 'wp_ajax_aqb_save_settings', $this, 'saveSettings' );
     }
 
     public function registerSidebar(): void {
@@ -69,12 +76,28 @@ class AdminQuickbar {
             return;
         }
 
-        $this->sidebar = new Sidebar( $this->getAdminQuickbar(), $this->getVersion() );
+        $this->sidebar = new Sidebar( $this->getAdminQuickbar(), $this->getVersion(), $this->settings );
     }
 
     private function addCapatibilites(): void {
         $administratorRole = get_role( 'administrator' );
         $administratorRole->add_cap( 'view_admin_quickbar' );
+    }
+
+
+    public function saveSettings() {
+        if ( !current_user_can( 'manage_options' ) ) {
+            return;
+        }
+        $settings = filter_input( INPUT_POST, 'aqbSettings', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+        $settings['loadThumbs'] = filter_var( $settings['loadThumbs'], FILTER_VALIDATE_BOOLEAN );
+        $settings['hideOnWebsite'] = filter_var( $settings['hideOnWebsite'], FILTER_VALIDATE_BOOLEAN );
+
+        set_transient( 'aqb_settings', $settings, 0 );
+
+        wp_send_json_success(get_transient( 'aqb_settings' ));
+
+        die();
     }
 
     public function getAdminQuickbar(): string {

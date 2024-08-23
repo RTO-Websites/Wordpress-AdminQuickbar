@@ -32,12 +32,12 @@ class Settings {
     const PARTIAL_DIR = AdminQuickbar_DIR . '/Lib/partials/';
 
 
-    public function __construct( array $args = [] ) {
-        $this->settings = get_transient( 'aqb_settings' ) ?: [];
-        $this->initFieldGroups( $args );
+    public function __construct( array $settings = [] ) {
+        $this->settings = $settings;
+        $this->initFieldGroups();
     }
 
-    private function initFieldGroups( array $args = [] ) {
+    private function initFieldGroups() {
         $hidePostTypes = [
             'aqb-recent' => __( 'Recent' ),
             'aqb-favorites' => __( 'Favorites' ),
@@ -58,7 +58,7 @@ class Settings {
                         'multiple' => true,
                         'label' => __( 'Hide main container (PostTypes)', 'admin-quickbar' ),
                         'sublabel' => '[' . __( 'Ctrl+Click', 'admin-quickbar' ) . ']',
-                        'rows' => count( $args['filteredPostTypes'] ),
+                        'rows' => count( $hidePostTypes ),
                         'options' => $hidePostTypes,
                         'selected' => $this->settings['hiddenPostTypes'] ?? ['attachment'],
                     ],
@@ -79,6 +79,7 @@ class Settings {
                     'hide-on-website' => [
                         'type' => 'checkbox',
                         'label' => __( 'Hide quickbar on website', 'admin-quickbar' ),
+                        'checked' => $this->settings['hideOnWebsite'] ?? false,
                     ],
                 ],
             ],

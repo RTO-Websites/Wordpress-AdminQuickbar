@@ -19,7 +19,6 @@ trait Wpml {
 
         $template = new Template( self::PARTIAL_DIR . '/language-flag.php', [
             'flagUrl' => $flagUrl,
-            'alt' => $this->activeLanguages[$languageCode]['native_name'],
             'languageCode' => $languageCode,
         ] );
 

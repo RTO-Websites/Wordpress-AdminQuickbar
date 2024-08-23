@@ -130,7 +130,7 @@ trait Render {
             }
             $style = $this->getMarginStyle( $post, $postType, $lastParent, $margin );
             $postTypeInfo = $this->getPostTypeInfo( $postType, $post );
-            $permalink = get_permalink( $post->ID );
+            $permalink = get_permalink( $post );
             $activeClass = filter_input( INPUT_GET, 'post' ) == $post->ID ? ' is-active' : '';
             $trashUrl = admin_url() . wp_nonce_url( "post.php?action=trash&amp;post=$post->ID", 'trash-post_' . $post->ID );
             $unTrasUrl = admin_url() . wp_nonce_url( "post.php?action=untrash&amp;post=$post->ID", 'untrash-post_' . $post->ID );
@@ -144,7 +144,7 @@ trait Render {
             $template = new Template( self::PARTIAL_DIR . '/loop-posts.php', [
                 'post' => $post,
                 'postTypeInfo' => $postTypeInfo,
-                'contextMenuData' => json_encode( $this->getContextMenuData( $postType, $post, $postTypeInfo ) ),
+                'contextMenuData' => json_encode( $this->getContextMenuData( $postType, $post, $postTypeInfo, $permalink ) ),
                 'style' => $style,
                 'thumb' => $this->getRenderedPostThumbnail( $post ),
                 'postTitle' => $this->getPostTitle( $post ),

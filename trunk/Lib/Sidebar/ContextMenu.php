@@ -10,19 +10,18 @@ trait ContextMenu {
      * @param \WP_Post $post
      * @param array $postTypeInfo
      */
-    public function getContextMenuData( $postType, $post, $postTypeInfo ): array {
+    public function getContextMenuData( $postType, $post, $postTypeInfo, $permalink ): array {
         $data = [
             'favorite' => true,
             'copy' => [
                 'id' => $post->ID,
                 'wordpress' => $postTypeInfo['link'] . '&action=edit',
                 'elementor' => empty( $postTypeInfo['noElementor'] ) ? $postTypeInfo['link'] . '&action=elementor' : '',
-                'website' => get_permalink( $post->ID ),
+                'website' => $permalink,
             ],
         ];
 
         if ( $this->hasSwift() ) {
-            $permalink = get_the_permalink( $post->ID );
             $data['swift'] = [
                 'inCache' => in_array( $permalink, $this->cacheList ),
                 'permalink' => $permalink,

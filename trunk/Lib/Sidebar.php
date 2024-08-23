@@ -227,7 +227,7 @@ class Sidebar {
                 foreach ( $postCategories as $postCategory ) {
                     if ( $postType->name === 'elementor_library' ) {
                         $categoryName = $templateTypesByPostId[$post->ID];
-                    } elseif ( empty( $postCategory ) ) {
+                    } elseif ( empty( $postCategory ) || empty( $this->categoryList[$postCategory] ) ) {
                         $categoryName = 'none';
                     } else {
                         $categoryName = $this->categoryList[$postCategory]->name;

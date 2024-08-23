@@ -16,6 +16,8 @@ class Sidebar {
 
     private array $cssPosts = [];
 
+    private array $settings = [];
+
     /**
      * List of post-names that should not be displayed and filtered out
      *
@@ -51,6 +53,9 @@ class Sidebar {
         $this->version = $version;
 
         $this->loader = new Loader();
+        $this->settings = get_transient( 'aqb_settings' ) ?: [];
+
+        $this->filterPostTypes = array_merge( $this->filterPostTypes, $this->settings['hiddenPostTypes'] ?? [ 'attachment' ] );
 
         $this->defineHooks();
 
@@ -205,8 +210,8 @@ class Sidebar {
             ] );
             $output .= $template->getRendered();
         }
-        $duration = microtime( true ) - $startTime;
-        die('duration: ' . $duration);
+        #$duration = microtime( true ) - $startTime;
+        #die( 'duration: ' . $duration );
 
         return $output;
     }
@@ -318,6 +323,10 @@ class Sidebar {
      * @throws \ImagickException
      */
     public function getRenderedPostThumbnail( $post ): string {
+        if ( empty( $this->settings['loadThumbs'] ) ) {
+            return '';
+        }
+
         $class = '';
         if ( has_post_thumbnail( $post ) ) {
             // from post-thumbnail
@@ -426,6 +435,7 @@ class Sidebar {
                     $wpdb->posts.post_type
                 FROM $wpdb->posts
                 WHERE $wpdb->posts.post_type = '$postType->name'
+                AND $wpdb->posts.post_status NOT IN ('auto-draft')
                 ORDER BY `post_parent` ASC, menu_order ASC
              ";
 
@@ -445,6 +455,7 @@ class Sidebar {
                 FROM $wpdb->posts
                     LEFT OUTER JOIN wp_term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
                 WHERE $wpdb->posts.post_type = '$postType->name'
+                AND $wpdb->posts.post_status NOT IN ('auto-draft')
                 GROUP BY $wpdb->posts.ID
                 ORDER BY menu_order ASC
              ";

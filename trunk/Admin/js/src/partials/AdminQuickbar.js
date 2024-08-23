@@ -62,7 +62,7 @@ let AdminQuickbar = function() {
     /**
      * Show/Hide trashed posts
      */
-    $doc.on('change', '.admin-quickbar-show-trash-option input', self.checkTrash);
+    $doc.on('change', '.admin-quickbar-show-trash input', self.checkTrash);
 
     /**
      * Load thumbs
@@ -127,8 +127,7 @@ let AdminQuickbar = function() {
       $body.addClass('aqb-hide-on-website');
     }
 
-    if (localStorage.adminQuickbarLoadthumbs === 'true') {
-      $('.admin-quickbar-loadthumbs input').prop('checked', true);
+    if ($('.admin-quickbar-loadthumbs input').is(':checked')) {
       self.loadThumbs();
     }
 
@@ -143,9 +142,6 @@ let AdminQuickbar = function() {
     }
 
     self.checkTheme();
-
-    // init hidden post types
-    self.initHiddenPostTypes();
 
     self.setLanguageSwitchActiveClass();
     self.hideByLanguage();
@@ -164,6 +160,21 @@ let AdminQuickbar = function() {
       });
     }
   };
+
+  self.saveSettings = function() {
+    let aqbSettings = {
+      hiddenPostTypes: $('.aqb-input-hide-posttypes').val() ?? [],
+      loadThumbs: $('.admin-quickbar-loadthumbs input').is(':checked'),
+    };
+
+    $.post(ajaxurl, {
+      action: 'aqb_save_settings',
+      aqbSettings: aqbSettings,
+    }, function(result) {
+      console.log('aqb_save_settings', result);
+    }, 'json');
+
+  }
 
   /**
    * Checks and set theme dark/light
@@ -202,23 +213,12 @@ let AdminQuickbar = function() {
     }
   };
 
-  /**
-   * Read from localstorage, set select-field and hide post-types
-   */
-  self.initHiddenPostTypes = function() {
-    if (typeof (localStorage.adminQuickbarHiddenPostTypes) === 'undefined') {
-      localStorage.adminQuickbarHiddenPostTypes = '[]';
-    }
-    let hiddenTypes = JSON.parse(localStorage.adminQuickbarHiddenPostTypes);
-    $('.aqb-input-hide-posttypes').val(hiddenTypes);
-    self.hidePostTypes();
-  };
 
   /**
-   * Update localstorage for hidden post-types and hide the post-types
+   * Update settings for hidden post-types and hide the post-types
    */
   self.updateHiddenPostTypes = function() {
-    localStorage.adminQuickbarHiddenPostTypes = JSON.stringify($('.aqb-input-hide-posttypes').val());
+    self.saveSettings();
     self.hidePostTypes();
   };
 
@@ -226,7 +226,7 @@ let AdminQuickbar = function() {
    * Hides post-types
    */
   self.hidePostTypes = function() {
-    let hiddenTypes = JSON.parse(localStorage.adminQuickbarHiddenPostTypes);
+    let hiddenTypes = $('.aqb-input-hide-posttypes').val();
 
     $('.admin-quickbar-postlist').removeClass('hidden-posttype');
 
@@ -415,7 +415,7 @@ let AdminQuickbar = function() {
    * @param {Event} e
    */
   self.checkTrash = function(e) {
-    localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash-option input').is(':checked');
+    localStorage.adminQuickbarShowTrash = $('.admin-quickbar-show-trash input').is(':checked');
 
     if (localStorage.adminQuickbarShowTrash === 'true') {
       $body.addClass('admin-quickbar-show-trash');
@@ -440,10 +440,9 @@ let AdminQuickbar = function() {
    * @param {Event} e
    */
   self.checkThumbs = function(e) {
-    localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
+    self.saveSettings();
 
-    if (localStorage.adminQuickbarLoadthumbs === 'true') {
-      $('.admin-quickbar-loadthumbs input').prop('checked', true);
+    if ($('.admin-quickbar-loadthumbs input').is(':checked')) {
       self.loadThumbs();
     } else {
       $('.admin-quickbar .wp-post-image').prop('src', '');

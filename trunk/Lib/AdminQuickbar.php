@@ -50,6 +50,9 @@ class AdminQuickbar {
     private function defineAdminHooks(): void {
         $pluginAdmin = new AdminQuickbarAdmin( $this->getAdminQuickbar(), $this->getVersion() );
         $this->loader->addAction( 'plugins_loaded', $this, 'registerSidebar' );
+
+        // Register ajax
+        $this->loader->addAction( 'wp_ajax_aqb_save_settings', $pluginAdmin, 'saveSettings' );
     }
 
     private function definePublicHooks(): void {

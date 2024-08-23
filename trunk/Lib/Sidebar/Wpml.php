@@ -5,20 +5,21 @@ namespace AdminQuickbar\Lib\Sidebar;
 use AdminQuickbar\Lib\Template;
 
 trait Wpml {
+    private $activeLanguages = [];
 
     public function getRenderedLanguageFlag( $post ): string {
-        if ( !$this->isWpmlActive() ) {
+        if ( !$this->isWpmlActive() || empty($post->language_code)) {
             return '';
         }
 
+        /** @var \SitePress $sitepress */
         global $sitepress;
-        $wpmlLanguageInfo = apply_filters( 'wpml_post_language_details', null, $post->ID );
-        $languageCode = $wpmlLanguageInfo['language_code'];
+        $languageCode = $post->language_code;
         $flagUrl = $sitepress->get_flag_url( $languageCode );
 
         $template = new Template( self::PARTIAL_DIR . '/language-flag.php', [
             'flagUrl' => $flagUrl,
-            'alt' => $wpmlLanguageInfo['display_name'],
+            'alt' => $this->activeLanguages[$languageCode]['native_name'],
             'languageCode' => $languageCode,
         ] );
 
@@ -39,6 +40,7 @@ trait Wpml {
                 'languageCode' => $language['language_code'],
             ] );
             $output .= $template->getRendered();
+            $this->activeLanguages[$language['language_code']] = $language;
         }
 
         return $output;

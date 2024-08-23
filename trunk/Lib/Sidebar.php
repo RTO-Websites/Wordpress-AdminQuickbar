@@ -10,6 +10,7 @@ class Sidebar {
     use Wpml;
     use Render;
     use ContextMenu;
+
     protected Loader $loader;
 
     const PARTIAL_DIR = AdminQuickbar_DIR . '/Lib/partials/';
@@ -169,6 +170,13 @@ class Sidebar {
             do_action( 'wpml_switch_language', 'all' );
         }
 
+        $wpmlSelect = '';
+        $wpmlJoin = '';
+        if ( $this->isWpmlActive() ) {
+            $wpmlSelect = ', language_code';
+            $wpmlJoin = " INNER JOIN {$wpdb->prefix}icl_translations ON $wpdb->posts.ID = element_id AND element_type = 'post_$postType->name'";
+        }
+
         $categoryCount = [];
         if ( $postType->hierarchical ) {
             $queryString = "
@@ -178,7 +186,9 @@ class Sidebar {
                     $wpdb->posts.post_name,
                     $wpdb->posts.post_status,
                     $wpdb->posts.post_type
+                    $wpmlSelect
                 FROM $wpdb->posts
+                    $wpmlJoin
                 WHERE $wpdb->posts.post_type = '$postType->name'
                 AND $wpdb->posts.post_status NOT IN ('auto-draft')
                 ORDER BY `post_parent` ASC, menu_order ASC
@@ -198,8 +208,10 @@ class Sidebar {
                     $wpdb->posts.post_status,
                     $wpdb->posts.post_type,
                     GROUP_CONCAT($wpdb->term_relationships.term_taxonomy_id) as post_category
+                    $wpmlSelect
                 FROM $wpdb->posts
-                    LEFT OUTER JOIN wp_term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
+                    INNER JOIN $wpdb->term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
+                    $wpmlJoin
                 WHERE $wpdb->posts.post_type = '$postType->name'
                 AND $wpdb->posts.post_status NOT IN ('auto-draft')
                 GROUP BY $wpdb->posts.ID

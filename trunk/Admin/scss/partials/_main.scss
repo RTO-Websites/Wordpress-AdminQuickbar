@@ -115,6 +115,10 @@ body .admin-quickbar {
       font-weight: 600;
     }
 
+    &.is-active {
+      border-left: 2px solid var(--aqb-accent);
+    }
+
     &.post-status-publish.has-password,
     &.post-status-draft,
     &.post-status-trash,

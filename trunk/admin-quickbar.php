@@ -7,13 +7,6 @@ use AdminQuickbar\Lib\Activator;
 use AdminQuickbar\Lib\Deactivator;
 
 /**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
- *
  * @link              https://www.rto.de
  * @since             1.0.0
  * @package           AdminQuickbar
@@ -22,7 +15,7 @@ use AdminQuickbar\Lib\Deactivator;
  * Plugin Name:       AdminQuickbar
  * Plugin URI:        https://github.com/RTO-Websites/Wordpress-AdminQuickbar
  * Description:       Adds a quickbar in admin with fast access to all posts/pages
- * Version:           1.8.0
+ * Version:           1.9.0
  * Author:            RTO GmbH
  * Author URI:        https://www.rto.de
  * License:           GPL-2.0+
@@ -36,7 +29,7 @@ if ( !defined( 'WPINC' ) ) {
     die;
 }
 
-define( 'AdminQuickbar_VERSION', '1.8.0' );
+define( 'AdminQuickbar_VERSION', '1.9.0' );
 
 define( 'AdminQuickbar_DIR', str_replace( '\\', '/', __DIR__ ) );
 define( 'AdminQuickbar_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
@@ -44,7 +37,7 @@ define( 'AdminQuickbar_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 /**
  * The class responsible for auto loading classes.
  */
-require_once AdminQuickbar_DIR . '/vendor/autoload.php';
+require_once AdminQuickbar_DIR . '/autoload.php';
 
 /**
  * The code that runs during plugin activation.
@@ -67,6 +60,4 @@ register_deactivation_hook( __FILE__, [ Deactivator::class, 'deactivate' ] );
  *
  * @since    1.0.0
  */
-
-
 AdminQuickbar::run();

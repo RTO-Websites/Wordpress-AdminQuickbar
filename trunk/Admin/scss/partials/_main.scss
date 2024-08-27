@@ -115,6 +115,10 @@ body .admin-quickbar {
       font-weight: 600;
     }
 
+    &.is-active {
+      border-left: 2px solid var(--aqb-accent);
+    }
+
     &.post-status-publish.has-password,
     &.post-status-draft,
     &.post-status-trash,
@@ -212,14 +216,8 @@ body .admin-quickbar {
     margin-top: -12px;
     margin-bottom: -17px;
     margin-right: 7px;
-    transition: all 0.3s ease;
-    transform-origin: top left;
     width: auto !important;
     z-index: 20;
-  }
-
-  .wp-post-image:hover {
-    transform: scale(4.5);
   }
 
   .aqb-search-wrapper,
@@ -404,6 +402,18 @@ body .admin-quickbar {
       cursor: text;
     }
   }
+
+  .aqb-category-count,
+  .aqb-post-type-count {
+    font-size: 0.8em;
+
+    &::before {
+      content: '(';
+    }
+    &::after {
+      content: ')';
+    }
+  }
 }
 
 
@@ -485,5 +495,13 @@ body {
 body.aqb-hide-on-website:not(.wp-admin):not(.elementor-editor-active) {
   .admin-quickbar {
     display: none;
+  }
+}
+
+body.aqb-show-postids .aqb-post-title:not(.is-renaming) {
+  &::after {
+    content: ' (' attr(data-postid) ')';
+    font-size: 0.8em;
+    color: var(--aqb-transparent-color);
   }
 }

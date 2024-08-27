@@ -21,12 +21,14 @@
                             <?php echo !empty( $field->multiple ) ? 'multiple' : ''; ?>
                         >
                             <?php foreach ( $field->options as $optionKey => $optionLabel ): ?>
-                                <option value="<?php echo $optionKey; ?>"><?php echo $optionLabel; ?></option>
+                                <option value="<?php echo $optionKey; ?>" <?php echo in_array($optionKey, $field->selected) ? ' selected' : ''; ?>>
+                                    <?php echo $optionLabel; ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                         <?php break;
                     case 'checkbox': ?>
-                        <input type="checkbox" name="admin-quickbar-<?php echo $fieldKey; ?>>"/>
+                        <input type="checkbox" name="admin-quickbar-<?php echo $fieldKey; ?>" <?php echo !empty($field->checked) ? ' checked' : ''; ?> />
                         <span class="aqb-field-label"><?php echo $field->label; ?></span>
                         <?php break;
                     case 'number': ?>

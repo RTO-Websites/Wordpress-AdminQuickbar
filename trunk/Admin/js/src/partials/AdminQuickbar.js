@@ -45,13 +45,12 @@ let AdminQuickbar = function() {
      * Hide on website
      */
     $doc.on('change', '.admin-quickbar-hide-on-website input', function(e) {
-      localStorage.adminQuickbarHideOnWebsite = $('.admin-quickbar-hide-on-website input').is(':checked');
-
-      if (localStorage.adminQuickbarHideOnWebsite === 'true') {
+      if ($('.admin-quickbar-hide-on-website input').is(':checked')) {
         $body.addClass('aqb-hide-on-website');
       } else {
         $body.removeClass('aqb-hide-on-website');
       }
+      self.saveSettings();
     });
 
     /**
@@ -63,6 +62,11 @@ let AdminQuickbar = function() {
      * Show/Hide trashed posts
      */
     $doc.on('change', '.admin-quickbar-show-trash-option input', self.checkTrash);
+
+    /**
+     * Show/Hide post-ids
+     */
+    $doc.on('change', '.admin-quickbar-show-postids input', self.checkShowPostIds);
 
     /**
      * Load thumbs
@@ -122,13 +126,7 @@ let AdminQuickbar = function() {
       $('.admin-quickbar-keepopen input').prop('checked', true);
     }
 
-    if (localStorage.adminQuickbarHideOnWebsite === 'true') {
-      $('.admin-quickbar-hide-on-website input').prop('checked', true);
-      $body.addClass('aqb-hide-on-website');
-    }
-
-    if (localStorage.adminQuickbarLoadthumbs === 'true') {
-      $('.admin-quickbar-loadthumbs input').prop('checked', true);
+    if ($('.admin-quickbar-loadthumbs input').is(':checked')) {
       self.loadThumbs();
     }
 
@@ -141,11 +139,12 @@ let AdminQuickbar = function() {
       $('.admin-quickbar-show-trash-option input').prop('checked', true);
       $body.addClass('admin-quickbar-show-trash');
     }
+    if (localStorage.adminQuickbarShowPostIds === 'true') {
+      $('.admin-quickbar-show-postids input').prop('checked', true);
+      $body.addClass('aqb-show-postids');
+    }
 
     self.checkTheme();
-
-    // init hidden post types
-    self.initHiddenPostTypes();
 
     self.setLanguageSwitchActiveClass();
     self.hideByLanguage();
@@ -164,6 +163,22 @@ let AdminQuickbar = function() {
       });
     }
   };
+
+  self.saveSettings = function() {
+    let aqbSettings = {
+      hiddenPostTypes: $('.aqb-input-hide-posttypes').val() ?? [],
+      loadThumbs: $('.admin-quickbar-loadthumbs input').is(':checked'),
+      hideOnWebsite: $('.admin-quickbar-hide-on-website input').is(':checked')
+    };
+
+    $.post(aqbLocalize.ajaxUrl, {
+      action: 'aqb_save_settings',
+      aqbSettings: aqbSettings,
+    }, function(result) {
+      console.log('aqb_save_settings', result);
+    }, 'json');
+
+  }
 
   /**
    * Checks and set theme dark/light
@@ -202,23 +217,12 @@ let AdminQuickbar = function() {
     }
   };
 
-  /**
-   * Read from localstorage, set select-field and hide post-types
-   */
-  self.initHiddenPostTypes = function() {
-    if (typeof (localStorage.adminQuickbarHiddenPostTypes) === 'undefined') {
-      localStorage.adminQuickbarHiddenPostTypes = '[]';
-    }
-    let hiddenTypes = JSON.parse(localStorage.adminQuickbarHiddenPostTypes);
-    $('.aqb-input-hide-posttypes').val(hiddenTypes);
-    self.hidePostTypes();
-  };
 
   /**
-   * Update localstorage for hidden post-types and hide the post-types
+   * Update settings for hidden post-types and hide the post-types
    */
   self.updateHiddenPostTypes = function() {
-    localStorage.adminQuickbarHiddenPostTypes = JSON.stringify($('.aqb-input-hide-posttypes').val());
+    self.saveSettings();
     self.hidePostTypes();
   };
 
@@ -226,7 +230,7 @@ let AdminQuickbar = function() {
    * Hides post-types
    */
   self.hidePostTypes = function() {
-    let hiddenTypes = JSON.parse(localStorage.adminQuickbarHiddenPostTypes);
+    let hiddenTypes = $('.aqb-input-hide-posttypes').val();
 
     $('.admin-quickbar-postlist').removeClass('hidden-posttype');
 
@@ -336,7 +340,10 @@ let AdminQuickbar = function() {
    * Read local storage and moves all posts in it to favorites
    */
   initRecent = function() {
-    $('.admin-quickbar-max-recent input').val(localStorage.adminQuickbarMaxRecent ?? 4);
+    if (!localStorage.adminQuickbarMaxRecent) {
+      localStorage.adminQuickbarMaxRecent = 4;
+    }
+    $('.admin-quickbar-max-recent input').val(localStorage.adminQuickbarMaxRecent);
     $doc.on('change', '.admin-quickbar-max-recent input', function(e) {
       localStorage.adminQuickbarMaxRecent = $('.admin-quickbar-max-recent input').val();
     });
@@ -422,6 +429,20 @@ let AdminQuickbar = function() {
   };
 
   /**
+   * Checks if show trashed is active
+   * @param {Event} e
+   */
+  self.checkShowPostIds = function(e) {
+    localStorage.adminQuickbarShowPostIds = $('.admin-quickbar-show-postids input').is(':checked');
+
+    if (localStorage.adminQuickbarShowPostIds === 'true') {
+      $body.addClass('aqb-show-postids');
+    } else {
+      $body.removeClass('aqb-show-postids');
+    }
+  };
+
+  /**
    * Checks if overlapping is active
    * @param {Event} e
    */
@@ -437,10 +458,9 @@ let AdminQuickbar = function() {
    * @param {Event} e
    */
   self.checkThumbs = function(e) {
-    localStorage.adminQuickbarLoadthumbs = $('.admin-quickbar-loadthumbs input').is(':checked');
+    self.saveSettings();
 
-    if (localStorage.adminQuickbarLoadthumbs === 'true') {
-      $('.admin-quickbar-loadthumbs input').prop('checked', true);
+    if ($('.admin-quickbar-loadthumbs input').is(':checked')) {
       self.loadThumbs();
     } else {
       $('.admin-quickbar .wp-post-image').prop('src', '');

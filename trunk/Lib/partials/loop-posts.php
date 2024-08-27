@@ -24,7 +24,7 @@
     ?>
     <span class="label">
         <?php echo $languageFlag; ?>
-        <span class="aqb-post-title"><?php echo $postTitle; ?></span>
+        <span class="aqb-post-title" data-postid="<?php echo $post->ID; ?>"><?php echo $postTitle; ?></span>
     </span>
     <div class="admin-quickbar-post-options">
         <a class="aqb-icon aqb-icon-wordpress dashicons-edit"

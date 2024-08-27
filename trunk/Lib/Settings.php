@@ -9,27 +9,43 @@ namespace AdminQuickbar\Lib;
 
 
 class Settings {
-    private $fieldGroups = [];
+    private array $fieldGroups = [];
+
+    private array $settings = [];
+
+    /**
+     * List of post-types that should not be displayed and filtered out
+     * @var string[]
+     */
+    private array $filterPostTypes = [
+        'nav_menu_item',
+        'revision',
+        'custom_css',
+        'customize_changeset',
+        'oembed_cache',
+        'ocean_modal_window',
+        'nxs_qp',
+        'wp_global_styles',
+        'acf-field',
+    ];
 
     const PARTIAL_DIR = AdminQuickbar_DIR . '/Lib/partials/';
 
-    /**
-     * Settings constructor.
-     * @param array $args
-     */
-    public function __construct( array $args = [] ) {
-        $this->initFieldGroups( $args );
+
+    public function __construct( array $settings = [] ) {
+        $this->settings = $settings;
+        $this->initFieldGroups();
     }
 
-    /**
-     * @param array $args
-     */
-    private function initFieldGroups( array $args = [] ) {
+    private function initFieldGroups() {
         $hidePostTypes = [
             'aqb-recent' => __( 'Recent' ),
             'aqb-favorites' => __( 'Favorites' ),
         ];
-        foreach ( $args['filteredPostTypes'] as $postType ) {
+        foreach ( get_post_types( [], 'object' ) as $postType ) {
+            if ( in_array( $postType->name, $this->filterPostTypes ) ) {
+                continue;
+            }
             $hidePostTypes[$postType->name] = $postType->label;
         }
 
@@ -42,14 +58,16 @@ class Settings {
                         'multiple' => true,
                         'label' => __( 'Hide main container (PostTypes)', 'admin-quickbar' ),
                         'sublabel' => '[' . __( 'Ctrl+Click', 'admin-quickbar' ) . ']',
-                        'rows' => count( $args['filteredPostTypes'] ),
+                        'rows' => count( $hidePostTypes ),
                         'options' => $hidePostTypes,
+                        'selected' => $this->settings['hiddenPostTypes'] ?? ['attachment'],
                     ],
                     'loadthumbs' => [
                         'type' => 'checkbox',
                         'label' => __( 'Show thumbs', 'admin-quickbar' ),
+                        'checked' => $this->settings['loadThumbs'] ?? false,
                     ],
-                    'show-trash' => [
+                    'show-trash-option' => [
                         'type' => 'checkbox',
                         'label' => __( 'Show trashed posts', 'admin-quickbar' ),
                     ],
@@ -58,9 +76,14 @@ class Settings {
                         'label' => __( 'Max. Recent', 'admin-quickbar' ),
                         'min' => 0,
                     ],
+                    'show-postids' => [
+                        'type' => 'checkbox',
+                        'label' => __( 'Show post-ids', 'admin-quickbar' ),
+                    ],
                     'hide-on-website' => [
                         'type' => 'checkbox',
                         'label' => __( 'Hide quickbar on website', 'admin-quickbar' ),
+                        'checked' => $this->settings['hideOnWebsite'] ?? false,
                     ],
                 ],
             ],
@@ -88,6 +111,7 @@ class Settings {
                             'dark' => __( 'Dark', 'admin-quickbar' ),
                             'light' => __( 'Light', 'admin-quickbar' ),
                         ],
+                        'selected' => [],
                     ],
                 ],
             ],
@@ -95,11 +119,6 @@ class Settings {
         $this->fieldGroups = json_decode( json_encode( $this->fieldGroups ) );
     }
 
-    /**
-     * Returns fully rendered settings
-     *
-     * @return string
-     */
     public function getRendered(): string {
         $template = new Template( self::PARTIAL_DIR . '/settings.php', [
             'fieldGroups' => $this->fieldGroups,

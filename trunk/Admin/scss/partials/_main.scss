@@ -458,6 +458,10 @@ body:not(.admin-quickbar-is-overlap).admin-quickbar-visible {
   .edit-post-layout .editor-post-publish-panel {
     right: 320px;
   }
+
+  #elementor-editor-wrapper-v2 .MuiBox-root .MuiGrid-root:last-child {
+    padding-right: 322px;
+  }
 }
 
 .elementor-editor-active:not(.wp-admin) .admin-quickbar {

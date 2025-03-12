@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: admin-quickbar\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"X-Generator: Poedit 2.4.1\n"
+
+msgid "Hide main container (PostTypes)"
+msgstr "Verstecke Haupt-container (PostTypes)"
+
+msgid "Show thumbs"
+msgstr "Zeige Thumbnails"
+
+msgid "Show trashed posts"
+msgstr "Zeige Beiträge in Papierkorb"
+
+msgid "Hide quickbar on website"
+msgstr "Verstecke Quickbar auf der Website"
+
+msgid "Quickbar behavior"
+msgstr "Quickbar Verhalten"
+
+msgid "Keep open when switching page"
+msgstr "Halte offen beim Seitenwechsel"
+
+msgid "Overlap"
+msgstr "Überlappen"
+
+msgid "Quickbar Color-Theme"
+msgstr "Quickbar Farbschema"
+
+msgid "Auto detect"
+msgstr "Automatische Erkennung"
+
+msgid "Dark"
+msgstr "Dunkel"
+
+msgid "Light"
+msgstr "Hell"
+
+msgid "Ctrl+Click"
+msgstr "Strg+Klick"

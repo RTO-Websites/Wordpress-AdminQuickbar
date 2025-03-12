@@ -1,11 +1,11 @@
 === AdminQuickbar ===
 Contributors: rtowebsites
 Donate link: https://www.rto.de
-Tags: post, post list, sidebar, elementor, rto, rto.de
+Tags: post, post list, sidebar, elementor
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.9.1
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,9 @@ Just install and activate the plugin.
 1. This screenshot shows the sidebar
 
 == Changelog ==
+= 1.9.2 =
+* Fix security issue
+
 = 1.9.1 =
 * Fix overlapped publish-button in elementor
 

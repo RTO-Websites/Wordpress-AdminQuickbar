@@ -68,33 +68,34 @@ class Toolbar {
      */
     private function initAdminMenuItems() {
         $submenu = [];
-        $customize_url = add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' );
-        $submenu['themes.php'][6] = [ __( 'Customize' ), 'customize', esc_url( $customize_url ), '', 'hide-if-no-customize' ];
+        $requestUri = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
+        $customize_url = add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $requestUri ) ) ), 'customize.php' );
+        $submenu['themes.php'][6] = [ __( 'Customize', 'adminquickbar' ), 'customize', esc_url( $customize_url ), '', 'hide-if-no-customize' ];
 
         if ( current_theme_supports( 'menus' ) || current_theme_supports( 'widgets' ) ) {
-            $submenu['themes.php'][10] = [ __( 'Menus' ), 'edit_theme_options', 'nav-menus.php' ];
+            $submenu['themes.php'][10] = [ __( 'Menus', 'adminquickbar' ), 'edit_theme_options', 'nav-menus.php' ];
         }
 
-        $submenu['options-general.php'][10] = [ _x( 'General', 'settings screen' ), 'manage_options', 'options-general.php' ];
-        $submenu['options-general.php'][15] = [ __( 'Writing' ), 'manage_options', 'options-writing.php' ];
-        $submenu['options-general.php'][20] = [ __( 'Reading' ), 'manage_options', 'options-reading.php' ];
-        $submenu['options-general.php'][25] = [ __( 'Discussion' ), 'manage_options', 'options-discussion.php' ];
-        $submenu['options-general.php'][30] = [ __( 'Media' ), 'manage_options', 'options-media.php' ];
-        $submenu['options-general.php'][40] = [ __( 'Permalinks' ), 'manage_options', 'options-permalink.php' ];
-        $submenu['options-general.php'][45] = [ __( 'Privacy' ), 'manage_privacy_options', 'options-privacy.php' ];
+        $submenu['options-general.php'][10] = [ _x( 'General', 'settings screen', 'adminquickbar' ), 'manage_options', 'options-general.php' ];
+        $submenu['options-general.php'][15] = [ __( 'Writing', 'adminquickbar' ), 'manage_options', 'options-writing.php' ];
+        $submenu['options-general.php'][20] = [ __( 'Reading', 'adminquickbar' ), 'manage_options', 'options-reading.php' ];
+        $submenu['options-general.php'][25] = [ __( 'Discussion', 'adminquickbar' ), 'manage_options', 'options-discussion.php' ];
+        $submenu['options-general.php'][30] = [ __( 'Media', 'adminquickbar' ), 'manage_options', 'options-media.php' ];
+        $submenu['options-general.php'][40] = [ __( 'Permalinks', 'adminquickbar' ), 'manage_options', 'options-permalink.php' ];
+        $submenu['options-general.php'][45] = [ __( 'Privacy', 'adminquickbar' ), 'manage_privacy_options', 'options-privacy.php' ];
 
-        $submenu['plugins.php'][5] = [ __( 'Installed Plugins' ), 'activate_plugins', 'plugins.php' ];
+        $submenu['plugins.php'][5] = [ __( 'Installed Plugins', 'adminquickbar' ), 'activate_plugins', 'plugins.php' ];
 
         if ( !is_multisite() ) {
             /* translators: Add new plugin. */
-            $submenu['plugins.php'][10] = [ _x( 'Add New', 'plugin' ), 'install_plugins', 'plugin-install.php' ];
-            $submenu['plugins.php'][15] = [ __( 'Plugin Editor' ), 'edit_plugins', 'plugin-editor.php' ];
+            $submenu['plugins.php'][10] = [ _x( 'Add New', 'plugin', 'adminquickbar' ), 'install_plugins', 'plugin-install.php' ];
+            $submenu['plugins.php'][15] = [ __( 'Plugin Editor', 'adminquickbar' ), 'edit_plugins', 'plugin-editor.php' ];
         }
 
         if ( defined( 'ELEMENTOR_VERSION' ) ) {
-            $submenu['elementor'][10] = [ _x( 'Templates', '' ), 'edit_posts', 'edit.php?post_type=elementor_library&tabs_group=library' ];
-            $submenu['elementor'][15] = [ _x( 'Popups', '' ), 'edit_posts', 'edit.php?post_type=elementor_library&tabs_group=popup&elementor_library_type=popup' ];
-            $submenu['elementor'][20] = [ _x( 'Tools', '' ), 'manage_options', 'admin.php?page=elementor-tools' ];
+            $submenu['elementor'][10] = [ _x( 'Templates', '', 'adminquickbar' ), 'edit_posts', 'edit.php?post_type=elementor_library&tabs_group=library' ];
+            $submenu['elementor'][15] = [ _x( 'Popups', '', 'adminquickbar' ), 'edit_posts', 'edit.php?post_type=elementor_library&tabs_group=popup&elementor_library_type=popup' ];
+            $submenu['elementor'][20] = [ _x( 'Tools', '', 'adminquickbar' ), 'manage_options', 'admin.php?page=elementor-tools' ];
         }
 
 

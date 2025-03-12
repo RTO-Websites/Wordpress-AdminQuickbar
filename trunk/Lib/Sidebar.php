@@ -176,55 +176,102 @@ class Sidebar {
             do_action( 'wpml_switch_language', 'all' );
         }
 
-        $wpmlSelect = '';
-        $wpmlJoin = '';
-        if ( $this->isWpmlActive() ) {
-            $wpmlSelect = ', language_code';
-            $wpmlJoin = " LEFT OUTER JOIN {$wpdb->prefix}icl_translations ON $wpdb->posts.ID = element_id AND element_type = 'post_$postType->name'";
-        }
-
         $categoryCount = [];
         if ( $postType->hierarchical ) {
-            $queryString = "
-                SELECT 
-                    $wpdb->posts.ID,
-                    $wpdb->posts.post_title,
-                    $wpdb->posts.post_name,
-                    $wpdb->posts.post_status,
-                    $wpdb->posts.post_type
-                    $wpmlSelect
-                FROM $wpdb->posts
-                    $wpmlJoin
-                WHERE $wpdb->posts.post_type = '$postType->name'
-                AND $wpdb->posts.post_status NOT IN ('auto-draft')
-                ORDER BY `post_parent` ASC, menu_order ASC
-             ";
+            $cacheKey = 'aqb_' . $postType->name;
 
-            $pages = $wpdb->get_results( $queryString, OBJECT );
+            $pages = wp_cache_get( $cacheKey );
+
+            if ( empty( $pages ) ) {
+                if ( $this->isWpmlActive() ) {
+                    // phpcs:disable WordPress.DB.DirectDatabaseQuery
+                    $pages = $wpdb->get_results( $wpdb->prepare( "
+                    SELECT 
+                        $wpdb->posts.ID,
+                        $wpdb->posts.post_title,
+                        $wpdb->posts.post_name,
+                        $wpdb->posts.post_status,
+                        $wpdb->posts.post_type,
+                        language_code
+                        FROM $wpdb->posts
+                        LEFT OUTER JOIN {$wpdb->prefix}icl_translations ON $wpdb->posts.ID = element_id AND element_type = 'post_%s'
+                        WHERE $wpdb->posts.post_type = %s
+                    AND $wpdb->posts.post_status NOT IN ('auto-draft')
+                    ORDER BY `post_parent` ASC, menu_order ASC
+                 ", $postType->name, $postType->name ), OBJECT );
+                    // phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+                } else {
+                    // phpcs:disable WordPress.DB.DirectDatabaseQuery
+                    $pages = $wpdb->get_results( $wpdb->prepare( "
+                    SELECT 
+                        $wpdb->posts.ID,
+                        $wpdb->posts.post_title,
+                        $wpdb->posts.post_name,
+                        $wpdb->posts.post_status,
+                        $wpdb->posts.post_type
+                        FROM $wpdb->posts
+                        WHERE $wpdb->posts.post_type = %s
+                    AND $wpdb->posts.post_status NOT IN ('auto-draft')
+                    ORDER BY `post_parent` ASC, menu_order ASC
+                 ", $postType->name ), OBJECT );
+                    // phpcs:enable WordPress.DB.DirectDatabaseQuery
+                }
+                wp_cache_set( $cacheKey, $pages );
+            }
             $categories = [
                 'none' => $pages,
             ];
             $countPostType += count( $pages );
         } else {
-            $queryString = "
-                SELECT 
-                    $wpdb->posts.ID,
-                    $wpdb->posts.post_title,
-                    $wpdb->posts.post_name,
-                    $wpdb->posts.post_status,
-                    $wpdb->posts.post_type,
-                    GROUP_CONCAT($wpdb->term_relationships.term_taxonomy_id) as post_category
-                    $wpmlSelect
-                FROM $wpdb->posts
-                    LEFT OUTER JOIN $wpdb->term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
-                    $wpmlJoin
-                WHERE $wpdb->posts.post_type = '$postType->name'
-                AND $wpdb->posts.post_status NOT IN ('auto-draft')
-                GROUP BY $wpdb->posts.ID
-                ORDER BY menu_order ASC
-             ";
+            $cacheKey = 'aqb_' . $postType->name;
 
-            $allPosts = $wpdb->get_results( $queryString, OBJECT );
+            $allPosts = wp_cache_get( $cacheKey );
+
+            if ( empty( $allPosts ) ) {
+
+                if ( $this->isWpmlActive() ) {
+                    // phpcs:disable WordPress.DB.DirectDatabaseQuery
+                    $allPosts = $wpdb->get_results( $wpdb->prepare( "
+                    SELECT 
+                        $wpdb->posts.ID,
+                        $wpdb->posts.post_title,
+                        $wpdb->posts.post_name,
+                        $wpdb->posts.post_status,
+                        $wpdb->posts.post_type,
+                        GROUP_CONCAT($wpdb->term_relationships.term_taxonomy_id) as post_category,
+                        language_code
+                    FROM $wpdb->posts
+                        LEFT OUTER JOIN $wpdb->term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
+                        LEFT OUTER JOIN {$wpdb->prefix}icl_translations ON $wpdb->posts.ID = element_id AND element_type = 'post_%s'
+                
+                    WHERE $wpdb->posts.post_type = %s
+                    AND $wpdb->posts.post_status NOT IN ('auto-draft')
+                    GROUP BY $wpdb->posts.ID
+                    ORDER BY menu_order ASC
+                 ", $postType->name, $postType->name ), OBJECT );
+                    // phpcs:enable WordPress.DB.DirectDatabaseQuery
+                } else {
+                    // phpcs:disable WordPress.DB.DirectDatabaseQuery
+                    $allPosts = $wpdb->get_results( $wpdb->prepare( "
+                    SELECT 
+                        $wpdb->posts.ID,
+                        $wpdb->posts.post_title,
+                        $wpdb->posts.post_name,
+                        $wpdb->posts.post_status,
+                        $wpdb->posts.post_type,
+                        GROUP_CONCAT($wpdb->term_relationships.term_taxonomy_id) as post_category
+                    FROM $wpdb->posts
+                        LEFT OUTER JOIN $wpdb->term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
+                    WHERE $wpdb->posts.post_type = %s
+                    AND $wpdb->posts.post_status NOT IN ('auto-draft')
+                    GROUP BY $wpdb->posts.ID
+                    ORDER BY menu_order ASC
+                 ", $postType->name ), OBJECT );
+                    // phpcs:enable WordPress.DB.DirectDatabaseQuery
+                }
+                wp_cache_set( $cacheKey, $allPosts );
+            }
 
             $templateTypesByPostId = $this->getTemplateTypesByPostId( $postType, $allPosts );
 
@@ -265,11 +312,21 @@ class Sidebar {
             return $post->ID;
         }, $allPosts );
 
-        $queryString = "SELECT $wpdb->postmeta.post_id, `meta_value` 
-                    FROM $wpdb->postmeta 
-                    WHERE post_id IN (" . implode( ',', $postIds ) . ") 
-                        AND meta_key = '_elementor_template_type'";
-        $templateTypes = $wpdb->get_results( $queryString, OBJECT );
+        $postIdString = implode( ',', $postIds );
+        $cacheKey = 'aqb_' . implode( '_', $postIds );
+
+        $templateTypes = wp_cache_get( $cacheKey );
+
+        if ( empty( $templateTypes ) ) {
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery
+            $templateTypes = $wpdb->get_results( $wpdb->prepare( "SELECT $wpdb->postmeta.post_id, `meta_value` 
+                        FROM $wpdb->postmeta 
+                        WHERE post_id IN (%s) 
+                            AND meta_key = '_elementor_template_type'", $postIdString ), OBJECT );
+            // phpcs:enable WordPress.DB.DirectDatabaseQuery
+            wp_cache_set( $cacheKey, $templateTypes );
+        }
+
         $templateTypesByPostId = [];
         foreach ( $templateTypes as $templateType ) {
             $templateTypesByPostId[$templateType->post_id] = $templateType->meta_value;
@@ -327,8 +384,11 @@ class Sidebar {
      *  Typically called via admin-ajax
      */
     public function renamePost(): void {
-        $postid = filter_input( INPUT_POST, 'postid' );
-        $title = filter_input( INPUT_POST, 'title' );
+        if ( !current_user_can( 'view_admin_quickbar' ) ) {
+            wp_die( 'no permission' );
+        }
+        $postid = filter_input( INPUT_POST, 'postid', FILTER_VALIDATE_INT );
+        $title = esc_attr( filter_input( INPUT_POST, 'title' ) );
 
         $result = [
             'ID' => $postid,

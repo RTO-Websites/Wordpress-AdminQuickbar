@@ -39,8 +39,8 @@ class Settings {
 
     private function initFieldGroups() {
         $hidePostTypes = [
-            'aqb-recent' => __( 'Recent' ),
-            'aqb-favorites' => __( 'Favorites' ),
+            'aqb-recent' => __( 'Recent', 'adminquickbar' ),
+            'aqb-favorites' => __( 'Favorites', 'adminquickbar' ),
         ];
         foreach ( get_post_types( [], 'object' ) as $postType ) {
             if ( in_array( $postType->name, $this->filterPostTypes ) ) {
@@ -51,65 +51,65 @@ class Settings {
 
         $this->fieldGroups = [
             [
-                'label' => __( 'Visibility' ),
+                'label' => __( 'Visibility', 'adminquickbar' ),
                 'fields' => [
                     'hide-posttypes' => [
                         'type' => 'select',
                         'multiple' => true,
-                        'label' => __( 'Hide main container (PostTypes)', 'admin-quickbar' ),
-                        'sublabel' => '[' . __( 'Ctrl+Click', 'admin-quickbar' ) . ']',
+                        'label' => __( 'Hide main container (PostTypes)', 'adminquickbar' ),
+                        'sublabel' => '[' . __( 'Ctrl+Click', 'adminquickbar' ) . ']',
                         'rows' => count( $hidePostTypes ),
                         'options' => $hidePostTypes,
                         'selected' => $this->settings['hiddenPostTypes'] ?? ['attachment'],
                     ],
                     'loadthumbs' => [
                         'type' => 'checkbox',
-                        'label' => __( 'Show thumbs', 'admin-quickbar' ),
+                        'label' => __( 'Show thumbs', 'adminquickbar' ),
                         'checked' => $this->settings['loadThumbs'] ?? false,
                     ],
                     'show-trash-option' => [
                         'type' => 'checkbox',
-                        'label' => __( 'Show trashed posts', 'admin-quickbar' ),
+                        'label' => __( 'Show trashed posts', 'adminquickbar' ),
                     ],
                     'max-recent' => [
                         'type' => 'number',
-                        'label' => __( 'Max. Recent', 'admin-quickbar' ),
+                        'label' => __( 'Max. Recent', 'adminquickbar' ),
                         'min' => 0,
                     ],
                     'show-postids' => [
                         'type' => 'checkbox',
-                        'label' => __( 'Show post-ids', 'admin-quickbar' ),
+                        'label' => __( 'Show post-ids', 'adminquickbar' ),
                     ],
                     'hide-on-website' => [
                         'type' => 'checkbox',
-                        'label' => __( 'Hide quickbar on website', 'admin-quickbar' ),
+                        'label' => __( 'Hide quickbar on website', 'adminquickbar' ),
                         'checked' => $this->settings['hideOnWebsite'] ?? false,
                     ],
                 ],
             ],
             [
-                'label' => __( 'Quickbar behavior', 'admin-quickbar' ),
+                'label' => __( 'Quickbar behavior', 'adminquickbar' ),
                 'fields' => [
                     'keepopen' => [
                         'type' => 'checkbox',
-                        'label' => __( 'Keep open when switching page', 'admin-quickbar' ),
+                        'label' => __( 'Keep open when switching page', 'adminquickbar' ),
                     ],
                     'overlap' => [
                         'type' => 'checkbox',
-                        'label' => __( 'Overlap', 'admin-quickbar' ),
+                        'label' => __( 'Overlap', 'adminquickbar' ),
                     ],
                 ],
             ],
             [
-                'label' => __( 'Quickbar Color-Theme' ),
+                'label' => __( 'Quickbar Color-Theme', 'adminquickbar' ),
                 'fields' => [
                     'theme' => [
                         'type' => 'select',
                         'label' => '',
                         'options' => [
-                            'auto' => __( 'Auto detect', 'admin-quickbar' ),
-                            'dark' => __( 'Dark', 'admin-quickbar' ),
-                            'light' => __( 'Light', 'admin-quickbar' ),
+                            'auto' => __( 'Auto detect', 'adminquickbar' ),
+                            'dark' => __( 'Dark', 'adminquickbar' ),
+                            'light' => __( 'Light', 'adminquickbar' ),
                         ],
                         'selected' => [],
                     ],

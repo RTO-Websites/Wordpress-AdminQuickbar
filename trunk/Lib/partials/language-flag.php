@@ -5,6 +5,6 @@
  */
 ?>
 <img class="language-flag"
-        src="<?php echo $flagUrl; ?>"
-        alt="<?php echo $languageCode; ?>"
-        data-language-code="<?php echo $languageCode; ?>"/>
+        src="<?php echo esc_url($flagUrl); ?>"
+        alt="<?php echo esc_attr($languageCode); ?>"
+        data-language-code="<?php echo esc_attr($languageCode); ?>"/>

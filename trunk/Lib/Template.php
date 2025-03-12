@@ -95,7 +95,7 @@ class Template {
      */
     public function render() {
 
-        echo $this->getRendered();
+        echo $this->getRendered(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
     }
 

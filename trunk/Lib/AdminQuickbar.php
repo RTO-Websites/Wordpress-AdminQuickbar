@@ -16,7 +16,7 @@ class AdminQuickbar {
 
     public function __construct() {
 
-        $this->pluginName = 'admin-quickbar';
+        $this->pluginName = 'adminquickbar';
         $this->version = AdminQuickbar_VERSION;
         $this->settings = get_transient( 'aqb_settings' ) ?: [];
 
@@ -86,8 +86,8 @@ class AdminQuickbar {
 
 
     public function saveSettings() {
-        if ( !current_user_can( 'manage_options' ) ) {
-            return;
+        if ( !current_user_can( 'view_admin_quickbar' ) ) {
+            wp_die('no permission');
         }
         $settings = filter_input( INPUT_POST, 'aqbSettings', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
         $settings['loadThumbs'] = filter_var( $settings['loadThumbs'], FILTER_VALIDATE_BOOLEAN );

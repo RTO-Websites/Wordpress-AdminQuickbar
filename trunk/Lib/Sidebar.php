@@ -194,11 +194,11 @@ class Sidebar {
                         $wpdb->posts.post_type,
                         language_code
                         FROM $wpdb->posts
-                        LEFT OUTER JOIN {$wpdb->prefix}icl_translations ON $wpdb->posts.ID = element_id AND element_type = 'post_%s'
+                        LEFT OUTER JOIN {$wpdb->prefix}icl_translations ON $wpdb->posts.ID = element_id AND element_type = %s
                         WHERE $wpdb->posts.post_type = %s
                     AND $wpdb->posts.post_status NOT IN ('auto-draft')
                     ORDER BY `post_parent` ASC, menu_order ASC
-                 ", $postType->name, $postType->name ), OBJECT );
+                 ", 'post_' . $postType->name, $postType->name ), OBJECT );
                     // phpcs:enable WordPress.DB.DirectDatabaseQuery
 
                 } else {
@@ -243,13 +243,13 @@ class Sidebar {
                         language_code
                     FROM $wpdb->posts
                         LEFT OUTER JOIN $wpdb->term_relationships on $wpdb->posts.ID = $wpdb->term_relationships.object_id
-                        LEFT OUTER JOIN {$wpdb->prefix}icl_translations ON $wpdb->posts.ID = element_id AND element_type = 'post_%s'
+                        LEFT OUTER JOIN {$wpdb->prefix}icl_translations ON $wpdb->posts.ID = element_id AND element_type = %s
                 
                     WHERE $wpdb->posts.post_type = %s
                     AND $wpdb->posts.post_status NOT IN ('auto-draft')
                     GROUP BY $wpdb->posts.ID
                     ORDER BY menu_order ASC
-                 ", $postType->name, $postType->name ), OBJECT );
+                 ", 'post_' . $postType->name, $postType->name ), OBJECT );
                     // phpcs:enable WordPress.DB.DirectDatabaseQuery
                 } else {
                     // phpcs:disable WordPress.DB.DirectDatabaseQuery
@@ -313,7 +313,7 @@ class Sidebar {
         }, $allPosts );
 
         $postIdString = implode( ',', $postIds );
-        $cacheKey = 'aqb_' . implode( '_', $postIds );
+        $cacheKey = 'aqb_templates_' . implode( '_', $postIds );
 
         $templateTypes = wp_cache_get( $cacheKey );
 
